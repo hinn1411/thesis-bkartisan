@@ -18,7 +18,7 @@ const SendPassword: FC<ISendPasswordProps> = memo(() => {
       {/* Back Button */}
 
       <div className="flex justify-center items-center min-h-screen bg-amber-50">
-        <div className="relative flex flex-col m-6 p-28 justify-between items-center text-center bg-white space-y-4  shadow-2xl rounded-2xl">
+        <div className="relative flex flex-col m-6 px-14 py-20 md:p-24 justify-between items-center text-center bg-white space-y-4  shadow-2xl rounded-2xl">
           {/* <Link to="/login">
             <div className="absolute top-5 left-5 flex justify-center items-center rounded-full hover:cursor-pointer hover:-translate-y-0.5 duration-150">
               <svg
@@ -46,7 +46,7 @@ const SendPassword: FC<ISendPasswordProps> = memo(() => {
             Yêu cầu thành công
           </p>
           {/* <h6>Bạn vui lòng nhập email để lấy lại mật khẩu</h6> */}
-          <div>
+          <div className="hidden md:block">
             <img src={doneIcon} alt="send password image" />
           </div>
           {/* <div className="flex flex-col justify-start text-start w-full">
