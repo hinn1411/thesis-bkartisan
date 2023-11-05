@@ -12,7 +12,7 @@ const EnterEmail: FC = memo(() => {
             <div className="absolute top-5 left-5 flex justify-center items-center rounded-full hover:cursor-pointer hover:-translate-y-0.5 duration-150">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-7 rotate-180"
+                className="w-4 rotate-180"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="#000000"
