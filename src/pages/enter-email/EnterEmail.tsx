@@ -9,7 +9,7 @@ const EnterEmail: FC = memo(() => {
       <div className="flex justify-center items-center min-h-screen bg-amber-50">
         <div className="relative flex flex-col m-6 p-28 justify-between items-center text-center bg-white space-y-4  shadow-2xl rounded-2xl">
           <Link to="/login">
-            <div className="absolute top-5 left-5 flex justify-center items-center rounded-full hover:cursor-pointer hover:-translate-y-0.5 duration-150">
+            <div className="absolute top-5 left-5 flex justify-center items-center space-x-1 rounded-full hover:cursor-pointer hover:-translate-y-0.5 duration-150">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-4 rotate-180"

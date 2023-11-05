@@ -46,7 +46,7 @@ const Header: FC = memo(() => {
       document.removeEventListener('mousedown', languageSelectionHandler);
   });
   return (
-    <nav className="container mx-auto px-10 py-4">
+    <nav className="container mx-auto px-10 py-4 border-b-2 border-b-gray-300">
       <div className="flex flex-col justify-between items-center md:flex-row space-y-4 md:space-y-0 md:space-x-4 mx-auto px-10 ">
         <span className="text-4xl text-orange-600 font-semibold">
           BKArtisan
