@@ -52,7 +52,10 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.post('/login', userController.postLogin);
+//app.post('/login', userController.postLogin);
+app.post('/login', passport.authenticate('local'), (req, res) => {
+  res.send(200);
+});
 app.post('/register', userController.postRegister);
 
 app.listen(PORT, () => console.log(`Running Express Server on Port ${PORT}!`));
