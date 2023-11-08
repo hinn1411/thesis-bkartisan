@@ -6,7 +6,7 @@ const Footer: FC = memo(() => {
   return (
     <footer className="bg-amber-50 container mx-auto px-10 py-4">
       {/* Inner container */}
-      <div className="flex flex-col justify-between items-start space-y-4 md:space-y-0 md:flex-row mx-auto px-10">
+      <div className="flex flex-col lg:flex-row justify-between items-start space-y-4 md:space-y-0  mx-auto px-10 py-0">
         <section>
           <h1 className="font-medium">Về chúng tôi</h1>
           <div className="text-[13px] font-normal">
@@ -42,7 +42,7 @@ const Footer: FC = memo(() => {
         </section>
         <section>
           <h1 className="font-medium">Đăng ký nhận tin</h1>
-          <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 justify-between md:space-x-2">
+          <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 justify-between md:space-x-2 ">
             <div>
               <input
                 type="email"

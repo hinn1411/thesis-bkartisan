@@ -46,10 +46,10 @@ const Header: FC = memo(() => {
       document.removeEventListener('mousedown', languageSelectionHandler);
   });
   return (
-    <nav className="container mx-auto px-10 py-4 border-b-2 border-b-gray-300">
-      <div className="flex flex-col justify-between items-center md:flex-row space-y-4 md:space-y-0 md:space-x-4 mx-auto px-10 ">
+    <nav className="container mx-auto px-20 py-4 border-b-2 border-b-gray-300">
+      <div className="flex flex-col justify-between items-center md:flex-row space-y-4 md:space-y-0 md:space-x-4 mx-auto">
         <span className="text-4xl text-orange-600 font-semibold">
-          BKArtisan
+          <Link to='/'>BKArtisan</Link>
         </span>
         <div className="category-container relative" ref={categoryRef}>
           <div
@@ -141,7 +141,7 @@ const Header: FC = memo(() => {
             <div
               className={`${
                 isLanguageDropdownOpened ? 'block' : 'hidden'
-              }  z-10 absolute left-[-50%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-36 mx-auto `}
+              }  z-10 absolute left-[-100%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-36 mx-auto `}
             >
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                 <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
@@ -158,7 +158,7 @@ const Header: FC = memo(() => {
         </div>
       </div>
       {/* Categories List */}
-      <div className="hidden md:flex justify-between items-center mt-4 text-[13px]  md:space-x-4 mx-auto px-10">
+      <div className="hidden md:flex justify-between items-center mt-4 text-[13px]  md:space-x-4 mx-auto">
         {/* <div>Quà theo lễ</div> */}
         <div className="group hover:cursor-pointer">
           <span>Quà theo lễ</span>
