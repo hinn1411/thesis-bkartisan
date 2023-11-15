@@ -51,4 +51,5 @@ function passportConfig() {
   );
 }
 
+
 export default passportConfig;
