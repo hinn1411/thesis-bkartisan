@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.6.2",
     "flowbite": "^2.0.0",
     "flowbite-react": "^0.6.4",
     "react": "^18.2.0",

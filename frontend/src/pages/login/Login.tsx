@@ -1,9 +1,56 @@
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios, { AxiosError } from 'axios';
+
 import facebookIcon from '../../assets/images/login/facebook.png';
 import googleIcon from '../../assets/images/login/google.png';
 import sideImage from '../../assets/images/login/image.png';
 const Login: FC = memo(() => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post("http://localhost:3001/login", {
+        username,
+        password
+      })
+      console.log(res);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          // Trường hợp đăng nhập thất bại do sai mặt khẩu
+          console.log("Sai mặt khẩu");
+        }
+        else if (error.response?.status === 500) {
+          console.log("Tài khoản không tồn tại");
+        }
+        else {
+          console.log("Không thể kết nối với server");
+        }
+      }
+      else {
+        console.log(error);
+      }
+    }
+  }
+
+  const handleRegister = () => {
+    console.log("Register");
+  }
+
+  const handleForgetPassword = () => {
+    console.log("Forget Password");
+  }
+
+  const handleFacebookLogin = () => {
+    console.log("Facebook Login");
+  }
+
+  const handleGoogleLogin = () => {
+    console.log("Google Login");
+  }
+
   return (
     <div className="h-screen">
       {/* <!-- Global Container --> */}
@@ -23,6 +70,7 @@ const Login: FC = memo(() => {
                 type="text"
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
                 placeholder="Nhập tên tài khoản"
+                onChange={e => setUsername(e.target.value)}
               />
             </div>
             <div className="my-6">
@@ -30,11 +78,12 @@ const Login: FC = memo(() => {
                 type="password"
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
                 placeholder="Nhập mật khẩu"
+                onChange={e => setPassword(e.target.value)}
               />
             </div>
             {/* <!-- Middle Content --> */}
             <div className="flex flex-col items-center justify-between mt-6 space-y-6  md:flex-row md:space-y-0 md:space-x-6">
-              <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
+              <button onClick={handleLogin} className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
                 <span>Đăng nhập</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -52,11 +101,11 @@ const Login: FC = memo(() => {
                   <line x1="13" y1="6" x2="19" y2="12" />
                 </svg>
               </button>
-              <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
+              <button onClick={handleRegister} className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
                 <Link to="/register">Đăng ký</Link>
               </button>
             </div>
-            <div className="font-regular text-orange-600 hover:cursor-pointer text-center my-4">
+            <div onClick={handleForgetPassword} className="font-regular text-orange-600 hover:cursor-pointer text-center my-4">
               <Link to="/enter-email" className="text-center mx-auto">
                 Quên mật khẩu?
               </Link>
@@ -71,11 +120,11 @@ const Login: FC = memo(() => {
             {/* src\assets\images\login\facebook.png 
             src\pages\login\Login.tsx */}
             <div className="flex flex-col space-x-0 space-y-6 md:flex-row md:space-x-4 md:space-y-0">
-              <button className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2">
+              <button onClick={handleFacebookLogin} className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2">
                 <img src={facebookIcon} alt="" className="w-9" />
                 <span className="font-thin">Facebook</span>
               </button>
-              <button className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2">
+              <button onClick={handleGoogleLogin} className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2">
                 <img src={googleIcon} alt="" className="w-9" />
                 <span className="font-thin">Google</span>
               </button>

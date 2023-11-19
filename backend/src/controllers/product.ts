@@ -1,5 +1,6 @@
-import Product from "../models/Product.js";
+import { Request, Response } from "express";
+import ProductSchema from "../models/product.model.js";
 
-export const getProduct = (req, res, next) => {
-    res.send(200);
+export const getProduct = (req: Request, res: Response) => {
+    res.send(200).send({msg: "Inside getProduct controller"});
 }

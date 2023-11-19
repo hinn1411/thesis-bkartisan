@@ -6,7 +6,7 @@ const authRouter = Router();
 
 authRouter.post("/login", passport.authenticate("local"), (req, res) => {
   console.log("Logged In");
-  res.send(200);
+  res.status(200).send("Login successful!");
 });
 
 authRouter.post("/register", postRegister);
