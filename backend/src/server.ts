@@ -1,9 +1,10 @@
 import express from "express";
 import session from "express-session";
-import cookieParser from "cookie-parser";
 import cors from "cors";
 import passport from "passport";
 import 'dotenv/config';
+
+import { redisStore } from "./config/redisconnect.js";
 
 // Routes
 import routers from "./routes/index.js";
@@ -15,16 +16,26 @@ passportConfig();
 const app = express();
 const PORT = process.env.APP_PORT;
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cookieParser());
 app.use(
   session({
-    secret: 'APODAJDSDASMCZXMZADASDASDPASDOASDSAK',
+    name: process.env.SESSION_NAME,
+    store: redisStore,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 3,
+      sameSite: false,
+      secure: false,
+      path: "/"
+    }
   })
 );
 

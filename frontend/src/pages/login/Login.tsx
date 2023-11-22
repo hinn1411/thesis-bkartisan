@@ -14,7 +14,7 @@ const Login: FC = memo(() => {
       const res = await axios.post("http://localhost:3001/login", {
         username,
         password
-      })
+      }, {withCredentials: true})
       console.log(res);
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -35,12 +35,24 @@ const Login: FC = memo(() => {
     }
   }
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     console.log("Register");
+    try {
+      const res = await axios.post("http://localhost:3001/logout", null, {withCredentials: true})
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  const handleForgetPassword = () => {
+  const handleForgetPassword = async () => {
     console.log("Forget Password");
+    try {
+      const res = await axios.get("http://localhost:3001/product", {withCredentials: true})
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handleFacebookLogin = () => {

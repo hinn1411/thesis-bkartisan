@@ -24,7 +24,7 @@ class UserModel {
 
   static async findOne(username: string) {
     const [rows] = await pool.query<RowDataPacket[]>(
-      `select * from User where username=?`,
+      `select * from User where username=?`, 
       [username]
     );
     return rows[0];

@@ -9,7 +9,7 @@ const LocalStrategy = passportLocal.Strategy;
 function passportConfig() {
   passport.serializeUser((user, done) => {
     console.log("Serializing User...");
-    console.log(user);
+    console.log(user.username);
     done(null, user.username);
   });
 
@@ -19,7 +19,6 @@ function passportConfig() {
     try {
       const user = await UserModel.findOne(id);
       if (!user) throw new Error("User not found");
-      console.log(user);
       done(null, user);
     } catch (err) {
       console.log(err);
