@@ -12,6 +12,8 @@ import routers from "./routes/index.js";
 // Passport config
 import passportConfig from "./config/passport.js";
 passportConfig();
+import passportGoogleConfig from "./config/passportGoogle.js";
+passportGoogleConfig();
 
 const app = express();
 const PORT = process.env.APP_PORT;

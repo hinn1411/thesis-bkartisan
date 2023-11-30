@@ -37,3 +37,12 @@ export const logout = async (req: Request, res: Response) => {
     console.log(err);
   }
 };
+
+export const loginSuccess = async (req: Request, res: Response) => {
+  try {
+    const {id} = req.body?.id;
+    
+  } catch (err) {
+    console.log(err);
+  }
+};

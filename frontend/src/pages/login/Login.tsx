@@ -60,8 +60,9 @@ const Login: FC = memo(() => {
   }
 
   const handleGoogleLogin = () => {
-    console.log("Google Login");
+    window.open('http://localhost:3001/google', '_self')
   }
+
 
   return (
     <div className="h-screen">
