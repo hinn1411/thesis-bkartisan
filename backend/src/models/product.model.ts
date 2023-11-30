@@ -39,7 +39,7 @@ class ProductSchema {
         return products;
     }
 
-    static async getProductDeteil(id) {
+    static async getProductDetail(id) {
         const product = (await pool.query<RowDataPacket[]>(
             `select * from Product where productID=?`, 
             [id]

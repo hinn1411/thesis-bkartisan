@@ -21,14 +21,15 @@ authRouter.post("/register", register);
 authRouter.post("/logout", logout);
 
 // Call google auth
-authRouter.get("/google", passport.authenticate("google", {scope: ['profile', 'email'], session: false}));
+authRouter.get("/google", passport.authenticate("google", {scope: ['profile', 'email']}));
 
 // Handle res google
 authRouter.get(
 	"/auth/google/callback", (req: CustomRequest, res: Response, next: NextFunction) => {
     passport.authenticate("google", (error, profile) => {
+      
       req.user = profile;
-      console.log(profile);
+      console.log(req.session);
       next();
     })(req, res, next)
   }, (req: CustomRequest, res: Response) => {
