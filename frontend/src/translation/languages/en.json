@@ -1,0 +1,17 @@
+{
+  "header": {
+    "categories": "categories",
+    "login": "login",
+    "holidays": "holidays",
+    "clothes": "clothes",
+    "shoes": "shoes",
+    "jewelry": "jewelry",
+    "accessories": "accessories",
+    "home": "home", 
+    "decor": "decor",
+    "toys": "toys", 
+    "entertainment": "entertainment",
+    "handmade": "handmade",
+    "antique": "antique"
+  }
+}

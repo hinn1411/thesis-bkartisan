@@ -1,0 +1,28 @@
+{ 
+  "login": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "enter_account": "Nhập tên tài khoản",
+    "enter_password": "Nhập mật khẩu",
+    "forget_password": "Quên mật khẩu?",
+    "login_with": "Hoặc đăng nhập với"
+  },
+  "header": {
+    "categories": "Danh mục",
+    "login": "Đăng nhập",
+    "holidays": "Quà theo lễ",
+    "clothes": "Quần áo",
+    "shoes": "Giày dép",
+    "jewelry": "Trang sức",
+    "accessories": "Phụ kiện",
+    "home": "Nhà cửa", 
+    "decor": "Trang trí",
+    "toys": "Đồ chơi", 
+    "entertainment": "Giải trí",
+    "handmade": "Đồ thủ công",
+    "antique": "Đồ cổ",
+    "search": "Nhập từ khóa tìm kiếm",
+    "art": "Nghệ thuật",
+    "collection": "Sưu tập"
+  }
+}

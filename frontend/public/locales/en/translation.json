@@ -1,0 +1,28 @@
+{
+  "login": {
+    "login": "Login",
+    "register": "Register",
+    "enter_account": "Enter your account",
+    "enter_password": "Enter your password ",
+    "forget_password": "Forgot password?",
+    "login_with": "Login with"
+  },
+  "header": {
+    "categories": "Categories",
+    "login": "Login",
+    "holidays": "Holidays",
+    "clothes": "Clothes",
+    "shoes": "Shoes",
+    "jewelry": "Jewelry",
+    "accessories": "Accessories",
+    "home": "Home", 
+    "decor": "Decor",
+    "toys": "Toys", 
+    "entertainment": "Entertainment",
+    "handmade": "Handmade",
+    "antique": "Antique",
+    "search": "Search your words",
+    "art": "Art",
+    "collection": "Collections"
+  }
+}
