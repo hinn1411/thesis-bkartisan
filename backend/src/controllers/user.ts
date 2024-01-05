@@ -1,11 +1,5 @@
-import passport from "passport";
-
 import User from "../models/User.js";
 import { hashPassword } from "../utils/helpers.js";
-
-export const postLogin = (req, res, next) => {
-  passport.authenticate("local")(req, res, next);
-};
 
 export const postRegister = async (request, response, next) => {
   const { username, email } = request.body;

@@ -3,6 +3,7 @@ import UserLayout from '../layouts/UserLayout';
 import ErrorPage from '../pages/errors/Error';
 import HomePage from '../pages/home/Home';
 import ProductDetailPage from '../pages/products/ProductDetail';
+import FavouriteProductPage from '../pages/favourite/FavouriteProduct';
 import AdminLayout from '../layouts/AdminLayout';
 import LoginPage from '../pages/login/Login';
 import RegisterPage from '../pages/register/Register';
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
+      { path: 'favourite/:userId', element: <FavouriteProductPage /> },
     ],
   },
   {

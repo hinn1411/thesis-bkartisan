@@ -123,10 +123,11 @@ const Header: FC = memo(() => {
             </span>
           </div>
           <div className="flex items-center justify-center">
-            <HeartOutlined
+            <Link to="/favourite/:userId">
+              <HeartOutlined
               size={24}
-              className="hover:scale-110 duration-300 hover:cursor-pointer"
-            />
+              className="hover:scale-110 duration-300 hover:cursor-pointer"/>
+            </Link>
           </div>
           <div className="relative flex items-center justify-center">
             <div className="flex items-center justify-center absolute top-[-75%] right-[-60%] w-4 h-4 bg-orange-600 text-[10px] text-white text-center rounded-full">

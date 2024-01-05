@@ -6,9 +6,7 @@ import passport from "passport";
 import { createClient } from "redis";
 
 // Routes
-//import authRouter from "./routes/auth.route.js";
-
-import * as userController from "./controllers/user.js"
+import routers from "./routes/index.js";
 
 // Passport config
 import passportConfig from "./config/passport.js";
@@ -52,7 +50,6 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.post('/login', userController.postLogin);
-app.post('/register', userController.postRegister);
+app.use('/', routers);
 
 app.listen(PORT, () => console.log(`Running Express Server on Port ${PORT}!`));
