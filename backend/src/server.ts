@@ -12,8 +12,8 @@ import routers from "./routes/index.js";
 // Passport config
 import passportConfig from "./config/passport.js";
 passportConfig();
-import passportGoogleConfig from "./config/passportGoogle.js";
-passportGoogleConfig();
+// import passportGoogleConfig from "./config/passportGoogle.js";
+// passportGoogleConfig();
 
 const app = express();
 const PORT = process.env.APP_PORT;
@@ -43,6 +43,7 @@ app.use(
 
 app.use((req, res, next) => {
   console.log(`${req.method}:${req.url}`);
+  console.log(req.sessionID);
   next();
 });
 
