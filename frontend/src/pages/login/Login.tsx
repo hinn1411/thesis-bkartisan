@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import facebookIcon from '../../assets/images/login/facebook.png';
 import googleIcon from '../../assets/images/login/google.png';
 import sideImage from '../../assets/images/login/image.png';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
 const Login: FC = memo(() => {
   const { t } = useTranslation();
   return (
