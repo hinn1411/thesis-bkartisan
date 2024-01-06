@@ -1,15 +1,58 @@
-import { memo } from 'react';
+import { FC, memo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios, { AxiosError } from 'axios';
+import apiAuth from '../../apis/apiAuth';
 import facebookIcon from '../../assets/images/login/facebook.png';
 import googleIcon from '../../assets/images/login/google.png';
 import sideImage from '../../assets/images/login/image.png';
 import { useTranslation } from 'react-i18next';
+
 import { useForm } from 'react-hook-form';
 import TextInput from '../../components/common/input/TextInput';
 const Login = memo(() => {
   const user = {
     minUserNameLen: 6,
     minPasswordLen: 6,
+  };
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const res = await apiAuth.login(username, password);
+      console.log(res.data);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401 || error.response?.status === 500) {
+          // Trường hợp đăng nhập thất bại do sai mặt khẩu hay tài khoản
+          console.log('Thông tin đăng nhập sai');
+        } else {
+          console.log('Lỗi. Không thể đăng nhập được');
+        }
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleForgetPassword = async () => {
+    console.log('Forget Password');
+    try {
+      const res = await axios.get('http://localhost:3001/product', {
+        withCredentials: true,
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleFacebookLogin = () => {
+    console.log('Facebook Login');
+  };
+
+  const handleGoogleLogin = () => {
+    window.open(`${import.meta.env.VITE_BASE_URL}/google`, '_self');
   };
   const { t } = useTranslation();
   const {

@@ -1,26 +1,35 @@
 import { Router } from "express";
+import { Request, Response, NextFunction } from 'express';
 import passport from "passport";
+import { register, logout, loginSuccess } from "../controllers/user.js";
+import 'dotenv/config';
 
-import User from "../models/User.js";
-import { hashPassword } from "../utils/helpers.js";
+
+// Extends the definition of the Request object
+interface CustomRequest extends Request {
+  user?: any;
+}
 
 const authRouter = Router();
 
 authRouter.post("/login", passport.authenticate("local"), (req, res) => {
   console.log("Logged In");
-  res.send(200);
+  res.status(200).json({msg: "Login successful!"});
 });
 
-authRouter.post("/register", async (request, response) => {
-  const { username, email } = request.body;
-  const userDB = await User.findOne({ username });
-  if (userDB) {
-    response.status(400).send({ msg: "User already exists!" });
-  } else {
-    const password = hashPassword(request.body.password);
-    const newUser = await User.create({ username, password, email });
-    response.send(201);
+authRouter.post("/register", register);
+
+authRouter.post("/logout", logout);
+
+// Call google auth
+authRouter.get("/google", passport.authenticate("google", {scope: ['profile', 'email']}));
+
+authRouter.get(
+	"/auth/google/callback", passport.authenticate('google'), (req: CustomRequest, res: Response, next: NextFunction) => {
+      res.redirect(`http://localhost:5173/login/`);
   }
-});
+);
+
+authRouter.post("/login/success", loginSuccess);
 
 export default authRouter;
