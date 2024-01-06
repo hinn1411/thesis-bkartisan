@@ -9,8 +9,8 @@ const LocalStrategy = passportLocal.Strategy;
 
 function passportConfig() {
   passport.serializeUser((user, done) => {
-    console.log("Serializing User...");
-    console.log(user);
+    //console.log("Serializing User...");
+    //console.log(user);
     if (user.id)
       done(null, user.id);
     else
@@ -18,8 +18,8 @@ function passportConfig() {
   });
 
   passport.deserializeUser(async (id, done) => {
-    console.log("Deserializing User");
-    console.log(id);
+    //console.log("Deserializing User");
+    //console.log(id);
     try {
       const user = await UserModel.findOne(id);
       if (!user) throw new Error("User not found");
@@ -33,16 +33,13 @@ function passportConfig() {
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
-        console.log("Local");
         if (!username || !password) throw new Error("Missing Credentials");
         const userDB = await UserModel.findOne(username);
         if (!userDB) throw new Error("User not found");
         const isValid = comparePassword(password, userDB.password);
         if (isValid) {
-          console.log("Authenticated Successfully!");
           done(null, userDB);
         } else {
-          console.log("Invalid Authentication");
           done(null, null);
         }
       } catch (err) {

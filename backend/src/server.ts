@@ -12,8 +12,6 @@ import routers from "./routes/index.js";
 // Passport config
 import passportConfig from "./config/passport.js";
 passportConfig();
-// import passportGoogleConfig from "./config/passportGoogle.js";
-// passportGoogleConfig();
 
 const app = express();
 const PORT = process.env.APP_PORT;
@@ -33,7 +31,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 3,
+      maxAge: 1000 * 60 * 60,
       sameSite: false,
       secure: false,
       path: "/"
@@ -43,7 +41,6 @@ app.use(
 
 app.use((req, res, next) => {
   console.log(`${req.method}:${req.url}`);
-  console.log(req.sessionID);
   next();
 });
 
