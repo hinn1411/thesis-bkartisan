@@ -1,11 +1,30 @@
-import { FC, memo } from 'react';
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import facebookIcon from '../../assets/images/login/facebook.png';
 import googleIcon from '../../assets/images/login/google.png';
 import sideImage from '../../assets/images/login/image.png';
 import { useTranslation } from 'react-i18next';
-const Login: FC = memo(() => {
+import { useForm } from 'react-hook-form';
+import TextInput from '../../components/common/input/TextInput';
+const Login = memo(() => {
+  const user = {
+    minUserNameLen: 6,
+    minPasswordLen: 6,
+  };
   const { t } = useTranslation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      username: ``,
+      password: ``,
+    },
+  });
+  const submitHandler = (data: object) => {
+    console.log(data);
+  };
   return (
     <div className="h-screen">
       {/* <!-- Global Container --> */}
@@ -22,49 +41,82 @@ const Login: FC = memo(() => {
             Log in to your account to upload or download pictures, videos or
             music.
           </p> */}
-            <div className="my-6">
-              <input
+            <form onSubmit={handleSubmit(submitHandler)}>
+              <div className="my-6">
+                <TextInput
+                  type="text"
+                  placeholder={t('login.enter_account')}
+                  label="username"
+                  register={register}
+                  errors={errors}
+                  validatedObject={{
+                    required: `Vui lòng nhập tên tài khoản`,
+                    minLength: {
+                      value: user.minUserNameLen,
+                      message: `Tên tài khoản phải có ít nhất ${user.minUserNameLen} ký tự`,
+                    },
+                  }}
+                />
+                {/* <input
                 type="text"
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
                 placeholder={t('login.enter_account')}
-              />
-            </div>
-            <div className="my-6">
-              <input
+              /> */}
+              </div>
+              <div className="my-6">
+                <TextInput
+                  type="password"
+                  placeholder={t('login.enter_password')}
+                  label="password"
+                  register={register}
+                  errors={errors}
+                  validatedObject={{
+                    required: `Vui lòng nhập lại mật khẩu`,
+                    minLength: {
+                      message: `Mật khẩu phải có ít nhất ${user.minPasswordLen} kí tự`,
+                      value: user.minPasswordLen,
+                    },
+                  }}
+                />
+                {/* <input
                 type="password"
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
                 placeholder={t('login.enter_password')}
-              />
-            </div>
-            {/* <!-- Middle Content --> */}
-            <div className="flex flex-col items-center justify-between mt-6 space-y-6  md:flex-row md:space-y-0 md:space-x-6">
-              <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
-                <span>{t('login.login')}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="#ffffff"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <line x1="13" y1="18" x2="19" y2="12" />
-                  <line x1="13" y1="6" x2="19" y2="12" />
-                </svg>
-              </button>
-              <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
-                <Link to="/register">{t('login.register')}</Link>
-              </button>
-            </div>
-            <div className="font-regular text-orange-600 hover:cursor-pointer text-center my-4">
-              <Link to="/enter-email" className="text-center mx-auto">
-                {t('login.forget_password')}
-              </Link>
-            </div>
+              /> */}
+              </div>
+              {/* <!-- Middle Content --> */}
+              <div className="flex flex-col items-center justify-between mt-6 space-y-6  md:flex-row md:space-y-0 md:space-x-6">
+                <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
+                  <span>{t('login.login')}</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="#ffffff"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <line x1="13" y1="18" x2="19" y2="12" />
+                    <line x1="13" y1="6" x2="19" y2="12" />
+                  </svg>
+                </button>
+                <Link to="/register">
+                  <button className="-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-orange-600 outline outline-orange-600 bg-white rounded-md px-9 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
+                    {t('login.register')}
+                  </button>
+                </Link>
+              </div>
+              <div className="font-regular text-orange-600 hover:cursor-pointer text-center my-4">
+                <Link to="/enter-email" className="text-center mx-auto">
+                  {t('login.forget_password')}
+                </Link>
+              </div>
+            </form>
+
             {/* <!-- Border --> */}
             <div className="mt-12 border-b border-b-gray-300"></div>
             {/* <!-- Bottom Content --> */}
