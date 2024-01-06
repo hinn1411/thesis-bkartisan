@@ -20,7 +20,7 @@ const Header: FC = memo(() => {
   };
   // Category dropdown states
   const { t, i18n } = useTranslation();
-  console.log(<Trans i18nKey="header.search"></Trans>);
+  // console.log(<Trans i18nKey="header.search"></Trans>);
 
   const [isCategoryDropdownOpened, setIsCategoryDropdownOpened] =
     useState(false);
