@@ -1,9 +1,10 @@
 import express from "express";
 import session from "express-session";
-import cookieParser from "cookie-parser";
 import cors from "cors";
 import passport from "passport";
-import { createClient } from "redis";
+import 'dotenv/config';
+
+import { redisStore } from "./config/redisconnect.js";
 
 // Routes
 import routers from "./routes/index.js";
@@ -12,33 +13,29 @@ import routers from "./routes/index.js";
 import passportConfig from "./config/passport.js";
 passportConfig();
 
-// Database config
-import dbconnect from "./config/dbconnect.js";
-dbconnect();
-
-const client = await createClient({
-  password: "x9AZUFlRp1RWgiF4tF62ofbGKSN2QN0Y",
-  socket: {
-    host: "redis-19842.c9.us-east-1-4.ec2.cloud.redislabs.com",
-    port: 19842,
-  },
-})
-  .on("error", (err) => console.log("Redis Client Error", err))
-  .connect();
-
 const app = express();
-const PORT = 3001;
+const PORT = process.env.APP_PORT;
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cookieParser());
 app.use(
   session({
-    secret: 'APODAJDSDASMCZXMZADASDASDPASDOASDSAK',
+    name: process.env.SESSION_NAME,
+    store: redisStore,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60,
+      sameSite: false,
+      secure: false,
+      path: "/"
+    }
   })
 );
 
