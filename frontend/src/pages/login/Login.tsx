@@ -1,4 +1,4 @@
-import { FC, memo, useState } from 'react';
+import { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import apiAuth from '../../apis/apiAuth';
@@ -9,19 +9,31 @@ import { useTranslation } from 'react-i18next';
 
 import { useForm } from 'react-hook-form';
 import TextInput from '../../components/common/input/TextInput';
-const Login = memo(() => {
+const Login: FC = memo(() => {
   const user = {
     minUserNameLen: 6,
-    minPasswordLen: 6,
+    minPasswordLen: 8,
   };
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      username: ``,
+      password: ``,
+    },
+  });
+  // const [username, setUsername] = useState('');
+  // const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
+  const handleLogin = async (data: any) => {
+    const {username, password} = data;
+
     try {
       const res = await apiAuth.login(username, password);
       console.log(res.data);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401 || error.response?.status === 500) {
           // Trường hợp đăng nhập thất bại do sai mặt khẩu hay tài khoản
@@ -55,19 +67,7 @@ const Login = memo(() => {
     window.open(`${import.meta.env.VITE_BASE_URL}/google`, '_self');
   };
   const { t } = useTranslation();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      username: ``,
-      password: ``,
-    },
-  });
-  const submitHandler = (data: object) => {
-    console.log(data);
-  };
+
   return (
     <div className="h-screen">
       {/* <!-- Global Container --> */}
@@ -84,7 +84,7 @@ const Login = memo(() => {
             Log in to your account to upload or download pictures, videos or
             music.
           </p> */}
-            <form onSubmit={handleSubmit(submitHandler)}>
+            <form onSubmit={handleSubmit(handleLogin)}>
               <div className="my-6">
                 <TextInput
                   type="text"
@@ -153,7 +153,10 @@ const Login = memo(() => {
                   </button>
                 </Link>
               </div>
-              <div className="font-regular text-orange-600 hover:cursor-pointer text-center my-4">
+              <div
+                onClick={handleForgetPassword}
+                className="font-regular text-orange-600 hover:cursor-pointer text-center my-4"
+              >
                 <Link to="/enter-email" className="text-center mx-auto">
                   {t('login.forget_password')}
                 </Link>
@@ -174,7 +177,10 @@ const Login = memo(() => {
                 <img src={facebookIcon} alt="" className="w-9" />
                 <span className="font-thin">Facebook</span>
               </button>
-              <button className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2">
+              
+              <button 
+              onClick={handleGoogleLogin}
+              className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2">
                 <img src={googleIcon} alt="" className="w-9" />
                 <span className="font-thin">Google</span>
               </button>
