@@ -18,13 +18,13 @@ export interface User {
 class UserModel {
 
   static async getAll() {
-    const [rows] = await pool.query<RowDataPacket[]>(`SELECT * FROM User;`);
+    const [rows] = await pool.query<RowDataPacket[]>(`SELECT * FROM user;`);
     return rows;
   }
 
   static async findOne(username: string) {
     const [rows] = await pool.query<RowDataPacket[]>(
-      `select * from User where username=?`, 
+      `select * from user where username=?`, 
       [username]
     );
     return rows[0];
@@ -33,7 +33,7 @@ class UserModel {
   static async create(newUser: User) {
     try {
       const [inserted] = await pool.query<ResultSetHeader>(
-        `INSERT INTO User(username, password, name, email, address, numPhone, image, gender, loginType, status) 
+        `INSERT INTO user(username, password, name, email, address, numPhone, image, gender, loginType, status) 
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         `,
         [

@@ -1,0 +1,62 @@
+{
+  "login": {
+    "login": "Login",
+    "register": "Register",
+    "enter_account": "Enter your account",
+    "enter_password": "Enter your password ",
+    "forget_password": "Forgot password?",
+    "login_with": "Login with"
+  },
+  "register": {
+    "register": "Register",
+    "enter_account": "Enter account",
+    "enter_email": "Enter your email",
+    "password": "Enter password",
+    "confirm_password": "Confirm your password",
+    "have_account": "Already have account?"
+  },
+  "header": {
+    "categories": "Categories",
+    "login": "Login",
+    "holidays": "Holidays",
+    "clothes": "Clothes",
+    "shoes": "Shoes",
+    "jewelry": "Jewelry",
+    "accessories": "Accessories",
+    "home": "Home", 
+    "decor": "Decor",
+    "toys": "Toys", 
+    "entertainment": "Entertainment",
+    "handmade": "Handmade",
+    "antique": "Antique",
+    "search": "Search your words",
+    "art": "Art",
+    "collection": "Collections"
+  },
+  "category": {
+    "title": "Outstanding gift",
+    "anniversary": "Anniversaries",
+    "men": "Men",
+    "women": "Women",
+    "children": "Children",
+    "family": "Family",
+    "unique": "Unique"
+  },
+  "footer": {
+    "about_us": "About us",
+    "home": "Home",
+    "introduction": "Introduction",
+    "developer": "Developer",
+    "security_policy": "Security policy",
+    "usage": "Usage",
+    "service": "Services",
+    "faq": "FAQ",
+    "instruction": "How to sell",
+    "complain": "Complains",
+    "regulation": "Regulations for seller",
+    "contact": "Contact",
+    "subscribe": "Subscribe",
+    "your_email": "Your email",
+    "submit": "Submit"
+  }
+}
