@@ -9,6 +9,13 @@ import LoginPage from '../pages/login/Login';
 import RegisterPage from '../pages/register/Register';
 import EnterEmailPage from '../pages/enter-email/EnterEmail';
 import SendPasswordPage from '../pages/send-password/SendPassword';
+import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
+import DetailProduct from '../pages/Seller/ManageProducts/DetailProduct';
+import CreateProducts from '../pages/Seller/ManageProducts/CreateProducts';
+import Dashboard from '../pages/Seller/Dashboard/Dashboard';
+import SellerLayout from '../layouts/SellerLayout';
+
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -45,6 +52,17 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
     children: [{}],
+  },
+  {
+    path: '/seller',
+    element: <SellerLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: 'manageproducts', element: <ViewProduct /> },
+      { path: 'manageproducts/createproduct', element: <CreateProducts /> },
+      { path: 'manageproducts/detail', element: <DetailProduct /> },
+    ],
   },
 ]);
 export default router;

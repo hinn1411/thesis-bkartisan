@@ -30,6 +30,7 @@ authRouter.get(
       
       req.user = profile;
       console.log(req.session);
+      console.log(profile);
       next();
     })(req, res, next)
   }, (req: CustomRequest, res: Response) => {
