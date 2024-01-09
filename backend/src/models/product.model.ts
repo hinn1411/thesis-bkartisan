@@ -20,7 +20,7 @@ class ProductSchema {
     
     static async getProductImages(productID) {
         const [images] = await pool.query<RowDataPacket[]>(
-            `SELECT * FROM ProductImage
+            `SELECT * FROM productimage
             where imageID=?;`,
             [productID]
         );
@@ -31,7 +31,7 @@ class ProductSchema {
     }
 
     static async getProducts() {
-        const [products] = await pool.query<RowDataPacket[]>(`SELECT * FROM Product;`);
+        const [products] = await pool.query<RowDataPacket[]>(`SELECT * FROM product;`);
         for (let i = 0; i < products.length; i++) {
             const images = await ProductSchema.getProductImages(products[i].productID);
             products[i].images = images;
@@ -41,7 +41,7 @@ class ProductSchema {
 
     static async getProductDetail(id) {
         const product = (await pool.query<RowDataPacket[]>(
-            `select * from Product where productID=?`, 
+            `select * from product where productID=?`, 
             [id]
         ))[0][0];
         product.images = await ProductSchema.getProductImages(product.productID)

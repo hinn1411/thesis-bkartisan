@@ -3,7 +3,7 @@ import { getProducts, getDetailProduct } from "../controllers/product.js";
 
 const productRouter = Router();
 
-productRouter.get('/', getProducts);
+productRouter.get('/product', getProducts);
 
 productRouter.get('/products/:productId', getDetailProduct);
 

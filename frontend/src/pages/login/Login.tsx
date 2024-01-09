@@ -1,32 +1,28 @@
 import { FC, memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
-
+import apiAuth from '../../apis/apiAuth';
 import facebookIcon from '../../assets/images/login/facebook.png';
 import googleIcon from '../../assets/images/login/google.png';
 import sideImage from '../../assets/images/login/image.png';
+import { useTranslation } from 'react-i18next';
 const Login: FC = memo(() => {
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:3001/login", {
-        username,
-        password
-      }, {withCredentials: true})
-      console.log(res);
+      const res = await apiAuth.login(username, password);
+      console.log(res.data);
     } catch (error) {
       if (error instanceof AxiosError) {
-        if (error.response?.status === 401) {
-          // Trường hợp đăng nhập thất bại do sai mặt khẩu
-          console.log("Sai mặt khẩu");
-        }
-        else if (error.response?.status === 500) {
-          console.log("Tài khoản không tồn tại");
+        if (error.response?.status === 401 || error.response?.status === 500) {
+          // Trường hợp đăng nhập thất bại do sai mặt khẩu hay tài khoản
+          console.log("Thông tin đăng nhập sai");
         }
         else {
-          console.log("Không thể kết nối với server");
+          console.log("Lỗi. Không thể đăng nhập được");
         }
       }
       else {
@@ -35,21 +31,11 @@ const Login: FC = memo(() => {
     }
   }
 
-  const handleRegister = async () => {
-    console.log("Register");
-    try {
-      const res = await axios.post("http://localhost:3001/logout", null, {withCredentials: true})
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   const handleForgetPassword = async () => {
     console.log("Forget Password");
     try {
       const res = await axios.get("http://localhost:3001/product", {withCredentials: true})
-      console.log(res);
+      console.log(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -60,10 +46,9 @@ const Login: FC = memo(() => {
   }
 
   const handleGoogleLogin = () => {
-    window.open('http://localhost:3001/google', '_self')
+    window.open(`${import.meta.env.VITE_BASE_URL}/google`, '_self')
   }
-
-
+  const { t } = useTranslation();
   return (
     <div className="h-screen">
       {/* <!-- Global Container --> */}
@@ -73,7 +58,9 @@ const Login: FC = memo(() => {
           {/* <!-- Left Side --> */}
           <div className="p-20">
             {/* <!-- Top Content --> */}
-            <h2 className="font-mono mb-5 text-4xl font-bold">Đăng nhập</h2>
+            <h2 className="font-mono mb-5 text-4xl font-bold">
+              {t('login.login')}
+            </h2>
             {/* <p className="max-w-sm mb-12 font-sans font-light text-gray-600">
             Log in to your account to upload or download pictures, videos or
             music.
@@ -84,6 +71,7 @@ const Login: FC = memo(() => {
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
                 placeholder="Nhập tên tài khoản"
                 onChange={e => setUsername(e.target.value)}
+                placeholder={t('login.enter_account')}
               />
             </div>
             <div className="my-6">
@@ -92,12 +80,15 @@ const Login: FC = memo(() => {
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
                 placeholder="Nhập mật khẩu"
                 onChange={e => setPassword(e.target.value)}
+                placeholder={t('login.enter_password')}
               />
             </div>
             {/* <!-- Middle Content --> */}
             <div className="flex flex-col items-center justify-between mt-6 space-y-6  md:flex-row md:space-y-0 md:space-x-6">
               <button onClick={handleLogin} className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
                 <span>Đăng nhập</span>
+              <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
+                <span>{t('login.login')}</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-6"
@@ -114,20 +105,25 @@ const Login: FC = memo(() => {
                   <line x1="13" y1="6" x2="19" y2="12" />
                 </svg>
               </button>
-              <button onClick={handleRegister} className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
-                <Link to="/register">Đăng ký</Link>
+              <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
+                <Link to="/register">{t('login.register')}</Link>
               </button>
             </div>
             <div onClick={handleForgetPassword} className="font-regular text-orange-600 hover:cursor-pointer text-center my-4">
-              <Link to="/enter-email" className="text-center mx-auto">
+              {/*<Link to="/enter-email" className="text-center mx-auto">
                 Quên mật khẩu?
+        </Link>*/}
+              Quên mật khẩu?
+            <div className="font-regular text-orange-600 hover:cursor-pointer text-center my-4">
+              <Link to="/enter-email" className="text-center mx-auto">
+                {t('login.forget_password')}
               </Link>
             </div>
             {/* <!-- Border --> */}
             <div className="mt-12 border-b border-b-gray-300"></div>
             {/* <!-- Bottom Content --> */}
             <p className="py-6 text-sm font-regular text-center text-gray-400">
-              Hoặc đăng nhập với
+              {t('login.login_with')}
             </p>
             {/* <!-- Bottom Buttons Container --> */}
             {/* src\assets\images\login\facebook.png 
