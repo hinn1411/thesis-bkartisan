@@ -15,6 +15,21 @@
     "confirm_password": "Confirm your password",
     "have_account": "Already have account?"
   },
+  "forgot_password": {
+    "back": "Go back",
+    "get_password": "Restore password",
+    "instruction": "Please enter your email to get password",
+    "placeholder": "Enter your email",
+    "send": "Send",
+    "remember_password": "Remember your password?",
+    "login": "Login"
+  },
+  "send_password": {
+    "successful_request": "Request successfully",
+    "send_to": "New password is sent to",
+    "check_mail": "Please check your email",
+    "login": "Login"
+  },
   "header": {
     "categories": "Categories",
     "login": "Login",
