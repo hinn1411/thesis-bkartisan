@@ -1,17 +1,18 @@
 import { FC, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import doneIcon from '../../assets/images/send-password/done.png';
-
+import { useTranslation } from 'react-i18next';
 interface ISendPasswordProps {
   // email: string;
 }
 const SendPassword: FC<ISendPasswordProps> = memo(() => {
   const navigate = useNavigate();
-  const routeToHome = (
+  const { t } = useTranslation();
+  const routeToHome = () =>
     // event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    navigate('/login');
-  };
+    {
+      navigate('/login');
+    };
   return (
     <div className="h-screen">
       {/* Global container */}
@@ -43,7 +44,7 @@ const SendPassword: FC<ISendPasswordProps> = memo(() => {
             BKArtisan
           </p>
           <p className="text-2xl font-semibold text-center hidden md:block">
-            Yêu cầu thành công
+            {t('send_password.successful_request')}
           </p>
           {/* <h6>Bạn vui lòng nhập email để lấy lại mật khẩu</h6> */}
           <div className="hidden md:block">
@@ -61,16 +62,16 @@ const SendPassword: FC<ISendPasswordProps> = memo(() => {
           </div> */}
 
           <span className="text-justify w-[18rem]">
-            Mật khẩu đã được gửi đến email{' '}
-            <span className="font-bold">q*******@gmail.com</span>, bạn vui lòng
-            kiểm tra hộp thư.
+            {t('send_password.send_to')}{' '}
+            <span className="font-bold">q*******@gmail.com</span>, {" "}
+            {t('send_password.check_mail')}
           </span>
 
           <button
             onClick={routeToHome}
             className="w-full flex mx-auto justify-center items-center py-4 space-x-2 font-sans font-bold text-white rounded-md bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150"
           >
-            Đăng nhập
+            {t('send_password.login')}
           </button>
 
           {/* <span>

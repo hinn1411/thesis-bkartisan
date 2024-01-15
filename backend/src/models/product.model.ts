@@ -48,8 +48,8 @@ class ProductSchema {
         return product;
     }
 
-    static async addProduct(product: Product) {
-
+    static async addProduct() {
+        
     }
 }
 

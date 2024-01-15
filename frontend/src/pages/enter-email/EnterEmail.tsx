@@ -1,6 +1,8 @@
 import { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 const EnterEmail: FC = memo(() => {
+  const {t} = useTranslation();
   return (
     <div className="h-screen">
       {/* Global container */}
@@ -25,35 +27,35 @@ const EnterEmail: FC = memo(() => {
                 <line x1="13" y1="18" x2="19" y2="12" />
                 <line x1="13" y1="6" x2="19" y2="12" />
               </svg>
-              <span className="text-sm">Quay lại</span>
+              <span className="text-sm">{t('forgot_password.back')}</span>
             </div>
           </Link>
           <p className="text-4xl font-semibold text-orange-600 pt-2">
             BKArtisan
           </p>
           <p className="text-2xl font-semibold text-center hidden md:block">
-            Lấy lại mật khẩu
+            {t('forgot_password.get_password')}
           </p>
-          <h6>Bạn vui lòng nhập email để lấy lại mật khẩu</h6>
+          <h6>{t('forgot_password.instruction')}</h6>
           <div className="flex flex-col justify-start text-start w-full">
             <label className="text-sm font-bold">Email</label>
             <div>
               <input
-                type="text"
+                type="email"
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:text-sm placeholder:font-light hover:outline hover:outline-black hover:outline-1"
-                placeholder="Nhập địa chỉ email của bạn"
+                placeholder={t('forgot_password.placeholder')}
               />
             </div>
           </div>
           <Link to="/send-password" className="w-full">
             <button className="w-full flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
-              Gửi
+              {t('forgot_password.send')}
             </button>
           </Link>
           <span>
-            Bạn đã nhớ mật khẩu?{' '}
+            {t('forgot_password.remember_password')} {" "}
             <span className="text-orange-600">
-              <Link to="/login">Đăng nhập</Link>
+              <Link to="/login">{t('forgot_password.login')}</Link>
             </span>
           </span>
         </div>
