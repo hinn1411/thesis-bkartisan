@@ -1,11 +1,32 @@
 import { FC, memo, useState, ChangeEvent } from 'react';
 import SellerSideBar from '../../../components/sidebar/SellerSideBar';
+import { IoCloseOutline } from "react-icons/io5";
 import { FiPlus } from "react-icons/fi";
 
 interface YourComponentProps {}
 const CreateProducts: FC<YourComponentProps> = memo(() => {
   const [images, setImages] = useState<string[]>([]);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+
+  const initialOptions = ['S', 'M', 'L', 'XL'];
+  const [availableSizes, setAvailableSizes] = useState<string[]>(initialOptions);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
+  const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSize = event.target.value;
+    setSelectedSizes([...selectedSizes, newSize]);
+    setAvailableSizes(availableSizes.filter(size => size !== newSize));
+  };
+
+  const removeSize = (sizeToRemove: string) => {
+    setSelectedSizes(selectedSizes.filter(size => size !== sizeToRemove));
+    setAvailableSizes([...availableSizes, sizeToRemove]);
+  };
+
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(event.target.value);
+  };
 
   const handleFileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -126,12 +147,12 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
           </div> 
           <div className="flex mb-4 justify-between">
             <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá sản phẩm</label>
-            <input type="text" id="Price" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá sản phẩm</label>
+              <input type="text" id="Price" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>
             </div>
             <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Số lượng</label>
-            <input type="text" id="Quanlity" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Số lượng</label>
+              <input type="text" id="Quanlity" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>
             </div>
           </div>
           <div className="flex mb-4 justify-between">
@@ -151,6 +172,76 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
               
             </div>
           </div>
+          
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tùy chọn (Tối đa 2)</label>
+            <div className="flex mb-4 justify-between">
+              <div className='w-48'>
+                
+                <select id="catagory" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 pr-7" onChange={handleCategoryChange}>
+                  <option selected>Chọn</option>
+                  <option value="US">Kích cỡ</option>
+                  <option value="CA">Áo</option>
+                  <option value="FR">Quần</option>
+                  <option value="DE">Board Game</option>
+                </select>
+              </div>
+
+              {selectedCategory && (
+              <div id='select1' className='space-y-3 w-48'>
+                <div className='flex items-center'>
+                  <select 
+                    id="size" 
+                    className=" shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 pr-7"
+                    onChange={handleSizeChange}
+                    value=""
+                  >
+                    <option disabled value="">Chọn các kích cỡ</option>
+                    {availableSizes.map(size => <option key={size} value={size}>{size}</option>)}
+                  </select>
+                <IoCloseOutline className="w-5 h-5 cursor-pointer" />
+                </div>
+                
+                <div className="flex flex-wrap space-y-3">
+                  {selectedSizes.map(size => (
+                    <div key={size} className="flex justify-between shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 w-full p-2.5">
+                      <p>{size}</p>
+                      <IoCloseOutline className="w-5 h-5 cursor-pointer" onClick={() => removeSize(size)}/>
+                    </div>
+                  ))}
+                </div>
+              </div>
+                )}
+
+              {selectedCategory && (
+                <div id='select1' className='space-y-3 w-48'>
+                  <div className='flex items-center'>
+                    <select 
+                      id="size" 
+                      className=" shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 pr-7"
+                      onChange={handleSizeChange}
+                      value=""
+                    >
+                      <option disabled value="">Chọn các kích cỡ</option>
+                      {availableSizes.map(size => <option key={size} value={size}>{size}</option>)}
+                    </select>
+                  <IoCloseOutline className="w-5 h-5 cursor-pointer" />
+                  </div>
+                  
+                  <div className="flex flex-wrap space-y-3">
+                    {selectedSizes.map(size => (
+                      <div key={size} className="flex justify-between shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 w-full p-2.5">
+                        <p>{size}</p>
+                        <IoCloseOutline className="w-5 h-5 cursor-pointer" onClick={() => removeSize(size)}/>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                )}
+            </div>
+          </div>
+
+          
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả sản phẩm</label>
             <textarea rows={4} id="Description" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>

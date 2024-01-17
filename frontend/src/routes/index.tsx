@@ -59,9 +59,9 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Dashboard /> },
-      { path: 'manageproducts', element: <ViewProduct /> },
-      { path: 'manageproducts/createproduct', element: <CreateProducts /> },
-      { path: 'manageproducts/detail', element: <DetailProduct /> },
+      { path: 'manage-products', element: <ViewProduct /> },
+      { path: 'manage-products/create-product', element: <CreateProducts /> },
+      { path: 'manage-products/detail', element: <DetailProduct /> },
     ],
   },
 ]);

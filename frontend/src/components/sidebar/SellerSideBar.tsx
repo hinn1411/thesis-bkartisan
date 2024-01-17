@@ -3,6 +3,9 @@ import logo from '../../assets/images/logo/dummy logo.png'
 import { MdOutlineDiscount, MdOutlineShoppingBag} from 'react-icons/md';
 import { BiMessageDots } from "react-icons/bi";
 import { AiOutlineLineChart } from "react-icons/ai";
+import { AiOutlineInbox } from "react-icons/ai";
+import { AiOutlineGift } from "react-icons/ai";
+import { FaCaretDown } from "react-icons/fa";
 import { BsCart3 } from 'react-icons/bs';
 import React, { useState } from 'react';
 
@@ -64,34 +67,24 @@ const SellerSideBar: FC<sideBarName> = memo(({name}) => {
           <div className="flex items-center ">
               <div className="flex flex-col items-end">
                 <div>
-                  <button type="button" className={`flex text-sm bg-gray-800 rounded-full ${isDropdownOpen ? 'focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600' : ''} `} aria-expanded={isDropdownOpen} data-dropdown-toggle="dropdown-user" id="dropdownButton"
+                  <button type="button" className={`flex items-center space-x-1 text-sm rounded-full ${isDropdownOpen ? 'focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600' : ''} `} aria-expanded={isDropdownOpen} data-dropdown-toggle="dropdown-user" id="dropdownButton"
                 onClick={handleButtonClick}>
                     
                     <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo"></img>
+                    <p> Quang</p>
+                    <FaCaretDown className = "w-4 h-4"/>
                   </button>
+                  
                 </div>
                 <div className={`z-50 ${isDropdownOpen ? '' : 'hidden'} my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`} id="dropdown-user">
-                  <div className="px-4 py-3" role="none">
-                    <p className="text-sm text-gray-900 dark:text-white" role="none">
-                      Neil Sims
-                    </p>
-                    <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                      neil.sims@flowbite.com
-                    </p>
-                  </div>
                   <ul className="py-1" role="none">
                     <li>
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a>
-                    </li>
-                    <li>
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a>
-                    </li>
-                    <li>
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Earnings</a>
+                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Information</a>
                     </li>
                     <li>
                       <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
                     </li>
+                   
                   </ul>
                 </div>
               </div>
@@ -150,6 +143,20 @@ const SellerSideBar: FC<sideBarName> = memo(({name}) => {
                   <BiMessageDots className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${name == "Message"? ` text-white` : `group-hover:text-gray-900 `} `} />
                   
                   <span className="flex-1 ms-3 whitespace-nowrap">Tin nhắn</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" className={`flex  items-center p-2 text-gray-500 rounded-lg  group ${name == "Message"? `bg-orange-500 text-white` : `hover:bg-orange-100 hover:text-gray-900`} group`}>
+                  <AiOutlineInbox className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${name == "Message"? ` text-white` : `group-hover:text-gray-900 `} `} />
+                  
+                  <span className="flex-1 ms-3 whitespace-nowrap">Quản lý vận chuyển</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" className={`flex  items-center p-2 text-gray-500 rounded-lg  group ${name == "Message"? `bg-orange-500 text-white` : `hover:bg-orange-100 hover:text-gray-900`} group`}>
+                  <AiOutlineGift className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${name == "Message"? ` text-white` : `group-hover:text-gray-900 `} `} />
+                  
+                  <span className="flex-1 ms-3 whitespace-nowrap">Quản lý quà tặng</span>
                 </a>
             </li>
             

@@ -29,7 +29,7 @@ const Login: FC = memo(() => {
             </div>
             <div className="my-6">
               <input
-                type="password"
+                type="email"
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light hover:outline hover:outline-black hover:outline-1"
                 placeholder={t('register.enter_email')}
               />
