@@ -39,12 +39,12 @@ const ProductCard: FC<ProductCardProps> = memo(
       currency: 'VND',
     }).format(originalCost);
     return (
-      <div className="mx-auto relative max-w-sm rounded border overflow-hidden shadow-lg">
+      <div className="mx-auto relative max-w-sm rounded border overflow-hidden shadow-sm hover:shadow-lg">
         {/* Inner container */}
         <div className="px-3 py-3">
           <div>
             {isNew && (
-              <div className="absolute top-3 left-3 z-10 px-4 rounded-full border-2 border-slate-200 bg-white ">
+              <div className="absolute top-6 left-6 z-10 px-4 rounded-xl border-2 border-slate-200 bg-white ">
                 Mới
               </div>
             )}
