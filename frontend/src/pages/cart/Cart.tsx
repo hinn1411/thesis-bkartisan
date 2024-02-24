@@ -29,7 +29,7 @@ const Cart: FC = memo(() => {
   }).format(1950000);
   return (
     <div className="min-h-screen px-4 md:px-20 my-5">
-      <p className="text-3xl ">Tổng số sản phẩm: 4</p>
+      <p className="text-2xl ">Tổng số sản phẩm: 4</p>
       <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-6 mt-3">
         <div className="w-[100%] md:w-[65%] flex flex-col space-y-6">
           <ItemCard
@@ -90,6 +90,7 @@ const Cart: FC = memo(() => {
           <div className="flex flex-col space-y-4 my-2">
             <div className="flex items-center">
               <input
+                defaultChecked
                 id="default-radio-1"
                 type="radio"
                 value=""
@@ -100,7 +101,7 @@ const Cart: FC = memo(() => {
                 htmlFor="default-radio-1"
                 className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                Thanh toán khi nhận hàng
+                Thanh toán khi nhận hàng (COD)
               </label>
             </div>
             <div className="flex items-center mb-4">
@@ -177,12 +178,19 @@ const Cart: FC = memo(() => {
               <p>{totalPrice}</p>
             </div>
             {/* Button container */}
-            <div className='flex flex-col space-y-3 my-4'>
-              <button className='text-base text-center bg-black rounded-full text-white w-full py-2'>Thanh toán</button>
-              <div className='flex py-2'>
-                <input className='border border-black rounded-l-full w-2/3 py-2 px-2.5 text-sm border-opacity-50' placeholder='Nhập mã' />
-                <button className='bg-black text-white text-center w-1/3 rounded-r-full'>Áp dụng</button>  
-              </div>           
+            <div className="flex flex-col space-y-3 my-4">
+              <button className="text-base text-center bg-black rounded-full text-white w-full py-2">
+                Thanh toán
+              </button>
+              <div className="flex py-2">
+                <input
+                  className="border border-black rounded-l-full w-2/3 py-2 px-2.5 text-sm border-opacity-50"
+                  placeholder="Nhập mã"
+                />
+                <button className="bg-black text-white text-center w-1/3 rounded-r-full">
+                  Áp dụng
+                </button>
+              </div>
             </div>
           </div>
         </div>
