@@ -54,7 +54,7 @@ const ProductCard: FC<ProductCardProps> = memo(
             )}
             <img
               src={srcImage}
-              className="object-cover rounded-[2px] border border-black border-opacity-50 hover:cursor-pointer"
+              className="object-cover h-[225px] w-[300px] rounded-[2px] border border-black border-opacity-50 hover:cursor-pointer"
               alt="product image"
             />
           </div>
