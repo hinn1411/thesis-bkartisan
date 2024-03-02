@@ -31,7 +31,7 @@ const Header: FC = memo(() => {
     let categorySelectionHandler = (e: any) => {
       if (!categoryRef.current?.contains(e.target)) {
         setIsCategoryDropdownOpened(false);
-        console.log(categoryRef.current);
+        // console.log(categoryRef.current);
       }
     };
     document.addEventListener('mousedown', categorySelectionHandler);
@@ -47,7 +47,7 @@ const Header: FC = memo(() => {
     const languageSelectionHandler = (e: any) => {
       if (!languageRef.current?.contains(e.target)) {
         setIsLanguageDropdownOpened(false);
-        console.log(languageRef.current);
+        // console.log(languageRef.current);
       }
     };
     document.addEventListener('mousedown', languageSelectionHandler);

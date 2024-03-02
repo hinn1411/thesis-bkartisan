@@ -19,6 +19,8 @@ import HomePage from '../pages/home/Home';
 import ProductDetailPage from '../pages/products/ProductDetail';
 import FavouriteProductPage from '../pages/favourite/FavouriteProduct';
 import CartPage from '../pages/cart/Cart';
+// -- Gifts
+import ChooseBoxPage from '../pages/gift/Gift';
 
 // Seller pages
 import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
@@ -38,6 +40,15 @@ const router = createBrowserRouter([
       { path: 'favourite/:userId', element: <FavouriteProductPage /> },
     ],
   },
+  {
+    path: '/gift',
+    element: <UserLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <ChooseBoxPage />}
+    ]
+  }
+  ,
   {
     path: '/login',
     element: <LoginPage />,

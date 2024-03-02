@@ -1,13 +1,13 @@
-import { Fragment, useRef, useState, FC, memo } from 'react';
+import { Fragment, useRef, FC, memo } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { CheckBadgeIcon } from '@heroicons/react/24/outline';
 
 export type ModalProps = {
   isOpen: boolean;
   setIsOpen: any;
 };
 
-const Modal: FC<ModalProps> = memo(({ isOpen, setIsOpen }) => {
+const SuccessfulModal: FC<ModalProps> = memo(({ isOpen, setIsOpen }) => {
   const cancelButtonRef = useRef(null);
 
   return (
@@ -44,9 +44,9 @@ const Modal: FC<ModalProps> = memo(({ isOpen, setIsOpen }) => {
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <ExclamationTriangleIcon
-                        className="h-6 w-6 text-red-600"
+                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                      <CheckBadgeIcon
+                        className="h-6 w-6 text-green-600"
                         aria-hidden="true"
                       />
                     </div>
@@ -55,11 +55,11 @@ const Modal: FC<ModalProps> = memo(({ isOpen, setIsOpen }) => {
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        Xóa sản phẩm
+                        Gói quà thành công!
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Bạn có muốn xóa sản phẩm này không?
+                        <p className="text-sm text-black">
+                          Bạn vui lòng kiểm tra giỏ hàng
                         </p>
                       </div>
                     </div>
@@ -68,19 +68,19 @@ const Modal: FC<ModalProps> = memo(({ isOpen, setIsOpen }) => {
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600 sm:ml-3 sm:w-auto"
+                    className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto"
                     onClick={() => setIsOpen(false)}
                   >
                     Đồng ý
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     onClick={() => setIsOpen(false)}
                     ref={cancelButtonRef}
                   >
                     Hủy bỏ
-                  </button>
+                  </button> */}
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -91,4 +91,4 @@ const Modal: FC<ModalProps> = memo(({ isOpen, setIsOpen }) => {
   );
 });
 
-export default Modal;
+export default SuccessfulModal;
