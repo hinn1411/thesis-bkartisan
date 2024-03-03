@@ -1,0 +1,11 @@
+.item {
+  @apply text-lg text-left font-medium;
+}
+
+.description {
+  @apply text-[14px];
+}
+
+.price {
+  @apply text-[16px] text-[#258635];
+}

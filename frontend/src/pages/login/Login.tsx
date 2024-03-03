@@ -148,7 +148,7 @@ const Login: FC = memo(() => {
                   </svg>
                 </button>
                 <Link to="/register">
-                  <button className="-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-orange-600 outline outline-orange-600 bg-white rounded-md px-9 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
+                  <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-orange-600 outline outline-orange-600 bg-white rounded-md px-9 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
                     {t('login.register')}
                   </button>
                 </Link>

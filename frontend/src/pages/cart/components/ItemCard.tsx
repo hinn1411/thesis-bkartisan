@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 import {
   MinusCircleOutlined,
   PlusCircleOutlined,
@@ -6,6 +6,10 @@ import {
   DeleteOutlined,
   TagOutlined,
 } from '@ant-design/icons';
+
+import Modal from '../../../components/common/modal/Modal';
+import { Link } from 'react-router-dom';
+
 interface ItemCardProps {
   sellerImage: string;
   sellerName: string;
@@ -31,6 +35,7 @@ const ItemCard: FC<ItemCardProps> = memo(
     originalPrice,
     percentageOfDiscount,
   }) => {
+    const [isOpenedDeleteModal, setIsOpenedDeleteModal] = useState(false);
     const currentCost = new Intl.NumberFormat('vi-VN', {
       style: 'currency',
       currency: 'VND',
@@ -39,8 +44,16 @@ const ItemCard: FC<ItemCardProps> = memo(
       style: 'currency',
       currency: 'VND',
     }).format(originalPrice);
+
+    const openDeleteItemModal = () => {
+      setIsOpenedDeleteModal(true);
+    };
     return (
       <div className="shadow-lg rounded-[12px] border border-black border-opacity-25">
+        <Modal
+          isOpen={isOpenedDeleteModal}
+          setIsOpen={setIsOpenedDeleteModal}
+        />
         {/* Inner container */}
         <div className="p-4">
           <div className="flex items-center justify-between mb-2">
@@ -61,17 +74,22 @@ const ItemCard: FC<ItemCardProps> = memo(
           <div className="flex flex-col md:flex-row justify-between space-y-2   md:space-y-0 md:space-x-3">
             {/* Content container */}
             <div>
-              <div className="h-full">
-                <img
-                  src={itemImage}
-                  alt="product image"
-                  className="rounded-[6px] object-fit w-full h-full"
-                />
-              </div>
+              <Link to="/products/:productId">
+                <div className="h-full">
+                  <img
+                    src={itemImage}
+                    alt="product image"
+                    className="rounded-[6px] object-fit w-full h-full hover:cursor-pointer"
+                  />
+                </div>
+              </Link>
             </div>
             <div className="w-full flex-flex-col justify-between space-y-1">
-              <div className="flex items-center justify-between">
-                <div>{itemName}</div>
+              <div className="flex items-center justify-between hover:cursor-pointer">
+                <Link to="/products/:productId">
+                  <div>{itemName}</div>
+                </Link>
+
                 <div className="text-[#258635] text-medium text-[20px]">
                   {currentCost}
                 </div>
@@ -110,7 +128,10 @@ const ItemCard: FC<ItemCardProps> = memo(
                     </div>
                     <p className="hover:underline">Sửa</p>
                   </div>
-                  <div className="flex items-center justify-center space-x-1 hover:cursor-pointer">
+                  <div
+                    onClick={openDeleteItemModal}
+                    className="flex items-center justify-center space-x-1 hover:cursor-pointer"
+                  >
                     <div className="flex items-center justify-center">
                       <DeleteOutlined />
                     </div>

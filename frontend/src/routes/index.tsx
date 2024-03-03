@@ -1,19 +1,32 @@
 import { createBrowserRouter } from 'react-router-dom';
+
+// Layouts
 import UserLayout from '../layouts/UserLayout';
-import ErrorPage from '../pages/errors/Error';
-import HomePage from '../pages/home/Home';
-import ProductDetailPage from '../pages/products/ProductDetail';
-import FavouriteProductPage from '../pages/favourite/FavouriteProduct';
 import AdminLayout from '../layouts/AdminLayout';
+import SellerLayout from '../layouts/SellerLayout';
+
+// Common pages
+import ErrorPage from '../pages/errors/Error';
+
+// Auth pages
 import LoginPage from '../pages/login/Login';
 import RegisterPage from '../pages/register/Register';
 import EnterEmailPage from '../pages/enter-email/EnterEmail';
 import SendPasswordPage from '../pages/send-password/SendPassword';
+
+// Buyer pages
+import HomePage from '../pages/home/Home';
+import ProductDetailPage from '../pages/products/ProductDetail';
+import FavouriteProductPage from '../pages/favourite/FavouriteProduct';
+import CartPage from '../pages/cart/Cart';
+// -- Gifts
+import ChooseBoxPage from '../pages/gift/Gift';
+
+// Seller pages
 import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
 import DetailProduct from '../pages/Seller/ManageProducts/DetailProduct';
 import CreateProducts from '../pages/Seller/ManageProducts/CreateProducts';
 import Dashboard from '../pages/Seller/Dashboard/Dashboard';
-import SellerLayout from '../layouts/SellerLayout';
 
 import UserManagement from '../pages/Admin/UserManagement';
 import CollabManagement from '../pages/Admin/CollabManagement';
@@ -25,10 +38,20 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: 'cart', element: <CartPage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
       { path: 'favourite/:userId', element: <FavouriteProductPage /> },
     ],
   },
+  {
+    path: '/gift',
+    element: <UserLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <ChooseBoxPage />}
+    ]
+  }
+  ,
   {
     path: '/login',
     element: <LoginPage />,
