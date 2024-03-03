@@ -11,17 +11,6 @@ interface CustomRequest extends Request {
 
 const authRouter = Router();
 
-/**
- * @openapi
- * /login:
- *  post:
- *     tags:
- *     - Authentication
- *     description: Login into web app.
- *     responses:
- *       200:
- *         description: Login successful
- */
 authRouter.post("/login", passport.authenticate("local"), (req, res) => {
   console.log("Logged In");
   res.status(200).json({ msg: "Login successful!" });

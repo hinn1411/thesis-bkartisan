@@ -6,9 +6,9 @@ const access: PoolOptions = {
   password: process.env.SQL_PASSWORD,
   database: process.env.SQL_DATABASE,
   port: parseInt(process.env.SQL_PORT),
-  ssl: {
-    rejectUnauthorized: true,
-  }
+  // ssl: {
+  //   rejectUnauthorized: true,
+  // }
 };
 
 const pool = await mysql.createPool(access);
