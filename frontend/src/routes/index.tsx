@@ -15,6 +15,8 @@ import CreateProducts from '../pages/Seller/ManageProducts/CreateProducts';
 import Dashboard from '../pages/Seller/Dashboard/Dashboard';
 import SellerLayout from '../layouts/SellerLayout';
 
+import UserManagement from '../pages/Admin/UserManagement';
+import CollabManagement from '../pages/Admin/CollabManagement';
 
 const router = createBrowserRouter([
   {
@@ -51,7 +53,10 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
-    children: [{}],
+    children: [
+      { index: true, element: <UserManagement /> },
+      { path: 'managecollab', element: <CollabManagement /> },
+    ],
   },
   {
     path: '/seller',
