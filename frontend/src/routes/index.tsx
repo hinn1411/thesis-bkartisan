@@ -14,6 +14,7 @@ import DetailProduct from '../pages/Seller/ManageProducts/DetailProduct';
 import CreateProducts from '../pages/Seller/ManageProducts/CreateProducts';
 import Dashboard from '../pages/Seller/Dashboard/Dashboard';
 import SellerLayout from '../layouts/SellerLayout';
+import Cart from '../pages/cart/Cart';
 
 
 const router = createBrowserRouter([
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
       { path: 'favourite/:userId', element: <FavouriteProductPage /> },
+      { path: 'cart', element: <Cart /> },
     ],
   },
   {

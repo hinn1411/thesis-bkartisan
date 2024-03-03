@@ -69,6 +69,7 @@ function passportConfig() {
 							status: "N",
 						};
 						await UserModel.create(newUser);
+            console.log("aaaaa");
 					}
 				}
 				callback(null, profile);
