@@ -1,7 +1,6 @@
 import { FC, memo } from 'react';
 import CategoryCard from '../../components/common/category/CategoryCard';
 // Product images
-import productImage1 from '../../assets/images/product/item1.png';
 import ProductCard from '../../components/common/product/ProductCard';
 import Pagination from '../../components/common/pagination/Pagination';
 import { useTranslation } from 'react-i18next';
@@ -48,8 +47,8 @@ const Home: FC = memo(() => {
       </div>
       {/* Product list */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {productData.map((product) => (
-          <ProductCard {...product} />
+        {productData.map((product, index) => (
+          <ProductCard key={index} {...product} />
         ))}
       </div>
 

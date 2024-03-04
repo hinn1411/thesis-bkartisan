@@ -51,7 +51,6 @@ export const productData = [
     currentCost: 1630252,
     originalCost: 2717087,
     percentageOfDiscount: 45,
-    isNew: true,
   },
   {
     id: 1,
@@ -64,7 +63,6 @@ export const productData = [
     currentCost: 139776,
     originalCost: 279832,
     percentageOfDiscount: 50,
-    isNew: true,
   },
   {
     id: 2,
@@ -77,7 +75,6 @@ export const productData = [
     currentCost: 155350,
     originalCost: 194175,
     percentageOfDiscount: 20,
-    isNew: true,
   },
   {
     id: 3,
@@ -90,7 +87,6 @@ export const productData = [
     currentCost: 1630252,
     originalCost: 2717087,
     percentageOfDiscount: 45,
-    isNew: true,
   },
   {
     id: 4,
@@ -103,7 +99,6 @@ export const productData = [
     currentCost: 1630252,
     originalCost: 2717087,
     percentageOfDiscount: 67,
-    isNew: true,
   },
   {
     id: 5,
@@ -116,6 +111,5 @@ export const productData = [
     currentCost: 1630252,
     originalCost: 2717087,
     percentageOfDiscount: 45,
-    isNew: true,
   },
 ];
