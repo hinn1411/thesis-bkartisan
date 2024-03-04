@@ -6,6 +6,7 @@ import {
   ShoppingOutlined,
   HeartOutlined,
 } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 interface ProductCardProps {
   srcImage: string;
   name: string;
@@ -15,7 +16,7 @@ interface ProductCardProps {
   currentCost: number;
   originalCost: number;
   percentageOfDiscount: number;
-  isNew: boolean;
+  isNew?: boolean;
   isBuyingGiftProcess?: boolean;
   productType?: string;
 }
@@ -34,6 +35,7 @@ const ProductCard: FC<ProductCardProps> = memo(
     isBuyingGiftProcess,
     productType,
   }) => {
+    const navigate = useNavigate();
     const curPrice = new Intl.NumberFormat('vi-VN', {
       style: 'currency',
       currency: 'VND',
@@ -43,7 +45,10 @@ const ProductCard: FC<ProductCardProps> = memo(
       currency: 'VND',
     }).format(originalCost);
     return (
-      <div className="mx-auto relative max-w-sm rounded border overflow-hidden shadow-sm hover:shadow-lg">
+      <div
+        onClick={() => navigate('/products/:productId')}
+        className="mx-auto relative max-w-sm rounded border overflow-hidden shadow-sm hover:shadow-lg hover:scale-105 hover:duration-300"
+      >
         {/* Inner container */}
         <div className="px-3 py-3">
           <div>
@@ -54,7 +59,7 @@ const ProductCard: FC<ProductCardProps> = memo(
             )}
             <img
               src={srcImage}
-              className="object-cover rounded-[2px] border border-black border-opacity-50 hover:cursor-pointer"
+              className="object-cover h-[225px] w-[300px] rounded-[2px] border border-black border-opacity-50 hover:cursor-pointer"
               alt="product image"
             />
           </div>

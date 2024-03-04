@@ -27,7 +27,7 @@ import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
 import DetailProduct from '../pages/Seller/ManageProducts/DetailProduct';
 import CreateProducts from '../pages/Seller/ManageProducts/CreateProducts';
 import Dashboard from '../pages/Seller/Dashboard/Dashboard';
-
+import SellerRegistrationPage from '../pages/Seller/registration/SellerRegistration';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -38,17 +38,15 @@ const router = createBrowserRouter([
       { path: 'cart', element: <CartPage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
       { path: 'favourite/:userId', element: <FavouriteProductPage /> },
+      { path: 'seller_registration', element: <SellerRegistrationPage /> },
     ],
   },
   {
     path: '/gift',
     element: <UserLayout />,
     errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <ChooseBoxPage />}
-    ]
-  }
-  ,
+    children: [{ index: true, element: <ChooseBoxPage /> }],
+  },
   {
     path: '/login',
     element: <LoginPage />,

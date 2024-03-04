@@ -2,11 +2,11 @@ import { memo, FC } from 'react';
 import {
   HeartOutlined,
   ShoppingOutlined,
-  GiftOutlined,
+  // GiftOutlined,
   SearchOutlined,
   MenuOutlined,
   CaretDownOutlined,
-  ShopOutlined 
+  ShopOutlined,
 } from '@ant-design/icons';
 import vnFlag from '../../assets/images/header/vn-flag.png';
 import enFlag from '../../assets/images/header/enFlag.webp';
@@ -58,7 +58,7 @@ const Header: FC = memo(() => {
     <nav className="container mx-auto px-20 py-4 border-b-2 border-b-gray-300">
       <div className="flex flex-col justify-between items-center md:flex-row space-y-4 md:space-y-0 md:space-x-4 mx-auto">
         <span className="text-4xl text-orange-600 font-semibold">
-          <Link to="/" className='flex justify-center items-center space-x-2'>
+          <Link to="/" className="flex justify-center items-center space-x-2">
             <svg
               width="43"
               height="43"
@@ -71,8 +71,8 @@ const Header: FC = memo(() => {
                 d="M17.1804 13.5354C16.3111 14.4208 16.3111 15.8535 17.1965 16.7389L19.1283 18.6707C20.9473 20.4897 20.9473 23.4518 19.1283 25.2708L15.5867 21.7293C14.6772 20.8197 14.2184 19.6204 14.2184 18.4292C14.2184 17.2379 14.6772 16.0386 15.5867 15.1291L17.1563 13.5596C17.1643 13.5515 17.1724 13.5435 17.1804 13.5354Z"
                 fill="#EA580C"
                 stroke="white"
-                stroke-width="2"
-                stroke-miterlimit="10"
+                strokeWidth="2"
+                strokeMiterlimit="10"
               />
               <path
                 d="M18.726 18.2675L17.1967 16.7382C16.3113 15.8528 16.3033 14.4282 17.1806 13.5347C18.0499 12.6815 19.4343 12.6976 20.2956 13.5589C20.7302 13.9935 20.9475 14.565 20.9475 15.1284C20.9475 15.6918 20.7302 16.2633 20.2956 16.698L19.9334 17.0602"
@@ -81,15 +81,15 @@ const Header: FC = memo(() => {
               <path
                 d="M18.726 18.2675L17.1967 16.7382C16.3113 15.8528 16.3033 14.4282 17.1806 13.5347C18.0499 12.6815 19.4343 12.6976 20.2956 13.5589C20.7302 13.9935 20.9475 14.565 20.9475 15.1284C20.9475 15.6918 20.7302 16.2633 20.2956 16.698L19.9334 17.0602"
                 stroke="white"
-                stroke-width="2"
-                stroke-miterlimit="10"
+                strokeWidth="2"
+                strokeMiterlimit="10"
               />
               <path
                 d="M26.3153 29.3514C27.1846 28.466 27.1846 27.0333 26.2992 26.1479L24.3674 24.2162C22.5483 22.3971 22.5483 19.4351 24.3674 17.616L27.909 21.1575C28.8185 22.0671 29.2773 23.2664 29.2773 24.4576C29.2773 25.6489 28.8185 26.8482 27.909 27.7577L26.3394 29.3273C26.3233 29.3434 26.3153 29.3514 26.3153 29.3514Z"
                 fill="#EA580C"
                 stroke="white"
-                stroke-width="2"
-                stroke-miterlimit="10"
+                strokeWidth="2"
+                strokeMiterlimit="10"
               />
               <path
                 d="M24.7622 24.6265L26.2915 26.1558C27.1769 27.0412 27.1849 28.4659 26.3076 29.3593C25.4383 30.2125 24.0538 30.1964 23.1926 29.3352C22.758 28.9005 22.5406 28.3291 22.5406 27.7656C22.5406 27.2022 22.758 26.6307 23.1926 26.1961L23.5629 25.8258"
@@ -98,8 +98,8 @@ const Header: FC = memo(() => {
               <path
                 d="M24.7622 24.6265L26.2915 26.1558C27.1769 27.0412 27.1849 28.4659 26.3076 29.3593C25.4383 30.2125 24.0538 30.1964 23.1926 29.3352C22.758 28.9005 22.5406 28.3291 22.5406 27.7656C22.5406 27.2022 22.758 26.6307 23.1926 26.1961L23.5629 25.8258"
                 stroke="white"
-                stroke-width="2"
-                stroke-miterlimit="10"
+                strokeWidth="2"
+                strokeMiterlimit="10"
               />
             </svg>
             <span>BKArtisan</span>
@@ -188,12 +188,15 @@ const Header: FC = memo(() => {
             </div>
           </Link>
 
-          <div className="flex items-center justify-center">
-            <ShopOutlined
-              size={24}
-              className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
-            />
-          </div>
+          <Link to="/seller_registration">
+            <div className="flex items-center justify-center">
+              <ShopOutlined
+                size={24}
+                className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
+              />
+            </div>
+          </Link>
+
           <div className="language-container relative" ref={languageRef}>
             <div
               onClick={() => setIsLanguageDropdownOpened((prev) => !prev)}
