@@ -28,8 +28,16 @@ import DetailProduct from '../pages/Seller/ManageProducts/DetailProduct';
 import CreateProducts from '../pages/Seller/ManageProducts/CreateProducts';
 import Dashboard from '../pages/Seller/Dashboard/Dashboard';
 
+// Admin pages
+import DashboardAdmin from '../pages/Admin/DashboardAdmin';
 import UserManagement from '../pages/Admin/UserManagement';
 import CollabManagement from '../pages/Admin/CollabManagement';
+import ProductManagement from '../pages/Admin/ProductManament';
+import ReportManagement from '../pages/Admin/ReportManagement';
+import ReviewProduct from '../pages/Admin/ReviewProduct';
+import OrderManagement from '../pages/Admin/OrderManagement';
+import Message from '../pages/Admin/Message';
+
 
 const router = createBrowserRouter([
   {
@@ -77,8 +85,14 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <UserManagement /> },
-      { path: 'managecollab', element: <CollabManagement /> },
+      { index: true, element: <DashboardAdmin /> },
+      { path: 'users', element: <UserManagement /> },
+      { path: 'collabs', element: <CollabManagement /> },
+      { path: 'reports', element: <ReportManagement /> },
+      { path: 'products', element: <ProductManagement /> },
+      { path: 'reviewproducts', element: <ReviewProduct /> },
+      { path: 'orders', element: <OrderManagement /> },
+      { path: 'message', element: <Message /> }
     ],
   },
   {
