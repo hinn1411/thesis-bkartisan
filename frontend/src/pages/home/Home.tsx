@@ -1,13 +1,52 @@
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 import CategoryCard from '../../components/common/category/CategoryCard';
 // Product images
-import ProductCard from '../../components/common/product/ProductCard';
+import ProductCard, {
+  ProductCardProps,
+} from '../../components/common/product/ProductCard';
 import Pagination from '../../components/common/pagination/Pagination';
 import { useTranslation } from 'react-i18next';
-import { categoryData, productData } from './data';
+import { categoryData } from './data';
+import { useQuery } from '@tanstack/react-query';
+import apiProducts from '../../apis/apiProducts';
+const PAGE = 1,
+  OFFSET = 1;
 const Home: FC = memo(() => {
+  console.log(`render home`);
+
   const { t } = useTranslation();
-  console.log(categoryData);
+
+  const [currentPage, setCurrentPage] = useState(PAGE);
+  const goToNextPage = () => {
+    setCurrentPage((prev) => prev + 1);
+    console.log(`current page = ${currentPage}`);
+    // refetch();
+  };
+  const goToPage = (newPage: number) => {
+    setCurrentPage(prev => newPage);
+  }
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+    console.log(`current page = ${currentPage}`);
+    // refetch();
+  };
+  // console.log(categoryData);
+  const {
+    data: products,
+    isSuccess,
+    refetch,
+  } = useQuery({
+    queryKey: ['products', currentPage],
+    // notifyOnChangeProps: 'all',
+    queryFn: async () => {
+      console.log(`call api, ${currentPage}`);
+
+      return await apiProducts.getProducts(currentPage, OFFSET);
+    },
+  });
+  // console.log(`products`, products);
 
   return (
     <main className="min-h-screen px-20 my-5">
@@ -47,12 +86,18 @@ const Home: FC = memo(() => {
       </div>
       {/* Product list */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {productData.map((product, index) => (
-          <ProductCard key={index} {...product} />
-        ))}
+        {isSuccess &&
+          products.map((product: ProductCardProps, index: number) => (
+            <ProductCard key={index} {...product} />
+          ))}
       </div>
 
-      <Pagination />
+      <Pagination
+        currentPage={PAGE}
+        goToLeft={goToPreviousPage}
+        goToRight={goToNextPage}
+        goToPage={goToPage}
+      />
     </main>
   );
 });

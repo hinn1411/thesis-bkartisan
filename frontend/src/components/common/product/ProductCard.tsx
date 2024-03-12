@@ -7,7 +7,7 @@ import {
   HeartOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-interface ProductCardProps {
+export interface ProductCardProps {
   srcImage: string;
   name: string;
   star: number;
@@ -79,7 +79,7 @@ const ProductCard: FC<ProductCardProps> = memo(
             <div className="text-base oldstyle-nums text-[#258635] font-medium">
               {curPrice}
             </div>
-            <div className="text-[12px] opacity-50">
+            <div className="text-[12px] opacity-90">
               {originalPrice} ({percentageOfDiscount}%)
             </div>
           </div>
