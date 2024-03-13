@@ -47,7 +47,7 @@ const ProductCard: FC<ProductCardProps> = memo(
     return (
       <div
         onClick={() => navigate('/products/:productId')}
-        className="mx-auto relative max-w-sm rounded border overflow-hidden shadow-sm hover:shadow-lg hover:scale-105 hover:duration-300"
+        className="mx-auto relative max-w-sm rounded border overflow-hidden shadow-sm hover:shadow-lg hover:scale-105 duration-300"
       >
         {/* Inner container */}
         <div className="px-3 py-3">
