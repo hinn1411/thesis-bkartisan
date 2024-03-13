@@ -9,6 +9,10 @@ import { useProductPagination } from './hooks/useProductPagination';
 import { useTranslation } from 'react-i18next';
 import { categoryData } from './data';
 
+/*
+  remember adding skeleton when fetching data
+*/
+
 const Home: FC = memo(() => {
   console.log(`render home`);
   const { t } = useTranslation();
