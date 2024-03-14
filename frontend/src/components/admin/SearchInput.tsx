@@ -2,14 +2,14 @@ import { ChangeEvent, FC, useState } from "react";
 import { Input } from "@mui/base";
 
 
-interface TextInputProps {
+interface SearchInputProps {
     placeholder: string,
     ariaLabel: string,
     handleEnter: Function,
     className?: string
 }
 
-const TextInput: FC<TextInputProps> = ({placeholder, ariaLabel, handleEnter, className}) => {
+const SearchInput: FC<SearchInputProps> = ({placeholder, ariaLabel, handleEnter, className}) => {
     const [value, setValue] = useState("");
 
     const onChange = (e: ChangeEvent) => {
@@ -39,4 +39,4 @@ const TextInput: FC<TextInputProps> = ({placeholder, ariaLabel, handleEnter, cla
   );
 };
 
-export default TextInput;
+export default SearchInput;

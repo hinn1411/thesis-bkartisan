@@ -115,7 +115,7 @@ const Select = React.forwardRef(function CustomSelect<
           return {
             ...resolvedSlotProps,
             className: clsx(
-              `relative text-sm font-sans box-border w-60 px-3 py-2 rounded-lg text-left bg-white dark:bg-neutral-900 border border-solid border-slate-200 dark:border-neutral-700 text-slate-900 dark:text-neutral-300 transition-all hover:bg-slate-50 dark:hover:bg-neutral-800 outline-0 shadow-md shadow-slate-100 dark:shadow-slate-900 ${
+              `relative text-sm font-sans box-border w-48 px-3 py-2 rounded-lg text-left bg-white dark:bg-neutral-900 border border-solid border-slate-200 dark:border-neutral-700 text-slate-900 dark:text-neutral-300 transition-all hover:bg-slate-50 dark:hover:bg-neutral-800 outline-0 shadow-md shadow-slate-100 dark:shadow-slate-900 ${
                 ownerState.focusVisible
                   ? 'focus-visible:ring-4 ring-purple-500/30 focus-visible:border-purple-500 focus-visible:dark:border-purple-500'
                   : ''
@@ -132,7 +132,7 @@ const Select = React.forwardRef(function CustomSelect<
           return {
             ...resolvedSlotProps,
             className: clsx(
-              `text-sm font-sans p-1.5 my-3 w-60 rounded-xl overflow-auto outline-0 bg-white dark:bg-neutral-900 border border-solid border-slate-200 dark:border-neutral-700 text-slate-900 dark:text-neutral-300 shadow shadow-slate-200 dark:shadow-neutral-900`,
+              `text-sm font-sans p-1.5 my-3 w-48 rounded-xl overflow-auto outline-0 bg-white dark:bg-neutral-900 border border-solid border-slate-200 dark:border-neutral-700 text-slate-900 dark:text-neutral-300 shadow shadow-slate-200 dark:shadow-neutral-900`,
               resolvedSlotProps?.className,
             ),
           };
