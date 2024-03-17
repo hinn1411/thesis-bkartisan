@@ -38,6 +38,9 @@ import ReviewProduct from "../pages/Admin/ReviewProduct";
 import OrderManagement from "../pages/Admin/OrderManagement";
 import Message from "../pages/Admin/Message";
 import UserDetail from "../pages/Admin/UserDetail";
+import CollabDetail from "../pages/Admin/CollabDetail";
+import HandledReports from "../pages/Admin/HandledReports";
+import HandledProducts from "../pages/Admin/HandledProducts";
 
 const router = createBrowserRouter([
   {
@@ -86,6 +89,9 @@ const router = createBrowserRouter([
       { path: "users", element: <UserManagement />,},
       { path: "users/:id", element: <UserDetail />},
       { path: "collabs", element: <CollabManagement /> },
+      { path: "collabs/:id", element: <CollabDetail />},
+      { path: "collabs/:id/reports", element: <HandledReports />},
+      { path: "collabs/:id/products", element: <HandledProducts />},
       { path: "reports", element: <ReportManagement /> },
       { path: "products", element: <ProductManagement /> },
       { path: "reviewproducts", element: <ReviewProduct /> },
