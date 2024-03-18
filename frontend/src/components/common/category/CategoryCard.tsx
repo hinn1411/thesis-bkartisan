@@ -12,11 +12,11 @@ const CategoryCard: FC<CategoryCardProps> = memo(
           <img
             src={srcImage}
             alt="category image"
-            className="hover:scale-110 duration-300"
+            className="hover:scale-105 duration-300"
           />
           <div className="text-center font-medium">{categoryName}</div>
         </div>
-        <div className="mx-2 mt-0 w-full duration-500 border-b-2 opacity-0 border-black border-2 group-hover:opacity-100"></div>
+        <div className="mx-2 mt-0 w-full duration-500 border-b-2 opacity-0 border-black border-1 group-hover:opacity-100"></div>
       </div>
     );
   }

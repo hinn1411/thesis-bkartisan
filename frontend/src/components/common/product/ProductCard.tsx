@@ -7,7 +7,7 @@ import {
   HeartOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-interface ProductCardProps {
+export interface ProductCardProps {
   srcImage: string;
   name: string;
   star: number;
@@ -47,7 +47,7 @@ const ProductCard: FC<ProductCardProps> = memo(
     return (
       <div
         onClick={() => navigate('/products/:productId')}
-        className="mx-auto relative max-w-sm rounded border overflow-hidden shadow-sm hover:shadow-lg hover:scale-105 hover:duration-300"
+        className="mx-auto relative max-w-sm rounded border overflow-hidden shadow-sm hover:shadow-lg hover:scale-105 duration-300"
       >
         {/* Inner container */}
         <div className="px-3 py-3">
@@ -79,7 +79,7 @@ const ProductCard: FC<ProductCardProps> = memo(
             <div className="text-base oldstyle-nums text-[#258635] font-medium">
               {curPrice}
             </div>
-            <div className="text-[12px] opacity-50">
+            <div className="text-[12px] opacity-90">
               {originalPrice} ({percentageOfDiscount}%)
             </div>
           </div>
