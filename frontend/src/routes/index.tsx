@@ -1,26 +1,26 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
 
 // Layouts
-import UserLayout from '../layouts/UserLayout';
-import AdminLayout from '../layouts/AdminLayout';
-import SellerLayout from '../layouts/SellerLayout';
+import UserLayout from "../layouts/UserLayout";
+import AdminLayout from "../layouts/AdminLayout";
+import SellerLayout from "../layouts/SellerLayout";
 
 // Common pages
-import ErrorPage from '../pages/errors/Error';
+import ErrorPage from "../pages/errors/Error";
 
 // Auth pages
-import LoginPage from '../pages/login/Login';
-import RegisterPage from '../pages/register/Register';
-import EnterEmailPage from '../pages/enter-email/EnterEmail';
-import SendPasswordPage from '../pages/send-password/SendPassword';
+import LoginPage from "../pages/login/Login";
+import RegisterPage from "../pages/register/Register";
+import EnterEmailPage from "../pages/enter-email/EnterEmail";
+import SendPasswordPage from "../pages/send-password/SendPassword";
 
 // Buyer pages
-import HomePage from '../pages/home/Home';
-import ProductDetailPage from '../pages/products/ProductDetail';
-import FavouriteProductPage from '../pages/favourite/FavouriteProduct';
-import CartPage from '../pages/cart/Cart';
+import HomePage from "../pages/home/Home";
+import ProductDetailPage from "../pages/products/ProductDetail";
+import FavouriteProductPage from "../pages/favourite/FavouriteProduct";
+import CartPage from "../pages/cart/Cart";
 // -- Gifts
-import ChooseBoxPage from '../pages/gift/Gift';
+import ChooseBoxPage from "../pages/gift/Gift";
 
 // Seller pages
 import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
@@ -39,9 +39,25 @@ import ViewMessage from '../pages/Seller/Message/ViewMessage';
 import ViewReport from '../pages/Seller/Report/ViewReport';
 import ViewTransport from '../pages/Seller/ManageTransport/ViewTransport';
 import SellerRegistrationPage from '../pages/Seller/registration/SellerRegistration';
+
+// Admin pages
+import DashboardAdmin from "../pages/Admin/Dashboard/DashboardAdmin";
+import UserManagement from "../pages/Admin/User/UserManagement";
+import CollabManagement from "../pages/Admin/Collab/CollabManagement";
+import ProductManagement from "../pages/Admin/Product/ProductManament";
+import ReportManagement from "../pages/Admin/Report/ReportManagement";
+import ReviewProduct from "../pages/Admin/ReviewProduct/ReviewProduct";
+import OrderManagement from "../pages/Admin/Order/OrderManagement";
+import Message from "../pages/Admin/Message";
+import UserDetail from "../pages/Admin/User/UserDetail";
+import CollabDetail from "../pages/Admin/Collab/CollabDetail";
+import HandledReports from "../pages/Admin/Collab/HandledReports";
+import HandledProducts from "../pages/Admin/Collab/HandledProducts";
+import AddCollab from "../pages/Admin/Collab/AddCollab";
+
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <UserLayout />,
     errorElement: <ErrorPage />,
     children: [
@@ -53,39 +69,53 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/gift',
+    path: "/gift",
     element: <UserLayout />,
     errorElement: <ErrorPage />,
     children: [{ index: true, element: <ChooseBoxPage /> }],
   },
   {
-    path: '/login',
+    path: "/login",
     element: <LoginPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: '/register',
+    path: "/register",
     element: <RegisterPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: '/enter-email',
+    path: "/enter-email",
     element: <EnterEmailPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: '/send-password',
+    path: "/send-password",
     element: <SendPasswordPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: '/admin',
+    path: "/admin",
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
-    children: [{}],
+    children: [
+      { index: true, element: <DashboardAdmin /> },
+      { path: "users", element: <UserManagement />,},
+      { path: "users/:id", element: <UserDetail />},
+      { path: "collabs", element: <CollabManagement /> },
+      { path: "collabs/:id", element: <CollabDetail />},
+      { path: "collabs/:id/reports", element: <HandledReports />},
+      { path: "collabs/:id/products", element: <HandledProducts />},
+      { path: "collabs/create", element: <AddCollab />},
+      { path: "reports", element: <ReportManagement /> },
+      { path: "products", element: <ProductManagement /> },
+      { path: "reviewproducts", element: <ReviewProduct /> },
+      { path: "orders", element: <OrderManagement /> },
+      { path: "message", element: <Message /> },
+    ],
   },
   {
-    path: '/seller',
+    path: "/seller",
     element: <SellerLayout />,
     errorElement: <ErrorPage />,
     children: [
