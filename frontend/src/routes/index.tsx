@@ -23,10 +23,22 @@ import CartPage from "../pages/cart/Cart";
 import ChooseBoxPage from "../pages/gift/Gift";
 
 // Seller pages
-import ViewProduct from "../pages/Seller/ManageProducts/ViewProduct";
-import DetailProduct from "../pages/Seller/ManageProducts/DetailProduct";
-import CreateProducts from "../pages/Seller/ManageProducts/CreateProducts";
-import Dashboard from "../pages/Seller/Dashboard/Dashboard";
+import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
+import DetailProduct from '../pages/Seller/ManageProducts/DetailProduct';
+import CreateProducts from '../pages/Seller/ManageProducts/CreateProducts';
+import Dashboard from '../pages/Seller/Dashboard/Dashboard';
+import ViewOrders from '../pages/Seller/ManageOrders/ViewOrders';
+import DetailOrders from '../pages/Seller/ManageOrders/DetailOrder';
+import ViewDiscounts from '../pages/Seller/ManageDiscounts/ViewDiscounts';
+import ChangeDiscount from '../pages/Seller/ManageDiscounts/ChangeDiscount';
+import CreateDiscount from '../pages/Seller/ManageDiscounts/CreateDiscount';
+import ViewGift from '../pages/Seller/ManageGift/ViewGift';
+import ChangeGift from '../pages/Seller/ManageGift/ChangeGift';
+import CreateGift from '../pages/Seller/ManageGift/CreateGift';
+import ViewMessage from '../pages/Seller/Message/ViewMessage';
+import ViewReport from '../pages/Seller/Report/ViewReport';
+import ViewTransport from '../pages/Seller/ManageTransport/ViewTransport';
+import SellerRegistrationPage from '../pages/Seller/registration/SellerRegistration';
 
 // Admin pages
 import DashboardAdmin from "../pages/Admin/Dashboard/DashboardAdmin";
@@ -50,9 +62,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "cart", element: <CartPage /> },
-      { path: "products/:productId", element: <ProductDetailPage /> },
-      { path: "favourite/:userId", element: <FavouriteProductPage /> },
+      { path: 'cart', element: <CartPage /> },
+      { path: 'products/:productId', element: <ProductDetailPage /> },
+      { path: 'favourite/:userId', element: <FavouriteProductPage /> },
+      { path: 'seller_registration', element: <SellerRegistrationPage /> },
     ],
   },
   {
@@ -107,9 +120,20 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Dashboard /> },
-      { path: "manageproducts", element: <ViewProduct /> },
-      { path: "manageproducts/createproduct", element: <CreateProducts /> },
-      { path: "manageproducts/detail", element: <DetailProduct /> },
+      { path: 'manage_products', element: <ViewProduct /> },
+      { path: 'manage_products/create_product/', element: <CreateProducts /> },
+      { path: 'manage_products/detail/:productId', element: <DetailProduct /> },
+      { path: 'manage_orders', element: <ViewOrders /> },
+      { path: 'manage_orders/:orderId', element: <DetailOrders /> },
+      { path: 'manage_discounts', element: <ViewDiscounts /> },
+      { path: 'manage_discounts/change_discount/:discountId', element: <ChangeDiscount /> },
+      { path: 'manage_discounts/create_discount/', element: <CreateDiscount /> },
+      { path: 'report', element: <ViewReport /> },
+      { path: 'message', element: <ViewMessage /> },
+      { path: 'manage_transport', element: <ViewTransport /> },
+      { path: 'manage_gift', element: <ViewGift /> },
+      { path: 'manage_gift/change_gift/:giftId', element: <ChangeGift /> },
+      { path: 'manage_gift/create_gift/', element: <CreateGift /> },
     ],
   },
 ]);

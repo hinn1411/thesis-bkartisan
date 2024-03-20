@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, FC, memo } from 'react';
+import { Fragment, useRef, FC, memo } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
