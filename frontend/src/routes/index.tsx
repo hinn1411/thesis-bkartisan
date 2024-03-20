@@ -29,18 +29,19 @@ import CreateProducts from "../pages/Seller/ManageProducts/CreateProducts";
 import Dashboard from "../pages/Seller/Dashboard/Dashboard";
 
 // Admin pages
-import DashboardAdmin from "../pages/Admin/DashboardAdmin";
-import UserManagement from "../pages/Admin/UserManagement";
-import CollabManagement from "../pages/Admin/CollabManagement";
-import ProductManagement from "../pages/Admin/ProductManament";
-import ReportManagement from "../pages/Admin/ReportManagement";
-import ReviewProduct from "../pages/Admin/ReviewProduct";
-import OrderManagement from "../pages/Admin/OrderManagement";
+import DashboardAdmin from "../pages/Admin/Dashboard/DashboardAdmin";
+import UserManagement from "../pages/Admin/User/UserManagement";
+import CollabManagement from "../pages/Admin/Collab/CollabManagement";
+import ProductManagement from "../pages/Admin/Product/ProductManament";
+import ReportManagement from "../pages/Admin/Report/ReportManagement";
+import ReviewProduct from "../pages/Admin/ReviewProduct/ReviewProduct";
+import OrderManagement from "../pages/Admin/Order/OrderManagement";
 import Message from "../pages/Admin/Message";
-import UserDetail from "../pages/Admin/UserDetail";
-import CollabDetail from "../pages/Admin/CollabDetail";
-import HandledReports from "../pages/Admin/HandledReports";
-import HandledProducts from "../pages/Admin/HandledProducts";
+import UserDetail from "../pages/Admin/User/UserDetail";
+import CollabDetail from "../pages/Admin/Collab/CollabDetail";
+import HandledReports from "../pages/Admin/Collab/HandledReports";
+import HandledProducts from "../pages/Admin/Collab/HandledProducts";
+import AddCollab from "../pages/Admin/Collab/AddCollab";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +93,7 @@ const router = createBrowserRouter([
       { path: "collabs/:id", element: <CollabDetail />},
       { path: "collabs/:id/reports", element: <HandledReports />},
       { path: "collabs/:id/products", element: <HandledProducts />},
+      { path: "collabs/create", element: <AddCollab />},
       { path: "reports", element: <ReportManagement /> },
       { path: "products", element: <ProductManagement /> },
       { path: "reviewproducts", element: <ReviewProduct /> },

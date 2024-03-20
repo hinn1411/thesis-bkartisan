@@ -1,9 +1,10 @@
 import { FC, Fragment, memo, useState } from "react";
-import DropdownSelect from "../../components/admin/DropdownSelect";
+import DropdownSelect from "../../../components/admin/DropdownSelect";
 import { Button, Box } from "@mui/material";
-import SearchInput from "../../components/admin/SearchInput";
-import User from "../../components/admin/User";
+import SearchInput from "../../../components/admin/SearchInput";
+import UserItem from "../../../components/admin/listitem/UserItem";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const img_example =
   "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
@@ -13,13 +14,37 @@ const CollabManagement: FC = memo(() => {
   const optionDateFilter = ["Mới nhất", "Sớm nhất"];
 
   const arr = [
-    {avatar:img_example, name:"Meow", gender:"meow", phone:"meow", email:"meow"},
-    {avatar:img_example, name:"Meow", gender:"meow", phone:"meow", email:"meow"},
-    {avatar:img_example, name:"Meow", gender:"meow", phone:"meow", email:"meow"},
-    {avatar:img_example, name:"Meow", gender:"meow", phone:"meow", email:"meow"},
-  ]
+    {
+      avatar: img_example,
+      name: "Meow",
+      gender: "meow",
+      phone: "meow",
+      email: "meow",
+    },
+    {
+      avatar: img_example,
+      name: "Meow",
+      gender: "meow",
+      phone: "meow",
+      email: "meow",
+    },
+    {
+      avatar: img_example,
+      name: "Meow",
+      gender: "meow",
+      phone: "meow",
+      email: "meow",
+    },
+    {
+      avatar: img_example,
+      name: "Meow",
+      gender: "meow",
+      phone: "meow",
+      email: "meow",
+    },
+  ];
 
-  const foo = () => console.log("MUAHAHA")
+  const foo = () => console.log("MUAHAHA");
 
   return (
     <Fragment>
@@ -30,7 +55,16 @@ const CollabManagement: FC = memo(() => {
           <DropdownSelect values={optionDateFilter} setValue={setDateFilter} />
         </Box>
 
-        <Button component="div" className="gap-6" variant="contained" endIcon={<IoMdAddCircleOutline />} >Thêm cộng tác viên mới</Button>
+        <Link to="create">
+          <Button
+            component="div"
+            className="gap-6"
+            variant="contained"
+            endIcon={<IoMdAddCircleOutline />}
+          >
+            Thêm cộng tác viên mới
+          </Button>
+        </Link>
 
         <Box display="flex" px={2} gap={2}>
           <SearchInput
@@ -53,13 +87,15 @@ const CollabManagement: FC = memo(() => {
         <div className="basis-2/6">Email</div>
       </Box>
 
-      {
-        arr.map((element, index) => {
-          return <User key={index} color={index % 2 == 0 ? "#F2F6FC" : "white"} {...element}/>
-        })
-      }
-      
-      
+      {arr.map((element, index) => {
+        return (
+          <UserItem
+            key={index}
+            color={index % 2 == 0 ? "#F2F6FC" : "white"}
+            {...element}
+          />
+        );
+      })}
     </Fragment>
   );
 });

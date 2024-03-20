@@ -1,13 +1,13 @@
 import { FC, Fragment, memo, useState } from "react";
 import { Avatar, Box, Grid } from "@mui/material";
-import ReturnIcon from "../../components/admin/ReturnIcon";
+import ReturnIcon from "../../../components/admin/ReturnIcon";
 import { FaRegUser } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
 import { MdMailOutline, MdDeleteForever, MdOutlineChat } from "react-icons/md";
 import { FaClipboardCheck } from "react-icons/fa6";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { LuPenLine } from "react-icons/lu";
-import DeleteModal from "./modal/DeleteModal";
+import DeleteModal from "../modal/DeleteModal";
 import { Link } from "react-router-dom";
 
 const img_example =
@@ -160,7 +160,7 @@ const CollabDetail: FC = memo(() => {
             </Grid>
             {/**Button sản phẩm đã duyệt */}
             <Grid item xs={6}>
-              <Link to="products">
+              <Link to="products" state={{name: "Lầu Hội"}}>
                 <Box
                   display={"flex"}
                   alignItems={"center"}

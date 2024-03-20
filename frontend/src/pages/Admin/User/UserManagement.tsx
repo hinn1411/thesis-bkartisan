@@ -1,8 +1,8 @@
 import { FC, Fragment, memo, useState } from "react";
-import DropdownSelect from "../../components/admin/DropdownSelect";
+import DropdownSelect from "../../../components/admin/DropdownSelect";
 import { Button, Box } from "@mui/material";
-import SearchInput from "../../components/admin/SearchInput";
-import User from "../../components/admin/User";
+import SearchInput from "../../../components/admin/SearchInput";
+import UserItem from "../../../components/admin/listitem/UserItem";
 
 const img_example =
   "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
@@ -59,7 +59,7 @@ const UserManagement: FC = memo(() => {
 
       {
         arr.map((element, index) => {
-          return <User key={index} color={index % 2 == 0 ? "#F2F6FC" : "white"} {...element}/>
+          return <UserItem key={index} color={index % 2 == 0 ? "#F2F6FC" : "white"} {...element}/>
         })
       }
       

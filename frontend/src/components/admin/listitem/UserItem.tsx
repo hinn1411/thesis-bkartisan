@@ -1,4 +1,4 @@
-import { FC, Fragment, memo } from "react";
+import { FC, memo } from "react";
 import { Box } from "@mui/system";
 import { Button, Avatar } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ interface UserProps {
   color: string;
 }
 
-const User: FC<UserProps> = memo(({avatar, name, gender, phone, email, color}) => {
+const UserItem: FC<UserProps> = memo(({avatar, name, gender, phone, email, color}) => {
 
   return (
     <Box display={"flex"} py={1} bgcolor={color}>
@@ -40,4 +40,4 @@ const User: FC<UserProps> = memo(({avatar, name, gender, phone, email, color}) =
   );
 });
 
-export default User;
+export default UserItem;

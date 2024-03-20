@@ -1,11 +1,11 @@
 import { FC, Fragment, memo, useState } from "react";
 import { Avatar, Box, Grid } from "@mui/material";
-import ReturnIcon from "../../components/admin/ReturnIcon";
+import ReturnIcon from "../../../components/admin/ReturnIcon";
 import { FaRegUser } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
 import { MdMailOutline, MdDeleteForever, MdOutlineChat  } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
-import DeleteModal from "./modal/DeleteModal";
+import DeleteModal from "../modal/DeleteModal";
 
 const img_example =
   "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
