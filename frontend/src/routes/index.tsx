@@ -54,6 +54,7 @@ import CollabDetail from "../pages/Admin/Collab/CollabDetail";
 import HandledReports from "../pages/Admin/Collab/HandledReports";
 import HandledProducts from "../pages/Admin/Collab/HandledProducts";
 import AddCollab from "../pages/Admin/Collab/AddCollab";
+import ReportDetail from "../pages/Admin/Report/ReportDetail";
 
 const router = createBrowserRouter([
   {
@@ -108,7 +109,9 @@ const router = createBrowserRouter([
       { path: "collabs/:id/products", element: <HandledProducts />},
       { path: "collabs/create", element: <AddCollab />},
       { path: "reports", element: <ReportManagement /> },
+      { path: "reports/:id", element: <ReportDetail />},
       { path: "products", element: <ProductManagement /> },
+      { path: "products/:id", element: <ProductDetailPage />},
       { path: "reviewproducts", element: <ReviewProduct /> },
       { path: "orders", element: <OrderManagement /> },
       { path: "message", element: <Message /> },

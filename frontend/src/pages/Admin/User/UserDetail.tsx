@@ -5,13 +5,15 @@ import { FaRegUser } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
 import { MdMailOutline, MdDeleteForever, MdOutlineChat  } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
-import DeleteModal from "../modal/DeleteModal";
+import DeleteModal from "../../../components/admin/modal/DeleteModal";
+import LockModal from "../../../components/admin/modal/LockModal";
 
 const img_example =
   "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
 
 const UserDetail: FC = memo(() => {
   const [openDeleteModal, setDeleteModal] = useState(false);
+  const [openLockModal, setLockModal] = useState(false);
 
   return (
     <Fragment>
@@ -118,6 +120,7 @@ const UserDetail: FC = memo(() => {
                 display={"flex"}
                 alignItems={"center"}
                 className="w-full text-white bg-amber-500 hover:bg-amber-600 font-medium rounded-lg text-sm py-2.5"
+                onClick={() => setLockModal(true)}
               >
                 <Box px={2}>
                   <CiLock size={"1.5rem"} fill="#ffffff" />
@@ -156,6 +159,7 @@ const UserDetail: FC = memo(() => {
         </Box>
       </Box>
       <DeleteModal openModal={openDeleteModal} setOpenModal={setDeleteModal}/>
+      <LockModal openModal={openLockModal} setOpenModal={setLockModal} />
     </Fragment>
   );
 });

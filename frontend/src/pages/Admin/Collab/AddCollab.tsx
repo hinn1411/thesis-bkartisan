@@ -1,18 +1,40 @@
-import { FC, Fragment, memo, useState } from "react";
-import { Avatar, Box, Grid } from "@mui/material";
+import { FC, Fragment, memo } from "react";
+import { Box, Grid } from "@mui/material";
 import ReturnIcon from "../../../components/admin/ReturnIcon";
 import { FaRegUser } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
-import { MdMailOutline, MdDeleteForever, MdOutlineChat } from "react-icons/md";
-import { CiLock } from "react-icons/ci";
-import DeleteModal from "../modal/DeleteModal";
-import { TextInput } from "flowbite-react";
+import { MdMailOutline } from "react-icons/md";
+import { TextInput, Button, Select } from "flowbite-react";
+import { useForm } from "react-hook-form";
+import UploadImage from "../../../components/admin/UploadImage";
 
-const img_example =
-  "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
+
+type FormData = {
+  name: string;
+  gender: "male" | "female";
+  phone: string;
+  email: string;
+  username: string;
+  password: string;
+  repeatPassword: string;
+  address: string;
+  image: string;
+};
 
 const AddCollab: FC = memo(() => {
-  const [openDeleteModal, setDeleteModal] = useState(false);
+  const {
+    register,
+    getValues,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      image: "",
+    }
+  });
+
+  const onSubmit = handleSubmit((data) => console.log(data));
 
   return (
     <Fragment>
@@ -21,7 +43,7 @@ const AddCollab: FC = memo(() => {
         <ReturnIcon />
       </Box>
 
-      <Box display="flex" py={2}>
+      <Box display="flex" py={2} component="form" onSubmit={onSubmit}>
         <Box
           width={6 / 10}
           className="border-2 border-slate-300/50 rounded p-4"
@@ -34,61 +56,118 @@ const AddCollab: FC = memo(() => {
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Họ và tên</Box>
-              <TextInput id="email4" type="email" icon={FaRegUser} placeholder="name@flowbite.com" required />
+              <TextInput
+                type="text"
+                icon={FaRegUser}
+                {...register("name", { required: true })}
+                helperText={
+                  errors.name && (
+                    <span className="text-red-500">
+                      Vui lòng nhập họ và tên
+                    </span>
+                  )
+                }
+              />
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Giới tính</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                Nam
-              </Box>
+              <Select id="gender" {...register("gender")}>
+                <option>Nam</option>
+                <option>Nữ</option>
+              </Select>
             </Grid>
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Số điện thoại</Box>
-              <Box
-                display="flex"
-                className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] p-1 h-9"
-              >
-                <Box alignSelf={"center"} px={1}>
-                  <FiPhone color="#64748B" />
-                </Box>
-                <Box alignSelf={"center"}>0123456789</Box>
-              </Box>
+              <TextInput
+                type="text"
+                icon={FiPhone}
+                {...register("phone", {
+                  required: true,
+                  minLength: 6,
+                  maxLength: 12,
+                  pattern: /^[0-9]+$/,
+                })}
+                helperText={
+                  errors.phone && (
+                    <span className="text-red-500">
+                      Vui lòng nhập số điện thoại hợp lệ
+                    </span>
+                  )
+                }
+              />
             </Grid>
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Email</Box>
-              <Box
-                display="flex"
-                className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] p-1 h-9"
-              >
-                <Box alignSelf={"center"} px={1}>
-                  <MdMailOutline color="#64748B" />
-                </Box>
-                <Box alignSelf={"center"}>lauhoi2010@gmail.com</Box>
-              </Box>
+              <TextInput
+                type="text"
+                icon={MdMailOutline}
+                {...register("email", {
+                  required: true,
+                  pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                })}
+                helperText={
+                  errors.email && (
+                    <span className="text-red-500">
+                      Vui lòng nhập email hợp lệ
+                    </span>
+                  )
+                }
+              />
             </Grid>
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Username</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                lauhoi2010
-              </Box>
+              <TextInput
+                type="text"
+                {...register("username", { required: true })}
+                helperText={
+                  errors.username && (
+                    <span className="text-red-500">
+                      Vui lòng nhập tên tài khoản
+                    </span>
+                  )
+                }
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Box className="font-medium pb-2">Mặt khẩu</Box>
+              <TextInput
+                type="password"
+                {...register("password", { required: true })}
+                helperText={
+                  errors.password && (
+                    <span className="text-red-500">Vui lòng nhập mặt khẩu</span>
+                  )
+                }
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Box className="font-medium pb-2">Nhập lại mặt khẩu</Box>
+              <TextInput
+                type="password"
+                {...register("repeatPassword", {
+                  required: true,
+                  validate: (value) => value === getValues("password"),
+                })}
+                helperText={
+                  errors.repeatPassword && (
+                    <span className="text-red-500">
+                      Nhập lại mặt khẩu không khớp
+                    </span>
+                  )
+                }
+              />
             </Grid>
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Địa chỉ</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-auto break-all">
-                KTX khu A ĐHQG, thành phố Thủ Đức, thành phố Hồ Chí Minh
-              </Box>
-            </Grid>
-            <Grid item xs={6}>
-              <Box className="font-medium pb-2">Ngày tạo tài khoản</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                20/10/2002
-              </Box>
-            </Grid>
-            <Grid item xs={6}>
-              <Box className="font-medium pb-2">Số lần bị khóa tài khoản</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                1
-              </Box>
+              <TextInput
+                type="text"
+                {...register("address", { required: true })}
+                helperText={
+                  errors.address && (
+                    <span className="text-red-500">Vui lòng nhập địa chỉ</span>
+                  )
+                }
+              />
             </Grid>
           </Grid>
         </Box>
@@ -96,64 +175,21 @@ const AddCollab: FC = memo(() => {
           className="h-fit border-2 border-slate-300/50 rounded p-4"
           flexGrow={1}
         >
-          {/**Avatar và tên */}
+          {/**Thêm ảnh đại diện */}
           <Box
             className="py-2"
             display={"flex"}
             flexDirection={"column"}
             alignItems={"center"}
           >
-            <Avatar
-              src={img_example}
-              sx={{ width: "10rem", height: "10rem" }}
-            />
-            <Box className="text-3xl font-medium py-6">Lầu Hội</Box>
+            <UploadImage setValue={setValue} />
+            <Box className="text-2xl font-medium py-6">Thêm ảnh đại diện</Box>
+            <Button color="blue" type="submit">
+              Xác nhận
+            </Button>
           </Box>
-          <Grid container spacing={1.5} p={1} rowGap={1}>
-            {/**Button khóa tài khoản */}
-            <Grid item xs={6}>
-              <Box
-                display={"flex"}
-                alignItems={"center"}
-                className="w-full text-white bg-amber-500 hover:bg-amber-600 font-medium rounded-lg text-sm py-2.5"
-              >
-                <Box px={2}>
-                  <CiLock size={"1.5rem"} fill="#ffffff" />
-                </Box>
-                <Box>Khóa tài khoản</Box>
-              </Box>
-            </Grid>
-            {/**Button xóa tài khoản */}
-            <Grid item xs={6}>
-              <Box
-                display={"flex"}
-                alignItems={"center"}
-                className="w-full text-white bg-red-500 hover:bg-red-600 font-medium rounded-lg text-sm py-2.5"
-                onClick={() => setDeleteModal(true)}
-              >
-                <Box px={2}>
-                  <MdDeleteForever size={"1.5rem"} fill="#ffffff" />
-                </Box>
-                <Box>Xóa tài khoản</Box>
-              </Box>
-            </Grid>
-            {/**Button nhắn tin */}
-            <Grid item xs={6}>
-              <Box
-                display={"flex"}
-                alignItems={"center"}
-                className="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm py-2.5"
-              >
-                <Box px={2}>
-                  <MdOutlineChat size={"1.5rem"} fill="#ffffff" />
-                </Box>
-                <Box>Nhắn tin</Box>
-              </Box>
-            </Grid>
-          </Grid>
         </Box>
       </Box>
-      <DeleteModal openModal={openDeleteModal} setOpenModal={setDeleteModal} />
     </Fragment>
   );
 });
