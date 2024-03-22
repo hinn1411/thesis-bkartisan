@@ -7,7 +7,7 @@ import { MdMailOutline, MdDeleteForever, MdOutlineChat } from "react-icons/md";
 import { FaClipboardCheck } from "react-icons/fa6";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { LuPenLine } from "react-icons/lu";
-import DeleteModal from "../modal/DeleteModal";
+import DeleteModal from "../../../components/admin/modal/DeleteModal";
 import { Link } from "react-router-dom";
 
 const img_example =
