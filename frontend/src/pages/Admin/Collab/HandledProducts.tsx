@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 const img_example =
   "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
 
+
 const HandledProducts: FC = memo(() => {
   const { name } = useLocation().state;
 

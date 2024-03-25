@@ -7,6 +7,7 @@ import { MdMailOutline, MdDeleteForever, MdOutlineChat  } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
 import DeleteModal from "../../../components/admin/modal/DeleteModal";
 import LockModal from "../../../components/admin/modal/LockModal";
+import TextField from "../../../components/admin/TextField";
 
 const img_example =
   "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
@@ -33,33 +34,15 @@ const UserDetail: FC = memo(() => {
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Họ và tên</Box>
-              <Box
-                display="flex"
-                className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] p-1 h-9"
-              >
-                <Box alignSelf={"center"} px={1}>
-                  <FaRegUser fill="#64748B" />
-                </Box>
-                <Box alignSelf={"center"}>Lầu Hội</Box>
-              </Box>
+              <TextField icon={<FaRegUser fill="#64748B" />} value="Lầu Hội"/>
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Giới tính</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                Nam
-              </Box>
+              <TextField value="Nam" />
             </Grid>
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Số điện thoại</Box>
-              <Box
-                display="flex"
-                className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] p-1 h-9"
-              >
-                <Box alignSelf={"center"} px={1}>
-                  <FiPhone color="#64748B" />
-                </Box>
-                <Box alignSelf={"center"}>0123456789</Box>
-              </Box>
+              <TextField icon={<FiPhone color="#64748B" />} value="0123456789" />
             </Grid>
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Email</Box>
@@ -75,27 +58,19 @@ const UserDetail: FC = memo(() => {
             </Grid>
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Username</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                lauhoi2010
-              </Box>
+              <TextField value="lauhoi2010" />
             </Grid>
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Địa chỉ</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-auto break-all">
-                KTX khu A ĐHQG, thành phố Thủ Đức, thành phố Hồ Chí Minh
-              </Box>
+              <TextField textarea value="KTX khu A ĐHQG, thành phố Thủ Đức, thành phố Hồ Chí Minh" />
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Ngày tạo tài khoản</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                20/10/2002
-              </Box>
+              <TextField value="20/10/2002" />
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Số lần bị khóa tài khoản</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                1
-              </Box>
+              <TextField value="1" />
             </Grid>
           </Grid>
         </Box>
