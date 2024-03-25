@@ -8,13 +8,15 @@ import { FaClipboardCheck } from "react-icons/fa6";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { LuPenLine } from "react-icons/lu";
 import DeleteModal from "../../../components/admin/modal/DeleteModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import TextField from "../../../components/admin/TextField";
 
 const img_example =
   "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
 
 const CollabDetail: FC = memo(() => {
   const [openDeleteModal, setDeleteModal] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <Fragment>
@@ -35,82 +37,46 @@ const CollabDetail: FC = memo(() => {
             {/**Họ và tên */}
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Họ và tên</Box>
-              <Box
-                display="flex"
-                className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] p-1 h-9"
-              >
-                <Box alignSelf={"center"} px={1}>
-                  <FaRegUser fill="#64748B" />
-                </Box>
-                <Box alignSelf={"center"}>Lầu Hội</Box>
-              </Box>
+              <TextField icon={<FaRegUser fill="#64748B" />} value="Lầu Hội" />
             </Grid>
             {/**Giới tính */}
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Giới tính</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                Nam
-              </Box>
+              <TextField value="Nam" />
             </Grid>
             {/**Số điên thoại */}
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Số điện thoại</Box>
-              <Box
-                display="flex"
-                className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] p-1 h-9"
-              >
-                <Box alignSelf={"center"} px={1}>
-                  <FiPhone color="#64748B" />
-                </Box>
-                <Box alignSelf={"center"}>0123456789</Box>
-              </Box>
+              <TextField icon={<FiPhone color="#64748B" />} value="0123456789" />
             </Grid>
             {/**Email */}
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Email</Box>
-              <Box
-                display="flex"
-                className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] p-1 h-9"
-              >
-                <Box alignSelf={"center"} px={1}>
-                  <MdMailOutline color="#64748B" />
-                </Box>
-                <Box alignSelf={"center"}>lauhoi2010@gmail.com</Box>
-              </Box>
+              <TextField icon={<MdMailOutline color="#64748B" />} value="lauhoi2010@gmail.com" />
             </Grid>
             {/**Username */}
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Username</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                lauhoi2010
-              </Box>
+              <TextField value="lauhoi2010" />
             </Grid>
             {/**Địa chỉ */}
             <Grid item xs={12}>
               <Box className="font-medium pb-2">Địa chỉ</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-auto break-all">
-                KTX khu A ĐHQG, thành phố Thủ Đức, thành phố Hồ Chí Minh
-              </Box>
+              <TextField textarea value="KTX khu A ĐHQG, thành phố Thủ Đức, thành phố Hồ Chí Minh" />
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Ngày tạo tài khoản</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                20/10/2002
-              </Box>
+              <TextField value="20/10/2002" />
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">
                 Lần duyệt bài đăng mới nhất
               </Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                1
-              </Box>
+              <TextField value="20/10/2002" />
             </Grid>
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Lần xử lí report mới nhất</Box>
-              <Box className="bg-[#eff4fb] rounded-[4px] border border-solid border-[#3c50e0] py-1 px-5 h-9">
-                1
-              </Box>
+              <TextField value="20/10/2002" />
             </Grid>
           </Grid>
         </Box>
@@ -160,33 +126,35 @@ const CollabDetail: FC = memo(() => {
             </Grid>
             {/**Button sản phẩm đã duyệt */}
             <Grid item xs={6}>
-              <Link to="products" state={{name: "Lầu Hội"}}>
+              {/* <Link to="products" state={{name: "Lầu Hội"}}> */}
                 <Box
                   display={"flex"}
                   alignItems={"center"}
                   className="w-full text-white bg-green-400 hover:bg-green-500 font-medium rounded-lg text-sm py-2.5"
+                  onClick={() => navigate("products",{ state: {name: "Lầu Hội"}})}
                 >
                   <Box px={2}>
                     <FaClipboardCheck size={"1.5rem"} fill="#ffffff" />
                   </Box>
                   <Box>Sản phẩm đã duyệt</Box>
                 </Box>
-              </Link>
+              {/* </Link> */}
             </Grid>
             {/**Button report đã xử lý */}
             <Grid item xs={6}>
-              <Link to="reports">
+              {/* <Link to="reports"> */}
                 <Box
                   display={"flex"}
                   alignItems={"center"}
                   className="w-full text-white bg-orange-500 hover:bg-orange-600 font-medium rounded-lg text-sm py-2.5"
+                  
                 >
                   <Box px={2}>
                     <HiOutlineExclamationCircle size={"1.5rem"} />
                   </Box>
                   <Box>Report đã xử lí</Box>
                 </Box>
-              </Link>
+              {/* </Link> */}
             </Grid>
             {/**Button xóa tài khoản */}
             <Grid item xs={6}>

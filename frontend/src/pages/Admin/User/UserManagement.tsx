@@ -1,6 +1,6 @@
 import { FC, Fragment, memo, useState } from "react";
 import DropdownSelect from "../../../components/admin/DropdownSelect";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Grid } from "@mui/material";
 import SearchInput from "../../../components/admin/SearchInput";
 import UserItem from "../../../components/admin/listitem/UserItem";
 
@@ -19,10 +19,10 @@ const UserManagement: FC = memo(() => {
   };
 
   const arr = [
-    {avatar:img_example, name:"Meow", gender:"meow", phone:"meow", email:"meow"},
-    {avatar:img_example, name:"Meow", gender:"meow", phone:"meow", email:"meow"},
-    {avatar:img_example, name:"Meow", gender:"meow", phone:"meow", email:"meow"},
-    {avatar:img_example, name:"Meow", gender:"meow", phone:"meow", email:"meow"},
+    [img_example, "Lầu Hội", "Lầu Hội", "0123456789", "20/10/2002"],
+    [img_example, "Lầu Hội", "Lầu Hội", "0123456789", "20/10/2002"],
+    [img_example, "Lầu Hội", "Lầu Hội", "0123456789", "20/10/2002"],
+    [img_example, "Lầu Hội", "Lầu Hội", "0123456789", "20/10/2002"],
   ]
 
   return (
@@ -46,7 +46,7 @@ const UserManagement: FC = memo(() => {
         </Box>
       </Box>
       <hr style={{ borderWidth: "0.01rem" }} />
-      <Box
+      {/* <Box
         display={"flex"}
         py={2}
         className={"text-slate-600 text-lg font-medium"}
@@ -55,11 +55,42 @@ const UserManagement: FC = memo(() => {
         <div className="basis-1/6">Giới tính</div>
         <div className="basis-1/6">SĐT</div>
         <div className="basis-2/6">Email</div>
-      </Box>
+      </Box> */}
+
+      {/**User */}
+
+      {/* <Grid container className={"text-slate-600 text-lg font-medium p-2 py-5"}>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={3}>Tên</Grid>
+        <Grid item xs={2}>Giới tính</Grid>
+        <Grid item xs={2}>SĐT</Grid>
+        <Grid item xs={2}>Email</Grid>
+      </Grid>
+      <hr className="border"/>
 
       {
         arr.map((element, index) => {
-          return <UserItem key={index} color={index % 2 == 0 ? "#F2F6FC" : "white"} {...element}/>
+          return <UserItem key={index} type="user" values={element}/>
+        })
+      } */}
+
+      {/**Product */}
+
+      <Grid container className={"text-slate-600 text-lg font-medium p-2 py-5"}>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={3}>Tên sản phẩm</Grid>
+        <Grid item xs={3}>Người đăng</Grid>
+        <Grid item xs={2}>Giá</Grid>
+        <Grid item xs={2}>Ngày duyệt</Grid>
+      </Grid>
+      <hr className="border"/>
+
+      {
+        arr.map((element, index) => {
+          if (index !== arr.length - 1)
+          return <UserItem key={index} type="product" values={element}/>
+          else
+          return <UserItem key={index} type="product" values={element} color="bg-[#F2F6FC]"/>
         })
       }
       
