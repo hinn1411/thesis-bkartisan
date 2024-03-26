@@ -21,6 +21,7 @@
     "@mui/system": "^5.15.11",
     "@tanstack/react-query": "^5.26.3",
     "@types/react-router-dom": "^5.3.3",
+    "apexcharts": "^3.48.0",
     "axios": "^1.6.2",
     "flowbite": "^2.0.0",
     "flowbite-react": "^0.6.4",

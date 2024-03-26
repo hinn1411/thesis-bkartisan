@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 import SellerSideBar from '../../../components/sidebar/SellerSideBar';
 import { PiTrashLight } from "react-icons/pi";
 import { FiPlus } from "react-icons/fi";
@@ -17,28 +17,60 @@ const Viewproducts: FC = memo(() => {
     });
   };
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
 
   return (
     <div>
       <SellerSideBar name = "ManageProducts"></SellerSideBar>
       <div className="p-4 sm:ml-64 mt-16">
-        <div className='flex items-center space-x-4'>
-          <Link to={"/seller/manage_products/create_product"}>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center space-x-4'>
+            <Link to={"/seller/manage_products/create_product"}>
+              <div className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
+                <FiPlus className = 'w-5 h-5' />
+                <p>Thêm</p>
+              </div>
+            </Link>
             <div className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
-              <FiPlus className = 'w-5 h-5' />
-              <p>Thêm</p>
+              <PiTrashLight className = 'w-5 h-5'/>
+              <p className='pr-4'>Xóa</p>
             </div>
-          </Link>
-          <div className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
-            <PiTrashLight className = 'w-5 h-5'/>
-            <p className='pr-4'>Xóa</p>
+            <div className='w-auto'>
+                <div onClick={toggleDropdown} className='flex items-center space-x-2 drop-shadow-lg border w-25 px-3 rounded-xl text-gray-500 hover:bg-gray-200 cursor-pointer'>
+                    <CiFilter className='w-5 h-5'/>
+                    <p>Lọc</p>
+                    <IoIosArrowDown className='w-5 h-5'/>
+                </div>
+                <div className={`${isDropdownOpen ? '' : 'hidden'} absolute border rounded-lg min-w-24 bg-white mt-1`}>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>aaaaaaa</p>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>aaaaaaa</p>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>aaaaaaa</p>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>aaaaaaa</p>
+                </div>
+            </div>
           </div>
-          <div className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
-            <CiFilter className = 'w-5 h-5'/>
-            <p>Lọc</p>
-            <IoIosArrowDown className = 'w-5 h-5'/>
+
+          
+          <div className="max-w-md">   
+              <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+              <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                      <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                      </svg>
+                  </div>
+                  <input type="search" id="default-search" className="block w-full p-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500" placeholder="Tìm kiếm sản phẩm" required />
+                  
+              </div>
           </div>
+
+
+
         </div>
         <table className="table-fixed w-full px-8 mt-5 border">
         
