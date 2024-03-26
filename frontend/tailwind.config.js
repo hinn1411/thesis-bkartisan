@@ -4,15 +4,16 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx,css}",
     "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/flowbite/**/*.js",
   ],
   theme: {
     fontFamily: {
-      sans: ['Poppins', 'sans-serif']
+      sans: ["Poppins", "sans-serif"],
     },
     extend: {},
   },
   plugins: [
-    // eslint-disable-next-line no-undef
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     require("flowbite/plugin"),
   ],
 };

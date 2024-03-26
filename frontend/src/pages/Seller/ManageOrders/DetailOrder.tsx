@@ -12,7 +12,7 @@ const DetailOrders: FC = memo(() => {
       <div id={`${orderId}`} className="p-4 sm:ml-64 mt-16">
         <div className='grid grid-cols-2 gap-x-3' style={{ gridTemplateColumns: '45% 55%' }}>
           <div className='col-span-5/12 space-y-3'>
-            <div className='border rounded-md p-2 space-y-3 shadow-md'>
+            <div className='border rounded-md p-4 space-y-3 shadow-md'>
               <p className='border-b-2 border-gray-300 text-xl pb-2'>Thông tin khách hàng</p>
               <div className='flex justify-between space-x-5'>
                 <p className=''>Tên</p>
@@ -32,7 +32,7 @@ const DetailOrders: FC = memo(() => {
               </div>
 
             </div>
-            <div className='border rounded-md p-2 space-y-4 shadow-md'>
+            <div className='border rounded-md p-4 space-y-4 shadow-md'>
               <div className='flex justify-between space-x-5'>
                   <p className=''>Số lượng sản phẩm</p>
                   <p className=''>4</p>
@@ -55,7 +55,7 @@ const DetailOrders: FC = memo(() => {
                 </div>
               </div>
             </div>
-          <div className='col-span-7/12 flex flex-col justify-between border rounded-md p-2 shadow-md'>
+          <div className='col-span-7/12 flex flex-col justify-between border rounded-md p-4 shadow-md'>
             <div>
               <table className="table-fixed w-full ">
                 <thead className='border-b-8 border-white text-xl'>
@@ -67,7 +67,7 @@ const DetailOrders: FC = memo(() => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className='text-center'>
+                  <tr className='text-center hover:bg-gray-300'>
                     <td>Chuông giáng sinh</td>
                     <td className='py-2'>1</td>
                     <td>200.000 VNĐ</td>
