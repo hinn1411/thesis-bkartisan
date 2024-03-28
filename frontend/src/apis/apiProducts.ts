@@ -10,10 +10,11 @@ export interface IProducts {
   discount: number;
 }
 const apiProducts = {
-  getProducts: async (page: number, offset: number) => {
+  getProducts: async (searchTerm:string, page: number, offset: number) => {
     try {
       const { data } = await axiosClient.get(`/products`, {
         params: {
+          searchTerm: searchTerm,
           page: page,
           offset: offset,
         },
@@ -48,6 +49,7 @@ const apiProducts = {
       throw err;
     }
   },
+
 };
 
 export default apiProducts;

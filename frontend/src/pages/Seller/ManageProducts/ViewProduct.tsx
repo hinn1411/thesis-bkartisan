@@ -5,9 +5,35 @@ import { FiPlus } from "react-icons/fi";
 import { CiFilter } from "react-icons/ci";
 import { IoIosArrowDown } from "react-icons/io";
 import { Link } from 'react-router-dom';
+import Pagination from '../../../components/common/pagination/Pagination';
+import { useManageProductPagination } from './Hooks/userManageProductPagination';
+import _ from 'lodash'
+import LineProduct, {
+  ProductLineProps
+} from '../../../components/seller/LineProducts';
+
+
 
 const Viewproducts: FC = memo(() => {
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const { data: products, page, setPage, isSuccess } = useManageProductPagination(searchTerm);
+
+  const delayedSearch = _.debounce((value: string) => {
+    setSearchTerm(value);
+  }, 500);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    delayedSearch(value);
+  };
+
+  
+
+
   const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+
     const isChecked = event.target.checked;
 
     // Lặp qua các checkbox khác và cập nhật trạng thái của chúng
@@ -27,7 +53,8 @@ const Viewproducts: FC = memo(() => {
   return (
     <div>
       <SellerSideBar name = "ManageProducts"></SellerSideBar>
-      <div className="p-4 sm:ml-64 mt-16">
+      <div className='pt-4 px-4 sm:ml-64 mt-16 max-h-[91vh] min-h-[91vh] flex flex-col justify-between'>
+      <div className="">
         <div className='flex items-center justify-between'>
           <div className='flex items-center space-x-4'>
             <Link to={"/seller/manage_products/create_product"}>
@@ -46,11 +73,12 @@ const Viewproducts: FC = memo(() => {
                     <p>Lọc</p>
                     <IoIosArrowDown className='w-5 h-5'/>
                 </div>
-                <div className={`${isDropdownOpen ? '' : 'hidden'} absolute border rounded-lg min-w-24 bg-white mt-1`}>
-                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>aaaaaaa</p>
-                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>aaaaaaa</p>
-                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>aaaaaaa</p>
-                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>aaaaaaa</p>
+                <div className={`${isDropdownOpen ? '' : 'hidden'} absolute border rounded-lg min-w-32 bg-white mt-1`}>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>Đang bán</p>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>Đang duyệt</p>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>Vi phạm</p>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>Tạm ngưng</p>
+                    <p className='border-b hover:bg-gray-300 px-2 cursor-pointer'>Hết hàng</p>
                 </div>
             </div>
           </div>
@@ -64,7 +92,7 @@ const Viewproducts: FC = memo(() => {
                           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                       </svg>
                   </div>
-                  <input type="search" id="default-search" className="block w-full p-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500" placeholder="Tìm kiếm sản phẩm" required />
+                  <input onChange={handleSearchChange} type="search" id="default-search" className="block w-full p-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500" placeholder="Tìm kiếm sản phẩm" required />
                   
               </div>
           </div>
@@ -72,7 +100,7 @@ const Viewproducts: FC = memo(() => {
 
 
         </div>
-        <table className="table-fixed w-full px-8 mt-5 border">
+        <table className="table-fixed w-full px-8 mt-3 border">
         
           <thead className='border-b'>
             <tr className=''>
@@ -86,27 +114,23 @@ const Viewproducts: FC = memo(() => {
             </tr>
           </thead>
           <tbody>
-            <tr className='text-center border-b hover:bg-gray-200  '>
-              <td><input id='check_1' className='rounded-sm bg-white focus:ring-2 focus:ring-orange-300' type="checkbox" /></td>
-              <td className='flex justify-center'><img className='w-30 h-20 p-1 rounded-lg' src="https://tangia-khaitruong.com/www/uploads/images/chi%E1%BA%BFu-c%C3%B3i-kim-s%C6%A1n-6.jpg" alt="" /></td>
-              <td className='px-10'>Thiệp quà sinh nhật</td>
-              <td>15.000</td>
-              <td>10</td>
-              <td>Đang bán</td>
-              <td className='text-blue-600'><Link to="/seller/manage_products/detail/1">Sửa</Link></td>
-            </tr>
-            <tr className='text-center border-b hover:bg-gray-200 '>
-              <td><input id='check_1' className='rounded-sm bg-white focus:ring-2 focus:ring-orange-300' type="checkbox" /></td>
-              <td className='flex justify-center'><img className='w-30 h-20 p-1 rounded-lg' src="https://tangia-khaitruong.com/www/uploads/images/chi%E1%BA%BFu-c%C3%B3i-kim-s%C6%A1n-6.jpg" alt="" /></td>
-              <td className='px-10'>Thiệp quà sinh nhật</td>
-              <td>15.000</td>
-              <td>10</td>
-              <td>Tạm ngưng</td>
-              <td className='text-blue-600'><Link to="/seller/manage_products/detail/2">Sửa</Link></td>
-            </tr>
-           
+            {isSuccess && (
+              <>
+                {products.map((product: ProductLineProps) => (
+                <LineProduct key={product.id} {...product} />
+              ))}
+              </>
+            )}
+            
           </tbody>
         </table>
+
+      </div>
+      <div>
+        {isSuccess && (
+            <Pagination currentPage={page} goToPage={setPage} />
+          )}
+      </div>
       </div>
     </div>
   );
