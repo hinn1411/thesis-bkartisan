@@ -100,6 +100,16 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
               </div>
             </Grid>
           );
+        } else if (type === "user" && index == 2) {
+          return (
+            <Grid item xs={layout[index]} key={index}>
+              {values[index] === "M"
+                ? "Nam"
+                : values[index] === "F"
+                ? "Nữ"
+                : "Chưa xác định"}
+            </Grid>
+          );
         } else {
           return (
             <Grid item xs={layout[index]} key={index}>

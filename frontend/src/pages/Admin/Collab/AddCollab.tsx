@@ -10,6 +10,7 @@ import UploadImage from "../../../components/admin/UploadImage";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import apiUsers from "../../../apis/apiUsers";
+import { useNavigate } from "react-router";
 
 type FormData = {
   name: string;
@@ -20,7 +21,7 @@ type FormData = {
   password: string;
   repeatPassword: string;
   address: string;
-  image: string;
+  image: File;
 };
 
 const AddCollab: FC = memo(() => {
@@ -32,9 +33,11 @@ const AddCollab: FC = memo(() => {
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
-      image: "",
+      image: undefined,
     }
   });
+
+  const navigate = useNavigate();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values) => {
@@ -42,6 +45,7 @@ const AddCollab: FC = memo(() => {
     },
     onSuccess: () => {
       toast.success("Thành công!");
+      navigate("/admin/collabs")
     },
     onError: () => {
       toast.error("Đã có lỗi xảy ra! Vui lòng thử lại.");
