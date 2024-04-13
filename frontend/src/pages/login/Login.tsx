@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import apiAuth from '../../apis/apiAuth';
 import facebookIcon from '../../assets/images/login/facebook.png';
@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import TextInput from '../../components/common/input/TextInput';
 const Login: FC = memo(() => {
+  const navigate = useNavigate();
   const user = {
     minUserNameLen: 6,
     minPasswordLen: 8,
@@ -32,9 +33,9 @@ const Login: FC = memo(() => {
 
     try {
       const res = await apiAuth.login(username, password);
-      console.log(res.data);
-      const redirectUrl = res.data.redirect;
-      window.location.href = redirectUrl;
+
+      navigate(res.data.redirect)
+
     } catch (error: any) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401 || error.response?.status === 500) {

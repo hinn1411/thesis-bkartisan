@@ -4,14 +4,16 @@ import ReturnIcon from "../../../components/admin/ReturnIcon";
 import { FaRegUser } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
 import { MdMailOutline } from "react-icons/md";
-import { TextInput, Button, Select } from "flowbite-react";
+import { TextInput, Button, Select, Spinner } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import UploadImage from "../../../components/admin/UploadImage";
-
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import apiUsers from "../../../apis/apiUsers";
 
 type FormData = {
   name: string;
-  gender: "male" | "female";
+  gender: "M" | "F";
   phone: string;
   email: string;
   username: string;
@@ -28,13 +30,21 @@ const AddCollab: FC = memo(() => {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
-    defaultValues: {
-      image: "",
-    }
+  } = useForm<FormData>();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values) => {
+      return apiUsers.createCollab(values);
+    },
+    onSuccess: () => {
+      toast.success("Thành công!");
+    },
+    onError: () => {
+      toast.error("Đã có lỗi xảy ra! Vui lòng thử lại.");
+    },
   });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const onSubmit = handleSubmit((data) => mutate(data));
 
   return (
     <Fragment>
@@ -43,7 +53,13 @@ const AddCollab: FC = memo(() => {
         <ReturnIcon />
       </Box>
 
-      <Box display="flex" py={2} component="form" onSubmit={onSubmit}>
+      <Box
+        display="flex"
+        py={2}
+        component="form"
+        onSubmit={onSubmit}
+        className="relative"
+      >
         <Box
           width={6 / 10}
           className="border-2 border-slate-300/50 rounded p-4"
@@ -72,8 +88,8 @@ const AddCollab: FC = memo(() => {
             <Grid item xs={6}>
               <Box className="font-medium pb-2">Giới tính</Box>
               <Select id="gender" {...register("gender")}>
-                <option>Nam</option>
-                <option>Nữ</option>
+                <option value="M">Nam</option>
+                <option value="F">Nữ</option>
               </Select>
             </Grid>
             <Grid item xs={12}>
@@ -189,6 +205,12 @@ const AddCollab: FC = memo(() => {
             </Button>
           </Box>
         </Box>
+        {isPending && (
+          <>
+            <div className="absolute inset-0 bg-slate-200/25"></div>
+            <Spinner size={"xl"} className="absolute top-1/2 left-1/2" />
+          </>
+        )}
       </Box>
     </Fragment>
   );
