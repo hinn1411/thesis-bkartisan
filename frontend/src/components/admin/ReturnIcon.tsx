@@ -16,7 +16,7 @@ const ReturnIcon: FC = memo(() => {
   };
 
   const handleClick = () => {
-    navigate("/admin/users");
+    navigate(-1);
   };
 
   const iconStyle = {
