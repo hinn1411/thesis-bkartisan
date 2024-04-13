@@ -33,6 +33,8 @@ const Login: FC = memo(() => {
     try {
       const res = await apiAuth.login(username, password);
       console.log(res.data);
+      const redirectUrl = res.data.redirect;
+      window.location.href = redirectUrl;
     } catch (error: any) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401 || error.response?.status === 500) {
