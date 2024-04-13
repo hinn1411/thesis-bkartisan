@@ -9,8 +9,15 @@ export interface ProductLineProps {
     originalCost: number;
   }
 
-const LineProduct: FC<ProductLineProps> = memo(
+interface LineProductProps extends ProductLineProps {
+  isSelected: boolean;
+  onCheckboxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const LineProduct: FC<LineProductProps> = memo(
     ({
+      isSelected, 
+      onCheckboxChange,
       srcImage,
       name,
       originalCost,
@@ -20,7 +27,7 @@ const LineProduct: FC<ProductLineProps> = memo(
   return (
 
         <tr className='text-center border-b hover:bg-gray-200'>
-            <td><input className='rounded-sm bg-white focus:ring-2 focus:ring-orange-300' type="checkbox" /></td>
+            <td><input className='rounded-sm bg-white focus:ring-2 focus:ring-orange-300' type="checkbox" checked={isSelected} onChange={onCheckboxChange}/></td>
             <td className='flex justify-center'><img className='w-30 h-20 p-1 rounded-lg' src={srcImage} alt="" /></td>
             <td className='px-10 truncate'>{name}</td>
             <td>{originalCost}</td>

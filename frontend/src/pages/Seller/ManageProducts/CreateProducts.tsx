@@ -1,34 +1,111 @@
-import { FC, memo, useState, ChangeEvent } from 'react';
+import { FC, memo, useState, ChangeEvent, FormEvent } from 'react';
 import SellerSideBar from '../../../components/sidebar/SellerSideBar';
 import { FiPlus } from "react-icons/fi";
 import { LiaTimesSolid } from "react-icons/lia";
+import Loading from './Components/OnLoading';
+import {useCreateProductMutation} from "./Hooks/useProductMutation"
+import DropdownCategory from './Components/DropdownCategory';
+import DropdownOption from './Components/DropdownOption';
+import DropdownChooseOption from './Components/DropdownChooseOption';
+import { ICategorys } from '../../../apis/apiCategory';
+import { useProductCategorys, useOptions, useChooseOptions1, useChooseOptions2 } from './Hooks/useQuery';
 
 interface YourComponentProps {
-  name: string,
-  images: string[],
-  video: string,
-  price: number,
-  quantity: number,
-  material: string,
-  productType: string,
-  option1: string,
-  chooseOption1: string[],
-  option2: string,
-  chooseOption2: string[],
-  description: string,
+  
 }
 const CreateProducts: FC<YourComponentProps> = memo(() => {
-  const [images, setImages] = useState<string[]>([]);
-  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const mutation = useCreateProductMutation();
+
+  const { data: categorys } = useProductCategorys();
+  const categoryNames = categorys ? categorys.map((category: ICategorys) => category.name) : [];
+
+  const { data: options } = useOptions();
+  
+  const [images, setImages] = useState<File[]>([]);
+  const [videoSrc, setVideoSrc] = useState<File>();
+  const [selectedChooseOptions1, setSelectedChooseOptions1] = useState<string[]>([]);
+  const [selectedChooseOptions2, setSelectedChooseOptions2] = useState<string[]>([]); 
+  const [isVisibleOption1, setIsVisibleOption1] = useState<boolean>(false); 
+  const [isVisibleOption2, setIsVisibleOption2] = useState<boolean>(false); 
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedOption1, setSelectedOption1] = useState<number | undefined>();
+  const [selectedOption2, setSelectedOption2] = useState<number | undefined>();
+
+
+  const { data: chooseOptions1, isFetching: isLoading1 } = useChooseOptions1(typeof selectedOption1 === 'number' ? selectedOption1 : -1);
+
+  const { data: chooseOptions2, isFetching: isLoading2 } = useChooseOptions2(typeof selectedOption2 === 'number' ? selectedOption2 : -1);
+
+
+  const handleSelectCategory = (category: string) => {
+    setSelectedCategory(category);
+  };
+  
+
+  const handleSelectOption1 = (option: number) => {
+    setSelectedOption1(option)
+    setIsVisibleOption1(true);
+    
+  }
+
+  const handleSelectOption2 = (option: number) => {
+    setSelectedOption2(option)
+    setIsVisibleOption2(true);
+    
+  }
+
+  const [formDatas, setFormData] = useState({
+    name: '',
+    price: 0,
+    quantity: 0,
+    material: '',
+    description: '',
+  });
+  
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setFormData({ ...formDatas, [name]: value });
+    console.log(formDatas)
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('name', formDatas.name);
+    formData.append('price', String(formDatas.price));
+    formData.append('quantity', String(formDatas.quantity));
+    formData.append('material', formDatas.material);
+    formData.append('category', selectedCategory);
+    formData.append('description', formDatas.description);
+    for (const image of images) {
+      formData.append("images", image);
+    }
+    for (const chooseOptions1 of selectedChooseOptions1) {
+      formData.append("chooseOptions1", chooseOptions1);
+    }
+    for (const chooseOptions2 of selectedChooseOptions2) {
+      formData.append("chooseOptions2", chooseOptions2);
+    }
+    // images.forEach((file, index) => {
+    //   formData.append(`images[${index}]`, file);
+    // });
+    if (videoSrc) {
+      formData.append('video', videoSrc);
+    }
+    mutation.mutate(formData);
+  };
+
+
+
 
   const handleFileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    const newImages: string[] = [];
+    const newImages: File[] = [];
 
     if (files) {
       for (let i = 0; i < files.length; i++) {
-        const imageFiles = URL.createObjectURL(files[i]);
-        newImages.push(imageFiles);
+        newImages.push(files[i]);
       }
 
       setImages([...images, ...newImages]);
@@ -71,28 +148,28 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
     const file = e.target.files?.[0];
   
     if (file && (await isVideoValid(file))) {
-      setVideoSrc(URL.createObjectURL(file));
+      setVideoSrc(file);
     }
   };
 
 
-    const [selectedOptions1, setSelectedOptions1] = useState<string[]>([]); // State để lưu trữ các tùy chọn đã chọn cho choose-option1
-    const [selectedOptions2, setSelectedOptions2] = useState<string[]>([]); // State để lưu trữ các tùy chọn đã chọn cho choose-option2
-    const [isVisibleOption1, setIsVisibleOption1] = useState<boolean>(false); // Trạng thái hiển thị của choose-option1
-    const [isVisibleOption2, setIsVisibleOption2] = useState<boolean>(false); // Trạng thái hiển thị của choose-option2
-
-
     // Hàm xử lý sự kiện khi tùy chọn thay đổi
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>, setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>, setIsVisible: React.Dispatch<React.SetStateAction<boolean>>) => {
-        const newValue = event.target.value;
-        setSelectedOptions(prevOptions => {
-            if (!prevOptions.includes(newValue)) {
-                return [...prevOptions, newValue];
+    const handleOptionChange1 = (option:string) => {
+        setSelectedChooseOptions1(prevOptions => {
+            if (!prevOptions.includes(option)) {
+                return [...prevOptions, option];
             }
             return prevOptions;
         });
     };
+    const handleOptionChange2 = (option:string) => {
+      setSelectedChooseOptions2(prevOptions => {
+          if (!prevOptions.includes(option)) {
+              return [...prevOptions, option];
+          }
+          return prevOptions;
+      });
+  };
 
     // Hàm xử lý sự kiện khi icon được nhấp
     const handleRemoveOption = (optionToRemove: string, setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>) => {
@@ -105,11 +182,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
           setIsVisibleOption1(prevVisible => !prevVisible);
       } else if (selectId === 'category2') {
           setIsVisibleOption2(prevVisible => !prevVisible);
-      } else if (selectId === 'option1') {
-          setIsVisibleOption1(true);
-      } else if (selectId === 'option2') {
-          setIsVisibleOption2(true);
-    }
+      }
       
   };
 
@@ -121,11 +194,11 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
       <SellerSideBar name = "ManageProducts"/>
 
       <div className="p-4 sm:ml-64 mt-16">
-        
-        <form className="max-w-3xl mx-auto">
+
+        <form className="max-w-3xl mx-auto" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên sản phẩm</label>
-            <input type="text" id="name" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" required/>
+            <input type="text" id="name" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5" name="name" value={formDatas.name} onChange={handleChange} required/>
           </div>
           <div className="mb-4">
             <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hình ảnh (Tối đa 6 hình)</p>
@@ -136,7 +209,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
               <div className='flex max-w-2xl space-x-2'>
                 {images.map((imageFiles, index) => (
                   <div key={index} className='relative group'>
-                    <img className='w-20 h-20 rounded-md' src={imageFiles} alt={`Image ${index + 1}`} />
+                    <img className='w-20 h-20 rounded-md' src={URL.createObjectURL(imageFiles)} alt={`Image ${index + 1}`} />
                     <div className='absolute top-0 right-0 flex items-center w-4 h-4 text-white bg-red-500 rounded-full p-1 cursor-pointer'
                       onClick={() => handleRemoveImage(index)}>
                       -
@@ -159,7 +232,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
               {/* video */}
               {videoSrc && (
                 <div className='flex max-w-sm space-x-2'>
-                  <video controls className="w-20 h-20 rounded-md" src={videoSrc} />
+                  <video controls className="w-20 h-20 rounded-md" src={URL.createObjectURL(videoSrc)} />
                 </div>
               )}
 
@@ -182,100 +255,85 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
           </div> 
           <div className="flex mb-4 justify-between">
             <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá sản phẩm</label>
-            <input type="text" id="Price" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá sản phẩm</label>
+              <input min="0" type="number" id="Price" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " name="price" value={formDatas.price} onChange={handleChange} required/>
             </div>
             <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Số lượng</label>
-            <input type="text" id="Quanlity" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Số lượng</label>
+              <input min="0" type="number" id="Quanlity" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " name="quantity" value={formDatas.quantity} onChange={handleChange} required/>
             </div>
           </div>
           <div className="flex mb-4 justify-between">
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Chất liệu</label>
-              <input type="text" id="Material" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>
+              <input type="text" id="Material" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " name="material" value={formDatas.material} onChange={handleChange} required/>
             </div>
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loại sản phẩm</label>
-              <select id="catagory" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 pr-7" >
-                <option selected>Chọn loại sản phẩm</option>
-                <option value="US">Đồ trang trí</option>
-                <option value="CA">Áo</option>
-                <option value="FR">Quần</option>
-                <option value="DE">Board Game</option>
-              </select>
+              <DropdownCategory name='Chọn loại sản phẩm' categoryNames={categoryNames} onSelectCategory={handleSelectCategory}/>
               
             </div>
           </div>
+
           <div className="flex mb-4 space-x-10">
             <div id="option1" >
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tùy chọn 1</label>
-              <select className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 pr-7" onChange={() => handleIconClick('option1')}>
-                <option selected disabled>Tùy chọn sản phẩm</option>
-                <option value="US">Kích cỡ</option>
-                <option value="CA">Màu sắc</option>
-              </select>
-              
+              <DropdownOption name='Tùy chọn sản phẩm' optionNames={options} onSelectOption={handleSelectOption1} on={isVisibleOption1}/>
             </div>
-            <div id="choose-option1" className={`space-y-5 mt-7 ${isVisibleOption1 ? '' : 'hidden'}`}>
+            {(isLoading1 ? (
+              <Loading></Loading>
+            ) : (
+              <div id="choose-option1" className={`space-y-5 mt-7 ${isVisibleOption1 ? '' : 'hidden'}`}>
               <div className='flex items-center space-x-2 ' >
                 <LiaTimesSolid className='h-5 w-5 cursor-pointer' onClick={() => handleIconClick('category1')}/>
-                <select id="catagory" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block p-2.5 pr-7" onChange={(e) => handleOptionChange(e, setSelectedOptions1, setIsVisibleOption1)}>
-                  <option selected disabled>Chọn các kích cỡ</option>
-                  <option value="US">Đồ trang trí</option>
-                  <option value="CA">Áo</option>
-                  <option value="FR">Quần</option>
-                  <option value="DE">Board Game</option>
-                </select>
+                <DropdownChooseOption name='Chọn' optionNames={chooseOptions1} handleOptionChange={handleOptionChange1}/>
               </div>
               <div className='flex flex-wrap max-w-sm ml-5'>
-                    {selectedOptions1.map((option, index) => (
+                    {selectedChooseOptions1.map((option, index) => (
                         <div key={index} className="flex items-center space-x-2 shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 p-2.5 mb-2 mx-2">
                             <p className='max-w-xl'>{option}</p>
-                            <LiaTimesSolid className='h-5 w-5 cursor-pointer' onClick={() => handleRemoveOption(option, setSelectedOptions1)} />
+                            <LiaTimesSolid className='h-5 w-5 cursor-pointer' onClick={() => handleRemoveOption(option, setSelectedChooseOptions1)} />
                         </div>
                     ))}
                 
               </div>
             </div>
+            ))
+
+            }
           </div>
 
           <div className="flex mb-4 space-x-10">
             <div id="option2">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tùy chọn 2 </label>
-              <select id="catagory" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 pr-7" onChange={() => handleIconClick('option2')}>
-                <option selected disabled>Tùy chọn sản phẩm</option>
-                <option value="US">Kích cỡ</option>
-                <option value="CA">Màu sắc</option>
-              </select>
-              
+              <DropdownOption name='Tùy chọn sản phẩm' optionNames={options} onSelectOption={handleSelectOption2} on={isVisibleOption2}/>
             </div>
+            {(isLoading2 ? (
+              <Loading></Loading>
+            ) : (
             <div id="choose-option2" className={`space-y-5 mt-7 ${isVisibleOption2 ? '' : 'hidden'}`}>
               <div className='flex items-center space-x-2 '>
                 <LiaTimesSolid className='h-5 w-5 cursor-pointer' onClick={() => handleIconClick('category2')}/>
-                <select id="catagory2" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block p-2.5 pr-7" onChange={(e) => handleOptionChange(e, setSelectedOptions2, setIsVisibleOption2)}>
-                  <option selected disabled>Chọn các màu sắc</option>
-                  <option value="US">Đồ trang trí</option>
-                  <option value="CA">Áo</option>
-                  <option value="FR">Quần</option>
-                  <option value="DE">Board Game</option>
-                </select>
+                <DropdownChooseOption name='Chọn' optionNames={chooseOptions2} handleOptionChange={handleOptionChange2}/>
               </div>
               <div className='flex flex-wrap max-w-sm ml-5'>
-                    {selectedOptions2.map((option, index) => (
+                    {selectedChooseOptions2.map((option, index) => (
                         <div key={index} className="flex items-center space-x-2 shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 p-2.5 mb-2 mx-2">
                             <p className='max-w-xl'>{option}</p>
-                            <LiaTimesSolid className='h-5 w-5 cursor-pointer' onClick={() => handleRemoveOption(option, setSelectedOptions2)} />
+                            <LiaTimesSolid className='h-5 w-5 cursor-pointer' onClick={() => handleRemoveOption(option, setSelectedChooseOptions2)} />
                         </div>
                     ))}
                 
               </div>
             </div>
+              ))
+
+            }
           </div>
 
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả sản phẩm</label>
-            <textarea rows={4} id="Description" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " required/>
+            <textarea rows={4} id="Description" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " name="description" value={formDatas.description} onChange={handleChange} required/>
           </div>
           
           <div className='flex justify-center space-x-10 sm:space-x-40 '>
