@@ -30,7 +30,11 @@ const AddCollab: FC = memo(() => {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: {
+      image: "",
+    }
+  });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values) => {
@@ -99,7 +103,7 @@ const AddCollab: FC = memo(() => {
                 icon={FiPhone}
                 {...register("phone", {
                   required: true,
-                  minLength: 6,
+                  minLength: 7,
                   maxLength: 12,
                   pattern: /^[0-9]+$/,
                 })}

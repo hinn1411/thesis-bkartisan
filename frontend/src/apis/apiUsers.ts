@@ -39,6 +39,7 @@ const apiUsers = {
     return data;
   },
   createCollab: async (collab: any) => {
+    console.log(collab);
     const res = await axiosClient.post(`/collabs/create-new`, collab);
     return res;
   },
