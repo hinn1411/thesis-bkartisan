@@ -33,7 +33,9 @@ const Login: FC = memo(() => {
 
     try {
       const res = await apiAuth.login(username, password);
+
       navigate(res.data.redirect)
+
     } catch (error: any) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401 || error.response?.status === 500) {
