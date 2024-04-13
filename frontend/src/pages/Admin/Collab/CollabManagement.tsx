@@ -1,101 +1,108 @@
 import { FC, Fragment, memo, useState } from "react";
-import DropdownSelect from "../../../components/admin/DropdownSelect";
-import { Button, Box } from "@mui/material";
-import SearchInput from "../../../components/admin/SearchInput";
-import UserItem from "../../../components/admin/listitem/UserItem";
+import { Grid } from "@mui/material";
+import ListItem from "../../../components/admin/ListItem";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Select, Button, TextInput } from "flowbite-react";
+import useFilterFetch from "../../../hooks/useFilterFetch";
+import apiUsers from "../../../apis/apiUsers";
+import LoadingMessage from "../../../components/admin/LoadingMessage";
+import ErrorMessage from "../../../components/admin/ErrorMessage";
 
-const img_example =
-  "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
+type FormData = {
+  byDate: "newToOld" | "oldToNew";
+  name: string;
+};
 
 const CollabManagement: FC = memo(() => {
-  const [dateFilter, setDateFilter] = useState(0);
-  const optionDateFilter = ["Mới nhất", "Sớm nhất"];
+  const navigate = useNavigate();
 
-  const arr = [
-    {
-      avatar: img_example,
-      name: "Meow",
-      gender: "meow",
-      phone: "meow",
-      email: "meow",
-    },
-    {
-      avatar: img_example,
-      name: "Meow",
-      gender: "meow",
-      phone: "meow",
-      email: "meow",
-    },
-    {
-      avatar: img_example,
-      name: "Meow",
-      gender: "meow",
-      phone: "meow",
-      email: "meow",
-    },
-    {
-      avatar: img_example,
-      name: "Meow",
-      gender: "meow",
-      phone: "meow",
-      email: "meow",
-    },
-  ];
+  const [page, setPage] = useState(1);
 
-  const foo = () => console.log("MUAHAHA");
+  const filterName = "collabmanagement-filter";
+  const defaultFieldValues = { byDate: "newToOld", name: "" };
+  const queryKey = ["users", page];
+
+  const { register, data, isPending, onSubmit, error } =
+    useFilterFetch<FormData>(
+      filterName,
+      defaultFieldValues,
+      queryKey,
+      apiUsers.getCollabsList
+    );
 
   return (
     <Fragment>
       <h1 className="text-3xl font-bold py-3">Danh sách cộng tác viên</h1>
-      <Box display={"flex"} py={3} justifyContent={"space-between"}>
-        <Box display={"flex"} gap={2}>
+      <Grid container gap={4} py={3}>
+        <Grid item xs={0.8}>
           <div className="text-base">Ngày tạo:</div>
-          <DropdownSelect values={optionDateFilter} setValue={setDateFilter} />
-        </Box>
-
-        <Link to="create">
+        </Grid>
+        <Grid item xs={1.5}>
+          <Select id="byDate" {...register("byDate")}>
+            <option value={"newToOld"}>Mới nhất</option>
+            <option value={"oldToNew"}>Sớm nhất</option>
+          </Select>
+        </Grid>
+        <Grid item xs={2.5}>
+          <TextInput
+            type="text"
+            placeholder="Nhập tên cộng tác viên"
+            {...register("name")}
+          />
+        </Grid>
+        <Grid item xs={1}>
           <Button
-            component="div"
-            className="gap-6"
-            variant="contained"
-            endIcon={<IoMdAddCircleOutline />}
+            color="blue"
+            fullSized={true}
+            onClick={onSubmit}
+            disabled={isPending}
+          >
+            Lọc
+          </Button>
+        </Grid>
+        <Grid item xs={2} />
+        <Grid item>
+          <Button
+            color="blue"
+            fullSized={true}
+            onClick={() => navigate("create")}
           >
             Thêm cộng tác viên mới
+            <IoMdAddCircleOutline className="ml-3 h-5 w-5" />
           </Button>
-        </Link>
+        </Grid>
+      </Grid>
 
-        <Box display="flex" px={2} gap={2}>
-          <SearchInput
-            placeholder="Nhập tên người dùng"
-            ariaLabel="Fooo"
-            handleEnter={foo}
-          />
-          <Button variant="contained">Tìm kiếm</Button>
-        </Box>
-      </Box>
       <hr style={{ borderWidth: "0.01rem" }} />
-      <Box
-        display={"flex"}
-        py={2}
-        className={"text-slate-600 text-lg font-medium"}
-      >
-        <div className="basis-2/6 px-28">Tên cộng tác viên</div>
-        <div className="basis-1/6">Giới tính</div>
-        <div className="basis-1/6">SĐT</div>
-        <div className="basis-2/6">Email</div>
-      </Box>
+      <Grid container className={"text-slate-600 text-lg font-medium p-2 py-5"}>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={3}>
+          Tên
+        </Grid>
+        <Grid item xs={2}>
+          Giới tính
+        </Grid>
+        <Grid item xs={2}>
+          SĐT
+        </Grid>
+        <Grid item xs={2}>
+          Email
+        </Grid>
+      </Grid>
+      <hr className="border" />
 
-      {arr.map((element, index) => {
-        return (
-          <UserItem
-            key={index}
-            color={index % 2 == 0 ? "#F2F6FC" : "white"}
-            {...element}
-          />
-        );
-      })}
+      {isPending ? (
+        <LoadingMessage />
+      ) : error ? (
+        <ErrorMessage msg={error.message} />
+      ) : data.length === 0 ? (
+        <ErrorMessage msg={"Không tìm thấy kết quả trùng khớp"} />
+      ) : (
+        data.map((element: any, index: number) => {
+          return <ListItem key={index} type="user" values={element} />;
+        })
+      )}
     </Fragment>
   );
 });
