@@ -15,6 +15,7 @@ import apiUsers from "../../../apis/apiUsers";
 import ErrorMessage from "../../../components/admin/ErrorMessage";
 import LoadingMessage from "../../../components/admin/LoadingMessage";
 import { checkLockStatus } from "../../../utils/checkLockStatus";
+import { formatDate } from "../../../utils/formatDate";
 
 const UserDetail: FC = memo(() => {
   const [openDeleteModal, setDeleteModal] = useState(false);
@@ -104,7 +105,7 @@ const UserDetail: FC = memo(() => {
                 </Grid>
                 <Grid item xs={6}>
                   <Box className="font-medium pb-2">Ngày tạo tài khoản</Box>
-                  <TextField value={data.createdAt} />
+                  <TextField value={formatDate("dd/mm/yyyy", new Date(data.createdAt))} />
                 </Grid>
                 <Grid item xs={6}>
                   <Box className="font-medium pb-2">

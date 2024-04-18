@@ -15,7 +15,7 @@ import { useNavigate } from "react-router";
 type FormData = {
   name: string;
   gender: "M" | "F";
-  phone: string;
+  numPhone: string;
   email: string;
   username: string;
   password: string;
@@ -105,14 +105,14 @@ const AddCollab: FC = memo(() => {
               <TextInput
                 type="text"
                 icon={FiPhone}
-                {...register("phone", {
+                {...register("numPhone", {
                   required: true,
                   minLength: 7,
                   maxLength: 12,
                   pattern: /^[0-9]+$/,
                 })}
                 helperText={
-                  errors.phone && (
+                  errors.numPhone && (
                     <span className="text-red-500">
                       Vui lòng nhập số điện thoại hợp lệ
                     </span>

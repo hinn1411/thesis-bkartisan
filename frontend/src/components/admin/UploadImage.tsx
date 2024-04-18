@@ -1,34 +1,57 @@
 import { FC, memo, useState } from "react";
 import { FileInput, Label } from "flowbite-react";
 import { Avatar, Box } from "@mui/material";
+import _ from "lodash";
+
 
 interface UploadImageProps {
-    setValue: any,
+  setValue: any;
+  defaultImg?: string;
 }
 
-const UploadImage: FC<UploadImageProps> = memo(({setValue}) => {
-  const [image, setImage] = useState<File>();
+const UploadImage: FC<UploadImageProps> = memo(({ setValue, defaultImg }) => {
+  const [image, setImage] = useState<File | string | undefined>(defaultImg);
+  const [error, setError] = useState<string | undefined>();
 
   const handleFileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (files) {
       const newImage = files[0];
+      //Check type
+      if (!newImage.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        const error = "Hình ảnh chỉ hỗ trợ kiểu jpg, jpeg, png và gif.";
+        setError(error);
+        return;
+      }
+
+      // Check Image Size
+      if (newImage.size > 5000000) {
+        const error = "File không được lớn hơn 5MB.";
+        setError(error);
+        return;
+      }
+
+      setError(undefined);
       setImage(newImage);
-      setValue("image", newImage)
+      setValue("image", newImage);
     }
   };
 
   const handleRemoveImage = () => {
     setValue("image", "");
     setImage(undefined);
+    setError(undefined);
   };
 
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex flex-col w-full items-center justify-center gap-3">
       {image !== undefined && (
         <Box className="relative group">
-          <Avatar src={URL.createObjectURL(image)} sx={{ width: "10rem", height: "10rem" }} />
+          <Avatar
+            src={_.isString(image) ? image : URL.createObjectURL(image)}
+            sx={{ width: "10rem", height: "10rem" }}
+          />
           <Box
             className="justify-center absolute top-0 right-0 flex items-center w-5 h-5 text-white bg-red-600 rounded-full p-1 cursor-pointer"
             onClick={() => handleRemoveImage()}
@@ -70,6 +93,7 @@ const UploadImage: FC<UploadImageProps> = memo(({setValue}) => {
           />
         </Label>
       )}
+      {error && <div className="text-red-500">{error}</div>}
     </div>
   );
 });

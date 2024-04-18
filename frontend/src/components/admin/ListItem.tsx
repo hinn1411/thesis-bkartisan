@@ -2,7 +2,7 @@ import { FC, memo } from "react";
 import { Avatar, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Button } from "flowbite-react";
-
+import { formatDate } from "../../utils/formatDate";
 interface ListProps {
   type:
     | "user"
@@ -100,7 +100,7 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
               </div>
             </Grid>
           );
-        } else if (type === "user" && index == 2) {
+        } else if (index == 2 && type === "user") {
           return (
             <Grid item xs={layout[index]} key={index}>
               {values[index] === "M"
@@ -110,10 +110,24 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
                 : "Chưa xác định"}
             </Grid>
           );
+        } else if (
+          index == 4 &&
+          (type == "handled-product" || type == "product")
+        ) {
+          return (
+            <Grid item xs={layout[index]} key={index}>
+              <div className="truncate mr-8">
+                {formatDate("dd/mm/yyyy", new Date(values[index])) ||
+                  "Chưa xác định"}
+              </div>
+            </Grid>
+          );
         } else {
           return (
             <Grid item xs={layout[index]} key={index}>
-              {values[index] || "Chưa xác định"}
+              <div className="truncate mr-8">
+                {values[index] || "Chưa xác định"}
+              </div>
             </Grid>
           );
         }
