@@ -1,27 +1,44 @@
 import { FC, Fragment, memo, useState } from "react";
-import { Button, Box, Grid } from "@mui/material";
-import SearchInput from "../../../components/admin/SearchInput";
+import { Box, Grid } from "@mui/material";
 import { CiFilter } from "react-icons/ci";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Filter from "../../../components/admin/Filter";
-import UserItem from "../../../components/admin/ListItem";
-
-const img_example =
-  "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
+import LoadingMessage from "../../../components/admin/LoadingMessage";
+import ErrorMessage from "../../../components/admin/ErrorMessage";
+import ListItem from "../../../components/admin/ListItem";
+import apiProducts from "../../../apis/apiProducts";
+import { useQuery } from "@tanstack/react-query";
 
 const ProductManagement: FC = memo(() => {
   const [openFilter, setFilter] = useState(false);
+  const [page, setPage] = useState(1);
 
-  const foo = (val) => {
-    console.log(val);
+  const defaultValues = {
+    product: "",
+    seller: "",
+    collab: "",
+    startDate: null,
+    endDate: null,
+    startPrice: "",
+    endPrice: "",
+    catagory: "",
+    approveByAI: "false",
+    order: "newToOld",
   };
 
-  const arr = [
-    [img_example, "Lầu Hội", "Chưa xác định", "Chưa xác định", "20/10/2002"],
-    [img_example, "Lầu Hội", "Lầu Hội", "0123456789", "20/10/2002"],
-    [img_example, "Lầu Hội", "Lầu Hội", "0123456789", "20/10/2002"],
-    [img_example, "Lầu Hội", "Lầu Hội", "0123456789", "20/10/2002"],
-  ]
+  const options =
+    JSON.parse(sessionStorage.getItem("productmanagement-filter") || "null") ||
+    defaultValues;
+
+  const [filterOpts, setFilterOpts] = useState(options);
+
+  const { data, isPending, error } = useQuery({
+    queryKey: ["products", page, filterOpts],
+    queryFn: async () => {
+      return await apiProducts.getProductsList(page, 20, filterOpts);
+    },
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <Fragment>
@@ -39,15 +56,6 @@ const ProductManagement: FC = memo(() => {
             <IoIosArrowUp className="w-5 h-5" />
           )}
         </div>
-
-        <Box display="flex" px={2} gap={2}>
-          <SearchInput
-            placeholder="Nhập tên người dùng"
-            ariaLabel="Fooo"
-            handleEnter={foo}
-          />
-          <Button variant="contained">Tìm kiếm</Button>
-        </Box>
       </Box>
       <hr style={{ borderWidth: "0.01rem" }} />
       {!openFilter ? (
@@ -74,22 +82,25 @@ const ProductManagement: FC = memo(() => {
           </Grid>
           <hr className="border" />
 
-          {arr.map((element, index) => {
-            if (index !== arr.length - 1)
-              return <UserItem key={index} type="product" values={element} />;
-            else
-              return (
-                <UserItem
-                  key={index}
-                  type="product"
-                  values={element}
-                  color="bg-[#F2F6FC]"
-                />
-              );
-          })}
+          {isPending ? (
+            <LoadingMessage />
+          ) : error ? (
+            <ErrorMessage msg={error.message} />
+          ) : data.length === 0 ? (
+            <ErrorMessage msg={"Không tìm thấy kết quả trùng khớp"} />
+          ) : (
+            data.map((element: any, index: number) => (
+              <ListItem key={index} type="product" values={element} />
+            ))
+          )}
         </>
       ) : (
-        <Filter setOpen={setFilter} />
+        <Filter
+          filterOpts={filterOpts}
+          setFilterOpts={setFilterOpts}
+          defaultValues={defaultValues}
+          setOpen={setFilter}
+        />
       )}
     </Fragment>
   );

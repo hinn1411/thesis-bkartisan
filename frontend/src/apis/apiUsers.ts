@@ -47,6 +47,15 @@ const apiUsers = {
     const res = await axiosClient.post(`/collabs/create-new`, formData);
     return res;
   },
+  updateInfoCollab: async (collab: any) => {
+    const formData = new FormData();
+    for (const key in collab) {
+      formData.append(key, collab[key]);
+    }
+    console.log(collab);
+    const res = await axiosClient.post(`/collabs/${collab.username}/update`, formData);
+    return res;
+  }
 };
 
 export default apiUsers;
