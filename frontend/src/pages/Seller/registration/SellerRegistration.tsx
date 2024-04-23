@@ -1,69 +1,80 @@
-import { FC, memo, useState } from 'react';
+import { FC, memo } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 import Stepper from './components/Stepper';
-import TextInput from '../../../components/common/input/TextInput';
-import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { FormDataSchema } from './components/forms/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, SubmitHandler, FieldName } from 'react-hook-form';
+import { useMultiStepForm } from './hooks/useMultiStepForm';
+import ShopForm from './components/forms/ShopForm';
+import InformationForm from './components/forms/InformationForm';
+import ConfirmationForm from './components/forms/ConfirmationForm';
+import { steps } from './data';
+type Inputs = z.infer<typeof FormDataSchema>;
 const SellerRegistration: FC = memo(() => {
-  const [currentState, setCurrentState] = useState(1);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const registrationSteps = [
+    <ShopForm />,
+    <InformationForm />,
+    <ConfirmationForm />,
+  ];
   const {
     register,
     handleSubmit,
+    watch,
+    reset,
+    trigger,
+    getValues,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      shopName: ``,
-      password: ``,
-    },
+  } = useForm<Inputs>({
+    resolver: zodResolver(FormDataSchema),
   });
+
+  const processForm: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    reset();
+  };
+  const next = async () => {
+    console.log(`next clicked`);
+
+    const fields = steps[currentStepIndex].fields;
+    console.log(fields);
+
+    const output = await trigger(fields as FieldName<Inputs>[], {
+      shouldFocus: true,
+    });
+    console.log(`output =`, output);
+
+    if (!output) {
+      return;
+    }
+    if (currentStepIndex < steps.length - 1) {
+      goTo(currentStepIndex + 1);
+    }
+  };
+  const { currentStepIndex, step, goTo, isCompleted, setIsCompleted } =
+    useMultiStepForm(registrationSteps, register, errors, next, watch, getValues);
   return (
     <main className="min-h-screen px-20 my-5">
       <div className="flex justify-start items-center space-x-1">
-        <InfoCircleOutlined />
+
+        <InfoCircleOutlined className='hidden md:block' />
 
         <p className="font-base">
           Hiện tại hệ thống chỉ hỗ trợ người bán ở Việt Nam. (Support Vietnamese
-          sellers only)
+          sellers only, we are sorry for this inconvenience)
         </p>
       </div>
       <div className="mt-4 space-y-5">
         <p className="text-center text-3xl">Trở thành người bán</p>
         <Stepper
-          currentState={currentState}
-          setCurrent={setCurrentState}
+          currentState={currentStepIndex}
+          setCurrent={goTo}
           isCompleted={isCompleted}
           setIsCompleted={setIsCompleted}
         />
-        <div className="w-[40%] mx-auto space-y-3 ">
-          <p className="text-sm">
-            Tips: Đặt tên theo những gì bạn bán, phong cách hay cảm hứng của bạn
-          </p>
-          <TextInput
-            type="text"
-            placeholder={'Nhập tên shop của bạn...'}
-            label="username"
-            register={register}
-            errors={errors}
-            validatedObject={{
-              required: `Vui lòng nhập tên tài khoản`,
-              minLength: {
-                value: 6,
-                message: `Tên tài khoản phải có ít nhất 6 ký tự`,
-              },
-            }}
-          />
-          <ul className="list-disc list-inside">
-            <li>Tên shop có độ dài từ 6-20 ký tự</li>
-            <li>
-              Không chứa ký tự đặc biệt, bao gồm khoản trắng và ký tự có dấu
-            </li>
-          </ul>
-          <button className="w-full md:w-auto md:mx-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border">
-            Cập nhật và tiếp tục
-          </button>
-        </div>
       </div>
+      <form onSubmit={handleSubmit(processForm)}>{step}</form>
     </main>
   );
 });
