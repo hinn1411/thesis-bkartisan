@@ -54,6 +54,13 @@ const Header: FC = memo(() => {
     return () =>
       document.removeEventListener('mousedown', languageSelectionHandler);
   });
+
+  const handleClick = () => {
+    
+  };
+
+
+
   return (
     <nav className="container mx-auto px-20 py-4 border-b-2 border-b-gray-300">
       <div className="flex flex-col justify-between items-center md:flex-row space-y-4 md:space-y-0 md:space-x-4 mx-auto">
@@ -193,6 +200,7 @@ const Header: FC = memo(() => {
               <ShopOutlined
                 size={24}
                 className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
+                onClick={handleClick}
               />
             </div>
           </Link>

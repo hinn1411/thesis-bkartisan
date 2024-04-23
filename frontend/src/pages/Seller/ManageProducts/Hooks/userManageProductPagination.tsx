@@ -9,12 +9,12 @@ const PAGE = 1;
 // eslint-disable-next-line react-refresh/only-export-components
 const OFFSET = 6;
 
-export const useManageProductPagination = (searchTerm: string) => {
+export const useManageProductPagination = (searchTerm: string, filterTerm: string) => {
   const [page, setPage] = useState(PAGE);
   const { data, isFetching, isSuccess, error } = useQuery({
-    queryKey: ['products', page, searchTerm],
+    queryKey: ['products', page, searchTerm, filterTerm],
     queryFn: async () => {
-      return await apiProducts.getProducts(searchTerm, page, OFFSET);
+      return await apiProducts.getProducts(searchTerm, page, OFFSET, filterTerm);
     },
   });
 
