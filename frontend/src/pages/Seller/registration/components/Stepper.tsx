@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import styles from './Stepper.module.css';
 import { CheckOutlined } from '@ant-design/icons';
+import { steps } from '../data';
 interface StepperProps {
   currentState: number;
   setCurrent: any;
@@ -10,31 +11,29 @@ interface StepperProps {
 
 const Stepper: FC<StepperProps> = memo(
   ({ currentState, setCurrent, isCompleted }) => {
-    const steps = ['Đặt tên shop', 'Cập nhật thông tin', 'Xác thực'];
+    // const steps = ['Đặt tên shop', 'Cập nhật thông tin', 'Xác thực'];
     return (
       <div>
         <div className="flex justify-center">
           {steps?.map((step, i) => (
             <div
               className={`${styles.step_item} ${
-                currentState == i + 1 && styles.active
-              } ${(i + 1 < currentState || isCompleted) && styles.complete}`}
+                currentState == i && styles.active
+              } ${(i < currentState || isCompleted) && styles.complete}`}
               key={i}
             >
-              <div onClick={() => setCurrent(i + 1)} className={styles.step}>
-                
-                  {i + 1 < currentState || isCompleted ? (
-                    <CheckOutlined size={24} />
-                  ) : (
-                    i + 1
-                  )}
-                
+              <div onClick={() => setCurrent(i)} className={styles.step}>
+                {i < currentState || isCompleted ? (
+                  <CheckOutlined size={24} />
+                ) : (
+                  i + 1
+                )}
               </div>
               <p
-                onClick={() => setCurrent(i + 1)}
+                onClick={() => setCurrent(i)}
                 className="text-gray-500 mt-2 hover:cursor-pointer"
               >
-                {step}
+                {step.name}
               </p>
             </div>
           ))}

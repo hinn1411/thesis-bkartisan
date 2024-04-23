@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC, Fragment, memo } from 'react';
 import { Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import apiAuth from '../../apis/apiAuth';
@@ -7,44 +7,45 @@ import googleIcon from '../../assets/images/login/google.png';
 import sideImage from '../../assets/images/login/image.png';
 import { useTranslation } from 'react-i18next';
 
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { userSchema } from './userSchema';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useLogin } from './hooks/useLogin';
 import TextInput from '../../components/common/input/TextInput';
+import Spinner from '../../components/common/ui/Spinner';
+import ErrorText from '../../components/common/message/ErrorText';
+
+type User = z.infer<typeof userSchema>;
+
 const Login: FC = memo(() => {
-  const user = {
-    minUserNameLen: 6,
-    minPasswordLen: 8,
-  };
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      username: ``,
-      password: ``,
-    },
+  } = useForm<User>({
+    resolver: zodResolver(userSchema),
   });
-  // const [username, setUsername] = useState('');
-  // const [password, setPassword] = useState('');
+  const { login, isSuccess, isPending, isError, errorMessage } = useLogin();
 
-  const handleLogin = async (data: any) => {
-    const {username, password} = data;
-
-    try {
-      const res = await apiAuth.login(username, password);
-      console.log(res.data);
-    } catch (error: any) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 401 || error.response?.status === 500) {
-          // Trường hợp đăng nhập thất bại do sai mặt khẩu hay tài khoản
-          console.log('Thông tin đăng nhập sai');
-        } else {
-          console.log('Lỗi. Không thể đăng nhập được');
-        }
-      } else {
-        console.log(error);
-      }
-    }
+  const handleLogin: SubmitHandler<User> = async (data: any) => {
+    console.log(`user data = `, data);
+    login(data);
+    // try {
+    //   const res = await apiAuth.login(username, password);
+    //   console.log(res.data);
+    // } catch (error: any) {
+    //   if (error instanceof AxiosError) {
+    //     if (error.response?.status === 401 || error.response?.status === 500) {
+    //       // Trường hợp đăng nhập thất bại do sai mặt khẩu hay tài khoản
+    //       console.log('Thông tin đăng nhập sai');
+    //     } else {
+    //       console.log('Lỗi. Không thể đăng nhập được');
+    //     }
+    //   } else {
+    //     console.log(error);
+    //   }
+    // }
   };
 
   const handleForgetPassword = async () => {
@@ -64,7 +65,7 @@ const Login: FC = memo(() => {
   };
 
   const handleGoogleLogin = () => {
-    window.open(`${import.meta.env.VITE_BASE_URL}/google`, '_self');
+    window.open(`${import.meta.env.VITE_BASE_URL}/google`);
   };
   const { t } = useTranslation();
 
@@ -92,13 +93,7 @@ const Login: FC = memo(() => {
                   label="username"
                   register={register}
                   errors={errors}
-                  validatedObject={{
-                    required: `Vui lòng nhập tên tài khoản`,
-                    minLength: {
-                      value: user.minUserNameLen,
-                      message: `Tên tài khoản phải có ít nhất ${user.minUserNameLen} ký tự`,
-                    },
-                  }}
+                  validatedObject={{}}
                 />
                 {/* <input
                 type="text"
@@ -113,13 +108,7 @@ const Login: FC = memo(() => {
                   label="password"
                   register={register}
                   errors={errors}
-                  validatedObject={{
-                    required: `Vui lòng nhập lại mật khẩu`,
-                    minLength: {
-                      message: `Mật khẩu phải có ít nhất ${user.minPasswordLen} kí tự`,
-                      value: user.minPasswordLen,
-                    },
-                  }}
+                  validatedObject={{}}
                 />
                 {/* <input
                 type="password"
@@ -127,26 +116,36 @@ const Login: FC = memo(() => {
                 placeholder={t('login.enter_password')}
               /> */}
               </div>
+              {isError && (
+                <div>
+                  <ErrorText>{errorMessage}</ErrorText>
+                </div>
+              )}
               {/* <!-- Middle Content --> */}
               <div className="flex flex-col items-center justify-between mt-6 space-y-6  md:flex-row md:space-y-0 md:space-x-6">
                 <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
                   <span>{t('login.login')}</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="#ffffff"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <line x1="13" y1="18" x2="19" y2="12" />
-                    <line x1="13" y1="6" x2="19" y2="12" />
-                  </svg>
+                  {isPending ? (
+                    <Spinner />
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-6"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="#ffffff"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                      <line x1="13" y1="18" x2="19" y2="12" />
+                      <line x1="13" y1="6" x2="19" y2="12" />
+                    </svg>
+                  )}
                 </button>
+
                 <Link to="/register">
                   <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-orange-600 outline outline-orange-600 bg-white rounded-md px-9 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
                     {t('login.register')}
@@ -177,10 +176,11 @@ const Login: FC = memo(() => {
                 <img src={facebookIcon} alt="" className="w-9" />
                 <span className="font-thin">Facebook</span>
               </button>
-              
-              <button 
-              onClick={handleGoogleLogin}
-              className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2">
+
+              <button
+                onClick={handleGoogleLogin}
+                className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2"
+              >
                 <img src={googleIcon} alt="" className="w-9" />
                 <span className="font-thin">Google</span>
               </button>
