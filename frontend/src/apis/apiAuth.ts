@@ -1,10 +1,10 @@
-import { axiosClient } from './axiosClient';
+import { authClient } from './axiosClient';
 
 const apiAuth = {
   login: async ({ username, password }: any) => {
     console.log(`username = ${username}, password = ${password}`);
     try {
-      const res = await axiosClient.post('/login', { username, password });
+      const res = await authClient.post('/login', { username, password });
       return res;
     } catch (err: any) {
       throw new Error('Tên tài khoản hoặc mật khẩu không đúng');
@@ -12,7 +12,7 @@ const apiAuth = {
   },
   register: async ({ username, password, email }: any) => {
     try {
-      const res = await axiosClient.post('/register', {
+      const res = await authClient.post('/register', {
         username,
         password,
         email,
@@ -28,8 +28,19 @@ const apiAuth = {
     }
   },
   logout: async () => {
-    const res = await axiosClient.post('/logout', null);
+    const res = await authClient.post('/logout', null);
     return res;
+  },
+  restorePassword: async ({ email }: any) => {
+    console.log(`email in api = ${email}`);
+
+    try {
+      const res = await authClient.post('/password', { email });
+      return res;
+    } catch (err: any) {
+      console.log(err);
+      throw new Error(err.response.data.msg);
+    }
   },
 };
 

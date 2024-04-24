@@ -1,8 +1,39 @@
 import { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { usePassword } from './hooks/usePassword';
+import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import TextInput from '../../components/common/input/TextInput';
+import ErrorText from '../../components/common/message/ErrorText';
+import Spinner from '../../components/common/ui/Spinner';
+
+const emailSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'Email không được để trống')
+    .email('Email không hợp lệ')
+    .trim(),
+});
+
+type Input = z.infer<typeof emailSchema>;
 const EnterEmail: FC = memo(() => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+  const { restorePassword, isError, isPending, errorMessage } = usePassword();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Input>({
+    resolver: zodResolver(emailSchema),
+  });
+
+  const handleRestorePassword: SubmitHandler<Input> = (data: any) => {
+    console.log(`data = `, data);
+
+    restorePassword(data);
+  };
   return (
     <div className="h-screen">
       {/* Global container */}
@@ -37,23 +68,41 @@ const EnterEmail: FC = memo(() => {
             {t('forgot_password.get_password')}
           </p>
           <h6>{t('forgot_password.instruction')}</h6>
-          <div className="flex flex-col justify-start text-start w-full">
-            <label className="text-sm font-bold">Email</label>
+          <form
+            onSubmit={handleSubmit(handleRestorePassword)}
+            className="flex flex-col justify-start text-start w-full space-y-4"
+          >
             <div>
-              <input
+              <label className="text-sm font-bold">Email</label>
+              <div>
+                <TextInput
+                  type="email"
+                  label="email"
+                  placeholder={t('forgot_password.placeholder')}
+                  register={register}
+                  errors={errors}
+                  validatedObject={{}}
+                />
+                {isError && <ErrorText>{errorMessage}</ErrorText>}
+                {/* <input
                 type="email"
                 className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:text-sm placeholder:font-light hover:outline hover:outline-black hover:outline-1"
                 placeholder={t('forgot_password.placeholder')}
-              />
+              /> */}
+              </div>
             </div>
-          </div>
-          <Link to="/send-password" className="w-full">
+
             <button className="w-full flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
-              {t('forgot_password.send')}
+              {isPending ? (
+                <Spinner className="w-4 h-4 " />
+              ) : (
+                t('forgot_password.send')
+              )}
             </button>
-          </Link>
+          </form>
+
           <span>
-            {t('forgot_password.remember_password')} {" "}
+            {t('forgot_password.remember_password')}{' '}
             <span className="text-orange-600">
               <Link to="/login">{t('forgot_password.login')}</Link>
             </span>

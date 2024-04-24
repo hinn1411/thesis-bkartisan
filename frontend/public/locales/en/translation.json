@@ -26,8 +26,7 @@
   },
   "send_password": {
     "successful_request": "Request successfully",
-    "send_to": "New password is sent to",
-    "check_mail": "Please check your email",
+    "message": "New password is sent to your email, please check your mailbox",
     "login": "Login"
   },
   "header": {

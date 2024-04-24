@@ -26,8 +26,7 @@
   },
   "send_password": {
     "successful_request": "Yêu cầu thành công",
-    "send_to": "Mật khẩu đã được gửi đến email",
-    "check_mail": "bạn vui lòng kiểm tra hộp thư.",
+    "message": "Mật khẩu đã được gửi đến email của bạn, bạn vui lòng kiểm tra hộp thư",
     "login": "Đăng nhập"
   },
   "header": {

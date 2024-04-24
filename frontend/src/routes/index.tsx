@@ -88,12 +88,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/enter-email",
+    path: "/enter_email",
     element: <EnterEmailPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: "/send-password",
+    path: "/send_password",
     element: <SendPasswordPage />,
     errorElement: <ErrorPage />,
   },

@@ -62,9 +62,7 @@ const SendPassword: FC<ISendPasswordProps> = memo(() => {
           </div> */}
 
           <span className="text-justify w-[18rem]">
-            {t('send_password.send_to')}{' '}
-            <span className="font-bold">q*******@gmail.com</span>, {" "}
-            {t('send_password.check_mail')}
+            {t('send_password.message')}
           </span>
 
           <button

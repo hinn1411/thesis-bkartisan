@@ -1,4 +1,3 @@
-
 import { FC, Fragment, memo } from 'react';
 import { Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
@@ -27,7 +26,7 @@ const Login: FC = memo(() => {
   } = useForm<User>({
     resolver: zodResolver(userSchema),
   });
-  const { login, isSuccess, isPending, isError, errorMessage } = useLogin();
+  const { login, isPending, isError, errorMessage } = useLogin();
 
   const handleLogin: SubmitHandler<User> = async (data: any) => {
     console.log(`user data = `, data);
@@ -62,11 +61,11 @@ const Login: FC = memo(() => {
   };
 
   const handleFacebookLogin = () => {
-    console.log('Facebook Login');
+    window.open(`${import.meta.env.VITE_AUTH_URL}/facebook`, '_self');
   };
 
   const handleGoogleLogin = () => {
-    window.open(`${import.meta.env.VITE_BASE_URL}/google`);
+    window.open(`${import.meta.env.VITE_AUTH_URL}/google`, '_self');
   };
   const { t } = useTranslation();
 
@@ -127,7 +126,7 @@ const Login: FC = memo(() => {
                 <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
                   <span>{t('login.login')}</span>
                   {isPending ? (
-                    <Spinner />
+                    <Spinner className="w-4 h-4" />
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +156,7 @@ const Login: FC = memo(() => {
                 onClick={handleForgetPassword}
                 className="font-regular text-orange-600 hover:cursor-pointer text-center my-4"
               >
-                <Link to="/enter-email" className="text-center mx-auto">
+                <Link to="/enter_email" className="text-center mx-auto">
                   {t('login.forget_password')}
                 </Link>
               </div>
@@ -173,7 +172,10 @@ const Login: FC = memo(() => {
             {/* src\assets\images\login\facebook.png 
             src\pages\login\Login.tsx */}
             <div className="flex flex-col space-x-0 space-y-6 md:flex-row md:space-x-4 md:space-y-0">
-              <button className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2">
+              <button
+                onClick={handleFacebookLogin}
+                className="flex items-center justify-center py-2 space-x-3 border border-gray-300 rounded shadow-sm hover:bg-opacity-30 hover:shadow-lg hover:-translate-y-0.5 transition duration-150 md:w-1/2"
+              >
                 <img src={facebookIcon} alt="" className="w-9" />
                 <span className="font-thin">Facebook</span>
               </button>
