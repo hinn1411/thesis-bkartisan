@@ -5,30 +5,44 @@ import {
   // GiftOutlined,
   SearchOutlined,
   MenuOutlined,
-  CaretDownOutlined,
   ShopOutlined,
+  FileSearchOutlined,
+  CommentOutlined,
+  BellOutlined,
+  UserOutlined,
+  InfoCircleOutlined,
+  CaretDownOutlined,
 } from '@ant-design/icons';
 import vnFlag from '../../assets/images/header/vn-flag.png';
 import enFlag from '../../assets/images/header/enFlag.webp';
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import apiAuth from '../../apis/apiAuth';
 import './Header.module.css';
+import { LANGUAGES } from '../../constants/languages';
+import { useUserProfile } from '../../hooks/useUserProfile';
+import AvatarSkeleton from '../common/skeleton/Avatar';
 const Header: FC = memo(() => {
-  const lang = {
-    vi: 'vi',
-    en: 'en',
-  };
+  const navigate = useNavigate();
+  const [currentFlag, setCurrentFlag] = useState<string>(vnFlag);
   // Category dropdown states
   const { t, i18n } = useTranslation();
-  // console.log(<Trans i18nKey="header.search"></Trans>);
-
+  const { resolvedLanguage: currentLanguage, changeLanguage } = i18n;
   const [isCategoryDropdownOpened, setIsCategoryDropdownOpened] =
     useState(false);
+  const [isLanguageDropdownOpened, setIsLanguageDropdownOpened] =
+    useState(false);
+  const [isUserDropdownOpened, setIsUserDropdownOpened] = useState(false);
   const categoryRef = useRef<HTMLDivElement>(null);
+  const languageRef = useRef<HTMLDivElement>(null);
+  const userRef = useRef<HTMLDivElement>(null);
+  const { user, isPending, isAuthenticated } = useUserProfile();
+  console.log(`user = `, user);
 
   useEffect(() => {
-    let categorySelectionHandler = (e: any) => {
+    const categorySelectionHandler = (e: any) => {
       if (!categoryRef.current?.contains(e.target)) {
         setIsCategoryDropdownOpened(false);
         // console.log(categoryRef.current);
@@ -39,10 +53,6 @@ const Header: FC = memo(() => {
       document.removeEventListener('mousedown', categorySelectionHandler);
   });
 
-  // Language dropdown state
-  const [isLanguageDropdownOpened, setIsLanguageDropdownOpened] =
-    useState(false);
-  const languageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const languageSelectionHandler = (e: any) => {
       if (!languageRef.current?.contains(e.target)) {
@@ -55,14 +65,43 @@ const Header: FC = memo(() => {
       document.removeEventListener('mousedown', languageSelectionHandler);
   });
 
-  const handleClick = () => {
-    
+  // useEffect(() => {
+  //   let userSelectionHandler = (e: any) => {
+  //     if (!userRef.current?.contains(e.targer)) {
+  //       setIsUserDropdownOpened(false);
+  //     }
+  //   };
+  //   document.addEventListener('mousedown', userSelectionHandler);
+  //   return () =>
+  //     document.removeEventListener('mousedown', userSelectionHandler);
+  // });
+
+  const changeCurrentLanguage = (newFlag: string, newLanguage: string) => {
+    setCurrentFlag(newFlag);
+    changeLanguage(newLanguage);
+    setIsLanguageDropdownOpened(false);
   };
 
+  const handleLogout = async () => {
+    try {
+      console.log(`log out`);
 
-
+      await apiAuth.logout().then(() => {
+        location.reload();
+        // navigate('/login');
+      });
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  };
+  // isPending -> render skeleton
   return (
-    <nav className="container mx-auto px-20 py-4 border-b-2 border-b-gray-300">
+    <nav
+      className={`${
+        isPending && 'shadow animate-pulse'
+      } container mx-auto px-20 py-4 border-b-2 border-b-gray-300`}
+    >
       <div className="flex flex-col justify-between items-center md:flex-row space-y-4 md:space-y-0 md:space-x-4 mx-auto">
         <span className="text-4xl text-orange-600 font-semibold">
           <Link to="/" className="flex justify-center items-center space-x-2">
@@ -112,6 +151,7 @@ const Header: FC = memo(() => {
             <span>BKArtisan</span>
           </Link>
         </span>
+        {/* Category droplist */}
         <div className="category-container relative" ref={categoryRef}>
           <div
             className="flex justify-center items-center space-x-2 category-trigger"
@@ -169,11 +209,72 @@ const Header: FC = memo(() => {
         </div>
         {/* Icon container */}
         <div className="flex justify-center items-center space-x-7">
-          <div className=" flex items-center justify-center hover:cursor-pointer">
-            {/* <LoginOutlined /> */}
-            <span className="font-medium">
-              <Link to="/login">{t('header.login')}</Link>
-            </span>
+          {/* Login Button */}
+          <div className="flex items-center justify-center hover:cursor-pointer">
+            {isPending ? (
+              <AvatarSkeleton className="h-[30px] w-[30px]" />
+            ) : isAuthenticated ? (
+              <div
+                className="options-container relative hover:cursor-pointer"
+                ref={userRef}
+              >
+                <div
+                  onClick={() => setIsUserDropdownOpened((cur) => !cur)}
+                  className="flex justify-center items-center space-x-1"
+                >
+                  <img
+                    src={user.avatar}
+                    className="h-[30px] w-[30px] rounded-full border-solid border-2 border-orange-600"
+                  ></img>
+                  <CaretDownOutlined />
+                </div>
+                <div
+                  className={`${
+                    isUserDropdownOpened ? 'block' : 'hidden'
+                  } z-10 absolute  right-[0%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48 mx-auto`}
+                >
+                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 mx-auto">
+                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <p className='font-semibold'>{user.name}</p>
+                    </li>
+                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <FileSearchOutlined />
+                      <p>Lịch sử mua hàng</p>
+                    </li>
+                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <CommentOutlined />
+                      <p>Tin nhắn</p>
+                    </li>
+                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <BellOutlined />
+                      <p>Thông báo</p>
+                    </li>
+                    <li className="flex items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <HeartOutlined />
+                      <div>Danh sách yêu thích</div>
+                    </li>
+                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <UserOutlined />
+                      <p>Trang cá nhân</p>
+                    </li>
+                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <InfoCircleOutlined />
+                      <p>Hướng dẫn sử dụng</p>
+                    </li>
+                    <li
+                      onClick={handleLogout}
+                      className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      <p className="text-red-600 font-semibold">Đăng xuất</p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <span className="font-medium">
+                <Link to="/login">{t('header.login')}</Link>
+              </span>
+            )}
           </div>
           <Link to="/favourite/:userId">
             <div className="flex items-center justify-center">
@@ -200,17 +301,18 @@ const Header: FC = memo(() => {
               <ShopOutlined
                 size={24}
                 className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
-                onClick={handleClick}
+                onClick={() => {}}
               />
             </div>
           </Link>
 
+          {/* Language container */}
           <div className="language-container relative" ref={languageRef}>
             <div
               onClick={() => setIsLanguageDropdownOpened((prev) => !prev)}
               className="language-trigger flex items-center justify-center space-x-1 hover:cursor-pointer"
             >
-              <img src={vnFlag} className="w-6 h-4" />
+              <img src={currentFlag} className="w-6 h-4" />
               <CaretDownOutlined />
             </div>
             <div
@@ -219,21 +321,27 @@ const Header: FC = memo(() => {
               }  z-10 absolute left-[-100%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-36 mx-auto `}
             >
               <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                <li>
+                <li
+                  onClick={() =>
+                    changeCurrentLanguage(vnFlag, LANGUAGES.VIETNAMESE)
+                  }
+                >
                   <button
                     className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onClick={() => i18n.changeLanguage('vn')}
-                    disabled={i18n.resolvedLanguage == lang.vi}
+                    disabled={currentLanguage == LANGUAGES.VIETNAMESE}
                   >
                     <img src={vnFlag} className="w-6 h-4" />
                     <p>Tiếng Việt</p>
                   </button>
                 </li>
-                <li>
+                <li
+                  onClick={() =>
+                    changeCurrentLanguage(enFlag, LANGUAGES.ENGLISH)
+                  }
+                >
                   <button
                     className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    onClick={() => i18n.changeLanguage('en')}
-                    disabled={i18n.resolvedLanguage == lang.en}
+                    disabled={currentLanguage == LANGUAGES.ENGLISH}
                   >
                     <img src={enFlag} className="w-6 h-4" />
                     <p>English</p>

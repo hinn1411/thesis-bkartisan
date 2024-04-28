@@ -1,4 +1,4 @@
-import { axiosClient } from "./axiosClient";
+import { authClient, axiosClient } from './axiosClient';
 
 const apiUsers = {
   getUsersList: async (page: number, offset: number, filterOpts: any) => {
@@ -43,7 +43,7 @@ const apiUsers = {
     for (const key in collab) {
       formData.append(key, collab[key]);
     }
- 
+
     const res = await axiosClient.post(`/collabs/create-new`, formData);
     return res;
   },
@@ -53,9 +53,21 @@ const apiUsers = {
       formData.append(key, collab[key]);
     }
     console.log(collab);
-    const res = await axiosClient.post(`/collabs/${collab.username}/update`, formData);
+    const res = await axiosClient.post(
+      `/collabs/${collab.username}/update`,
+      formData
+    );
     return res;
-  }
+  },
+  getProfile: async () => {
+    try {
+      const { data } = await authClient.get(`/login/success`);
+      return data.data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
 };
 
 export default apiUsers;

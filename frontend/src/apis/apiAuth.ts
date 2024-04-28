@@ -28,8 +28,13 @@ const apiAuth = {
     }
   },
   logout: async () => {
-    const res = await authClient.post('/logout', null);
-    return res;
+    try {
+      const res = await authClient.post('/logout');
+      return res;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   },
   restorePassword: async ({ email }: any) => {
     console.log(`email in api = ${email}`);
