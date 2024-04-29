@@ -1,0 +1,76 @@
+{ 
+  "login": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "enter_account": "Nhập tên tài khoản",
+    "enter_password": "Nhập mật khẩu",
+    "forget_password": "Quên mật khẩu?",
+    "login_with": "Hoặc đăng nhập với"
+  },
+  "register": {
+    "register": "Đăng ký",
+    "enter_account": "Nhập tài khoản",
+    "enter_email": "Nhập địa chỉ email",
+    "password": "Nhập mật khẩu",
+    "confirm_password": "Nhập lại mật khẩu",
+    "have_account": "Đã có tài khoản?"
+  },
+  "forgot_password": {
+    "back": "Quay lại",
+    "get_password": "Lấy lại mật khẩu",
+    "instruction": "Bạn vui lòng nhập email để lấy lại mật khẩu",
+    "placeholder": "Nhập địa chỉ email của bạn",
+    "send": "Gửi",
+    "remember_password": "Bạn đã nhớ mật khẩu?",
+    "login": "Đăng nhập"
+  },
+  "send_password": {
+    "successful_request": "Yêu cầu thành công",
+    "message": "Mật khẩu đã được gửi đến email của bạn, bạn vui lòng kiểm tra hộp thư",
+    "login": "Đăng nhập"
+  },
+  "header": {
+    "categories": "Danh mục",
+    "login": "Đăng nhập",
+    "holidays": "Quà theo lễ",
+    "clothes": "Quần áo",
+    "shoes": "Giày dép",
+    "jewelry": "Trang sức",
+    "accessories": "Phụ kiện",
+    "home": "Nhà cửa", 
+    "decor": "Trang trí",
+    "toys": "Đồ chơi", 
+    "entertainment": "Giải trí",
+    "handmade": "Đồ thủ công",
+    "antique": "Đồ cổ",
+    "search": "Nhập từ khóa tìm kiếm",
+    "art": "Nghệ thuật",
+    "collection": "Sưu tập"
+  },
+  "category": {
+    "title": "Quà nổi bật",
+    "anniversary": "Quà kỷ niệm",
+    "men": "Quà cho nam",
+    "women": "Quà cho nữ",
+    "children": "Quà cho trẻ em",
+    "family": "Quà cho gia đình",
+    "unique": "Quà độc lạ"
+  }, 
+  "footer": {
+    "about_us": "Về chúng tôi",
+    "home": "Trang chủ",
+    "introduction": "Giới thiệu",
+    "developer": "Nhà phát triển",
+    "security_policy": "Chính sách bảo mật",
+    "usage": "Quy định sử dụng",
+    "service": "Hỗ trợ khách hàng",
+    "faq": "Câu hỏi thường gặp",
+    "instruction": "Hướng dẫn đăng bán",
+    "complain": "Giải quyết khiếu nại",
+    "regulation": "Quy định đăng bán",
+    "contact": "Liên hệ",
+    "subscribe": "Đăng ký nhận tin",
+    "your_email": "Email của bạn",
+    "submit": "Đăng ký"
+  }
+}
