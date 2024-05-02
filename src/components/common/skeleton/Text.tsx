@@ -4,12 +4,12 @@ export interface TextSkeletonProps {
   className?: string;
 }
 const TextSkeleton: FC<TextSkeletonProps> = ({ className }) => {
-  let style = 'h-2.5 w-24';
+  let style = 'h-2.5 w-24 rounded-full';
   if (className) {
     style = className;
   }
   return (
-    <div className={`${style} bg-gray-300 rounded-full animate-pulse`}></div>
+    <div className={`${style} bg-gray-300  animate-pulse`}></div>
   );
 };
 

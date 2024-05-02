@@ -28,7 +28,7 @@ const Login: FC = memo(() => {
   });
   const { login, isPending, isError, errorMessage } = useLogin();
 
-  const handleLogin: SubmitHandler<User> = async (data: any) => {
+  const handleLogin: SubmitHandler<User> = async (data) => {
     console.log(`user data = `, data);
     login(data);
     // try {

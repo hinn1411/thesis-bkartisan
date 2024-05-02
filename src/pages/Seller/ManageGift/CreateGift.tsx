@@ -68,7 +68,7 @@ const CreateGift: FC<YourComponentProps> = memo(() => {
                 ))}
               </div>
               {images.length < 1 && (
-                <label className="flex items-center border-2 p-5 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                <label className="flex items-center border-2 p-5 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                   <FiPlus className="w-8 h-8 text-gray-500 dark:text-gray-400"></FiPlus>
                   <input id="image" type="file" className="hidden" multiple onChange={handleFileImageChange} />
                 </label>

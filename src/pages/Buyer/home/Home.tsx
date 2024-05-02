@@ -14,6 +14,8 @@ import { useGift } from './hooks/useGift';
 import CategoryCardSkeleton, {
   CategoryCardSkeletonList,
 } from '../../../components/common/category/CategoryCardSkeleton';
+import ProductList from '@components/common/product/ProductList';
+import ProductSkeleton, { ProductSkeletonList } from '@components/common/product/ProductSkeleton';
 
 /*
   remember adding skeleton when fetching data
@@ -22,7 +24,13 @@ import CategoryCardSkeleton, {
 const Home: FC = memo(() => {
   console.log(`render home`);
   const { t } = useTranslation();
-  const { data: products, page, setPage, isSuccess } = useProductPagination();
+  const {
+    data: products,
+    page,
+    setPage,
+    isSuccess,
+    isFetching,
+  } = useProductPagination();
   const { gifts, isPending: isLoadingGifts } = useGift();
   return (
     <main className="min-h-screen px-20 my-5">
@@ -36,22 +44,20 @@ const Home: FC = memo(() => {
       ) : (
         <ul className="flex flex-col space-y-4 md:flex-row md:space-y-0 items-center justify-evenly text-base space-x-2 my-8 border-b-2 pb-8 border-b-gray-300">
           {gifts.map((gift: any) => (
-            <CategoryCard
-              key={gift.id}
-              srcImage={gift.image}
-              categoryName={gift.name}
-            />
+            <CategoryCard key={gift.id} {...gift} />
           ))}
         </ul>
       )}
 
       {/* Product list */}
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      {/* <ProductSkeleton /> */}
+      <ProductList data={products} isLoading={isFetching} />
+      {/* <ul className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {isSuccess &&
           products.map((product: ProductCardProps, index: number) => (
             <ProductCard key={index} {...product} />
           ))}
-      </div>
+      </ul> */}
       <Pagination currentPage={page} goToPage={setPage} />
     </main>
   );

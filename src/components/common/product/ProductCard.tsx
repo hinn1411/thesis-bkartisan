@@ -8,6 +8,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 export interface ProductCardProps {
+  id: number;
   srcImage: string;
   name: string;
   star: number;
@@ -23,6 +24,7 @@ export interface ProductCardProps {
 
 const ProductCard: FC<ProductCardProps> = memo(
   ({
+    id,
     srcImage,
     name,
     star,
@@ -46,7 +48,7 @@ const ProductCard: FC<ProductCardProps> = memo(
     }).format(originalCost);
     return (
       <div
-        onClick={() => navigate('/products/:productId')}
+        onClick={() => navigate(`/products/${id}`)}
         className="mx-auto relative max-w-sm rounded-[10px] border overflow-hidden shadow-sm hover:shadow-lg hover:scale-105 duration-300"
       >
         {/* Inner container */}

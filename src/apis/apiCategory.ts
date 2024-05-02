@@ -18,12 +18,15 @@ const apiCategorys = {
   getCategoryByLevel: async (level: number) => {
     try {
       const { data } = await axiosClient.get(`/categories/${level}`);
-      return data.map(({ categoryId, name, image, isSelected }: any) => ({
-        id: categoryId,
-        name,
-        image,
-        isSelected,
-      }));
+      return data.map(
+        ({ categoryId, name, image, isSelected, level }: any) => ({
+          id: categoryId,
+          name,
+          image,
+          isSelected,
+          level,
+        })
+      );
     } catch (err) {
       console.log(err);
       throw err;
@@ -32,10 +35,29 @@ const apiCategorys = {
   getGifts: async () => {
     try {
       const { data } = await axiosClient.get('/categories/gifts');
-      return data.map(({ categoryId, name, image }: any) => ({
+      return data.map(({ categoryId, name, image, level }: any) => ({
         id: categoryId,
         name,
         image,
+        level,
+      }));
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  getCategoryChildren: async (id: number) => {
+    try {
+      const { data } = await axiosClient.post('/categories/children', {
+        id,
+      });
+      console.log(`category children`, data);
+
+      return data.map(({ categoryId, name, image, level }) => ({
+        id: categoryId,
+        name,
+        image,
+        level,
       }));
     } catch (err) {
       console.log(err);
