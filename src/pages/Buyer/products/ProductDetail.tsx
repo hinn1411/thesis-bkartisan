@@ -1,25 +1,40 @@
-import { FC, Suspense, memo } from 'react';
+import { FC, memo } from 'react';
 import { Rating } from 'flowbite-react';
 import { Textarea } from 'flowbite-react';
 
 import Pagination from '@components/common/pagination/Pagination';
 import Comment from '@components/common/comment/Comment';
 import CategoryLink from '@components/common/categotylink/CategoryLink';
-import { HeartOutlined, DownOutlined } from '@ant-design/icons';
+import {
+  HeartOutlined,
+  HeartFilled,
+  DownOutlined,
+  GiftOutlined,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import { useState } from 'react';
 import { useProductDetail } from './hooks/useProductDetail';
 import { useParams } from 'react-router-dom';
-import ImageSlider from './components/ImageSlider';
 import ImageList from './components/ImageList';
 import TextSkeleton from '@components/common/skeleton/Text';
 import Spinner from '@components/common/ui/Spinner';
+import ImageSlider from './components/ImageSlider';
+import { formatCurrency } from '../../../utils/formatCurrency';
+import { CURRENCIES } from '@contants/currencies';
+import Button from '@components/common/button/Button';
+// const slides = [
+//   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
+//   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
+//   'https://i.etsystatic.com/site-assets/gift-category-pages/L0/gifts-for-christmas-L1.jpg?v=1696278259',
+//   'https://i.etsystatic.com/site-assets/gift-category-pages/L0/gifts-for-him-L1.jpg?v=1696278259  ',
+// ];
 
 const ProductDetail: FC = memo(() => {
   const { productId } = useParams();
   const { data, isFetching } = useProductDetail(productId as string);
 
   console.log(data);
-  const [currentSlide, setCurrentSlide] = useState(1);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const changeSlide = () => {
     setCurrentSlide(1);
@@ -46,7 +61,7 @@ const ProductDetail: FC = memo(() => {
     setExpandedStates(newExpandedStates);
   };
   return (
-    <div className="mx-20">
+    <div className="mx-4 md:mx-20">
       {/* Links navigation */}
       <div className="flex items-center space-x-2 md:space-x-5 text-xs p-4 ">
         <CategoryLink linkTo="/" categoryName="Trang chủ"></CategoryLink>
@@ -59,15 +74,19 @@ const ProductDetail: FC = memo(() => {
         <CategoryLink linkTo="" categoryName="Cờ"></CategoryLink>
         <p>Cờ gỗ của nga</p>
       </div>
+      {/* Image slider experiment */}
+      {/* <div className="image__slider w-[500px] h-48 sm:h-64 xl:h-80 2xl:h-96"></div> */}
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2">
         {/* Carousel */}
+
         <div className="h-auto">
           <div className="h-48 sm:h-64 xl:h-80 2xl:h-96">
             <ImageSlider
+              isLoading={isFetching}
+              data={data}
               currentSlide={currentSlide}
               setSlide={setCurrentSlide}
-              data={data}
-              isLoading={isFetching}
+              parentWidth={600}
             />
           </div>
           <ImageList
@@ -103,7 +122,11 @@ const ProductDetail: FC = memo(() => {
           </div> */}
         </div>
         {/* Information product */}
-        <Suspense fallback={<Spinner />}>
+        {isFetching ? (
+          <div className=" flex justify-center items-center">
+            <Spinner className="h-12 w-12" />
+          </div>
+        ) : (
           <section className=" md:ml-10 my-2">
             <p onClick={changeSlide} className="text-red-700 mb-3">
               Hàng hiếm
@@ -118,31 +141,42 @@ const ProductDetail: FC = memo(() => {
               {isFetching ? (
                 <TextSkeleton />
               ) : (
-                <p className="text-green-600 mr-1 text-xl">{data.price}</p>
+                <p className="text-green-600 mr-1 text-xl">
+                  {formatCurrency(data?.currentCost, CURRENCIES.VIETNAMDONG)}
+                </p>
               )}
 
-              <p className="text-neutral-400 line-through text-xs">
-                2,020,202đ
-              </p>
+              {data?.percentageOfDiscount > 0 && (
+                <p className="text-neutral-400 line-through text-xs">
+                  {formatCurrency(data?.originalCost, CURRENCIES.VIETNAMDONG)}(
+                  {data?.percentageOfDiscount}%)
+                </p>
+              )}
             </div>
             <p className="text-green-600 mb-2">
               Chương trình khuyến mãi được áp dụng đến 27/11/2023
             </p>
-            <p>
-              Hộp đựng bút chì bằng gỗ của Liên Xô cổ điển thập niên 80 được làm
-              bằng gỗ theo phong cách bàn cờ. Món quà tuyệt vời cho nam giới và
-              người sưu tập.
-            </p>
+            <p>{data.description}</p>
             <div className="flex items-center text-sm space-x-2 my-1">
               <a className="underline" href="#">
-                sadboizaintcry
+                {data?.seller}
               </a>
+
               <Rating className="mt-2 mb-1">{starsShop}</Rating>
             </div>
-            <div className="max-w-full flex my-5">
-              <button className="bg-black w-3/4 mx-auto text-white py-2 rounded-full hover:scale-110 duration-300 hover:cursor-pointer">
-                Thêm vào giỏ hàng
+            <div className="max-w-full flex flex-col my-5 space-y-3">
+              <button className="flex items-center justify-center space-x-3 bg-black w-full md:w-3/4 mx-auto text-white py-3 rounded-full cursor-pointer">
+                <ShoppingCartOutlined />
+                <p>Thêm vào giỏ hàng</p>
               </button>
+              <Button className="bg-[#E5E5E5] flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer">
+                <GiftOutlined />
+                <p>Tặng quà</p>
+              </Button>
+              <Button className="bg-white flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer border">
+                <HeartFilled style={{ color: '#DC2626' }} />
+                <p>Yêu thích</p>
+              </Button>
             </div>
             <div className="my-3">
               <button
@@ -271,7 +305,7 @@ const ProductDetail: FC = memo(() => {
               </div>
             </div>
           </section>
-        </Suspense>
+        )}
 
         {/* Comment and rating */}
         <div>

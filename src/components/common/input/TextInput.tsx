@@ -1,12 +1,12 @@
 import { memo, FC } from 'react';
 
 export type TextInputProps = {
-  label: any;
+  label: string;
   register?: any;
   validatedObject?: any;
   errors?: any;
   type: string;
-  placeholder: any;
+  placeholder: string;
 };
 
 const TextInput: FC<TextInputProps> = memo(

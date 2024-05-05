@@ -26,7 +26,8 @@
       "@images/*": ["./src/assets/images/*"],
       "@apis/*": ["./src/apis/*"],
       "@hooks/*": ["./src/hooks/*"],
-      "@contants/*": ["./src/constants/*"]
+      "@contants/*": ["./src/constants/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src"],

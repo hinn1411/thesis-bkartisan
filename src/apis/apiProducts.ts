@@ -60,7 +60,20 @@ const apiProducts = {
   getProductDetails: async (productId: string | undefined) => {
     try {
       const { data } = await axiosClient.get(`/products/${productId}`);
-      return data;
+      // return data;
+      return {
+          id: productId,
+          name: data.name,
+          percentageOfDiscount: data.discount,
+          assets: data.assets,
+          seller: data.seller,
+          currentCost: data.price * (1 - data.discount / 100),
+          originalCost: data.price,
+          star: data.numberOfStar,
+          numOfRating: data.numberOfRating,
+          comments: data.comments,
+          description: data.description
+        }
     } catch (err) {
       console.log(err);
       throw err;

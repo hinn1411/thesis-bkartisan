@@ -1,3 +1,4 @@
+import { ASSETS } from '@contants/assets';
 import { FC, memo, Dispatch } from 'react';
 
 export interface ImageSliderProps {
@@ -15,7 +16,7 @@ const ImageList: FC<ImageSliderProps> = memo(
       style = className;
     }
 
-    if (isLoading) {
+    if (isLoading || data.assets.length === 0) {
       return (
         <ul className={`${style}`}>
           <li>
@@ -59,18 +60,31 @@ const ImageList: FC<ImageSliderProps> = memo(
     }
     return (
       <ul className={`${style}`}>
-        {data.images.map((image: string, index: number) => (
-          <li key={index} onClick={() => setSide(index + 1)}>
-            <img
-
-              className={`${
-                index + 1 != currentSlide
-                  ? 'opacity-50'
-                  : 'border-2 border-black shadow-md'
-              } w-20 h-20 rounded-[10px] overflow-hidden`}
-              src={image}
-              alt="..."
-            />
+        {data.assets.map((asset: any, index: number) => (
+          <li className="w-20 h-20" key={index} onClick={() => setSide(index)}>
+            {asset.type == ASSETS.IMAGE ? (
+              <img
+                className={`${
+                  index != currentSlide
+                    ? 'opacity-50'
+                    : 'border-2 border-black shadow-md'
+                } w-full h-full rounded-[10px] overflow-hidden`}
+                src={asset.link}
+                alt="..."
+              />
+            ) : (
+              <video
+                src={asset.link}
+                className={`${
+                  index != currentSlide
+                    ? 'opacity-50 border-2'
+                    : 'border-2 border-black shadow-md'
+                } w-20 h-20 rounded-[10px] overflow-hidden`}
+                // controls
+              >
+                Your browser does not support the video tag.
+              </video>
+            )}
           </li>
         ))}
       </ul>

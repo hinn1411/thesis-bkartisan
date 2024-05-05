@@ -7,6 +7,8 @@ import {
   HeartOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../../../utils/formatCurrency';
+import { CURRENCIES } from '@contants/currencies';
 export interface ProductCardProps {
   id: number;
   srcImage: string;
@@ -38,14 +40,16 @@ const ProductCard: FC<ProductCardProps> = memo(
     productType,
   }) => {
     const navigate = useNavigate();
-    const curPrice = new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(currentCost);
-    const originalPrice = new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(originalCost);
+    // const currentPrice = new Intl.NumberFormat('vi-VN', {
+    //   style: 'currency',
+    //   currency: 'VND',
+    // }).format(currentCost);
+    const currentPrice = formatCurrency(currentCost, CURRENCIES.VIETNAMDONG);
+    const originalPrice = formatCurrency(originalCost, CURRENCIES.VIETNAMDONG);
+    // const originalPrice = new Intl.NumberFormat('vi-VN', {
+    //   style: 'currency',
+    //   currency: 'VND',
+    // }).format(originalCost);
     return (
       <div
         onClick={() => navigate(`/products/${id}`)}
@@ -79,7 +83,7 @@ const ProductCard: FC<ProductCardProps> = memo(
           {/* Price container */}
           <div className="flex items-center justify-start space-x-1">
             <div className="text-base oldstyle-nums text-[#258635] font-medium">
-              {curPrice}
+              {currentPrice}
             </div>
             <div className="text-[12px] opacity-90">
               {originalPrice} ({percentageOfDiscount}%)
