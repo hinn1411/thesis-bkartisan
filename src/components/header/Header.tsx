@@ -1,4 +1,5 @@
-import { memo, FC } from 'react';
+import React, { memo, FC } from 'react';
+// Icons
 import {
   HeartOutlined,
   ShoppingOutlined,
@@ -13,33 +14,48 @@ import {
   InfoCircleOutlined,
   CaretDownOutlined,
 } from '@ant-design/icons';
+// Languages
 import vnFlag from '../../assets/images/header/vn-flag.png';
 import enFlag from '../../assets/images/header/enFlag.webp';
-import { Link } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
-import apiAuth from '../../apis/apiAuth';
-import './Header.module.css';
 import { LANGUAGES } from '../../constants/languages';
+import { Link, useNavigate } from 'react-router-dom';
+// Apis
+import apiAuth from '../../apis/apiAuth';
+// Styles
+import './Header.module.css';
+//  Hooks
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { useCategory } from '../../hooks/useCategory';
+import { useState, useEffect, useRef } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+// Skeletons
 import AvatarSkeleton from '../common/skeleton/Avatar';
-import CategorySkeleton from '../common/category/CategoryCardSkeleton';
 import TextSkeleton, { TextListSkeleton } from '../common/skeleton/Text';
 import LogoSkeleton from '../common/skeleton/Logo';
+import { CategoryText } from '@components/common/category/index';
 const Header: FC = memo(() => {
+  // Navigation
+  const navigate = useNavigate();
+
+  // Languages
   const [currentFlag, setCurrentFlag] = useState<string>(vnFlag);
-  // Category dropdown states
   const { t, i18n } = useTranslation();
   const { resolvedLanguage: currentLanguage, changeLanguage } = i18n;
+
+  // UI
   const [isCategoryDropdownOpened, setIsCategoryDropdownOpened] =
     useState(false);
   const [isLanguageDropdownOpened, setIsLanguageDropdownOpened] =
     useState(false);
   const [isUserDropdownOpened, setIsUserDropdownOpened] = useState(false);
+
+  // References
   const categoryRef = useRef<HTMLDivElement>(null);
   const languageRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
+
+  // Data
+  const [searchKey, setSearchKey] = useState();
   const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile();
   const { categories, isPending: isLoadingCategories } = useCategory();
   console.log(`user = `, user);
@@ -88,10 +104,8 @@ const Header: FC = memo(() => {
   const handleLogout = async () => {
     try {
       console.log(`log out`);
-
       await apiAuth.logout().then(() => {
         location.reload();
-        // navigate('/login');
       });
     } catch (err) {
       console.log(err);
@@ -99,6 +113,14 @@ const Header: FC = memo(() => {
     }
   };
   // isPending -> render skeleton
+
+  const search = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    navigate(`/search?name=${searchKey}`, {
+      replace: true,
+    });
+  };
+
   return (
     <nav
       className={`container mx-auto px-20 py-4 border-b-2 border-b-gray-300`}
@@ -179,10 +201,7 @@ const Header: FC = memo(() => {
               </div>
             </div>
             {isLoadingCategories ? (
-              <>
-             
-                {/* <TextSkeleton /> */}
-              </>
+              <>{/* <TextSkeleton /> */}</>
             ) : (
               <div
                 className={`${
@@ -191,14 +210,15 @@ const Header: FC = memo(() => {
               >
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                   {categories.map((category) => (
-                    <li key={category.id}>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        {category.name}
-                      </a>
-                    </li>
+                    <CategoryText key={category.id} {...category} />
+                    // <li key={category.id}>
+                    //   <a
+                    //     href="#"
+                    //     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    //   >
+                    //     {category.name}
+                    //   </a>
+                    // </li>
                   ))}
                 </ul>
               </div>
@@ -210,16 +230,27 @@ const Header: FC = memo(() => {
         {isLoadingUser ? (
           <TextSkeleton className="w-[500px] h-[70px]" />
         ) : (
-          <div className="flex justify-center items-center border-2 border-black md:w-1/3 px-8 py-3 rounded-full">
+          <form
+            onSubmit={search}
+            className="flex justify-center items-center border-2 border-black md:w-1/3 px-8 py-3 rounded-full"
+          >
             <input
+              onChange={(e) => setSearchKey(e.target.value)}
               type="text"
               placeholder={t('header.search')}
               className="w-full border-none placeholder:font-thin focus:outline-none"
             />
-            <button className="flex justify-center items-center">
+            <button
+              onClick={() =>
+                navigate(`/search?name=${searchKey}`, {
+                  replace: true,
+                })
+              }
+              className="flex justify-center items-center"
+            >
               <SearchOutlined className="hover:scale-110 duration-300" />
             </button>
-          </div>
+          </form>
         )}
 
         {/* Icon container */}
@@ -382,10 +413,9 @@ const Header: FC = memo(() => {
           {categories.map((category) => {
             if (category.isSelected) {
               return (
-                <li key={category.id} className="group hover:cursor-pointer">
-                  <span>{category.name}</span>
-                  <div className="mx-2 mt-0 duration-500 border-b-2 opacity-0 border-orange-600 group-hover:opacity-100"></div>
-                </li>
+                <CategoryText 
+                className='duration-300 hover:-translate-y-0.5'
+                key={category.id} {...category} />
               );
             }
           })}

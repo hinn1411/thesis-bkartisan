@@ -29,7 +29,7 @@ const EnterEmail: FC = memo(() => {
     resolver: zodResolver(emailSchema),
   });
 
-  const handleRestorePassword: SubmitHandler<Input> = (data: any) => {
+  const handleRestorePassword: SubmitHandler<Input> = (data) => {
     console.log(`data = `, data);
 
     restorePassword(data);

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 export const useLogin = () => {
   const navigate = useNavigate();
   const { mutate, isPending, isSuccess, isError, error } = useMutation({
-    mutationFn: async (userData: any) => {
+    mutationFn: async (userData) => {
       const { data } = await apiAuth.login(userData);
       console.log(`user login info = `, data);
       return data;

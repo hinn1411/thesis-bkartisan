@@ -1,3 +1,5 @@
+
+
 const CategoryCardSkeleton = () => {
   return (
     <div className="flex flex-col justify-center items-center space-y-2 animate-pulse">
@@ -7,14 +9,20 @@ const CategoryCardSkeleton = () => {
   );
 };
 
-export const CategoryCardSkeletonList = (props) => {
+interface CategoryCardSkeletonListProps {
+  numberOfElement: number;
+}
+
+export const CategoryCardSkeletonList = (
+  props: CategoryCardSkeletonListProps
+) => {
   // const MAX = 6;
   const list = [];
   for (let i = 0; i < props.numberOfElement; i++) {
     list.push(<CategoryCardSkeleton />);
   }
   return (
-    <ul className="flex flex-col space-y-4 md:flex-row md:space-y-0 items-center justify-evenly text-base space-x-2 my-8 border-b-2 pb-8 border-b-gray-300">
+    <ul className="flex flex-col space-y-4 md:flex-row md:space-y-0 items-center justify-evenly text-base space-x-2 my-8 ">
       {list.map((item, index: number) => (
         <li key={index}>{item}</li>
       ))}

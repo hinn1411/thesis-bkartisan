@@ -10,7 +10,10 @@ function useFilterFetch<Type>(
 ) {
   const options =
     JSON.parse(sessionStorage.getItem(filterName) || "null") || defaultValues;
-
+  console.log(`options = `);
+  console.log(options);
+  
+  
   const { register, handleSubmit } = useForm<Type>({
     defaultValues: options,
   });

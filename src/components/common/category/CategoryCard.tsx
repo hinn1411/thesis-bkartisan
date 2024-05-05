@@ -1,22 +1,27 @@
+import { every } from 'lodash';
 import { FC, memo } from 'react';
-
+import { Link } from 'react-router-dom';
 interface CategoryCardProps {
-  srcImage: string;
-  categoryName: string;
+  id: number;
+  image: string;
+  name: string;
+  level: number;
 }
 const CategoryCard: FC<CategoryCardProps> = memo(
-  ({ srcImage, categoryName }) => {
+  ({ id, image, name, level }) => {
     return (
       <li className="group hover:cursor-pointer flex flex-col justify-center items-center">
-        <div className="flex flex-col justify-center items-center space-y-2">
-          <img
-            src={srcImage}
-            alt="category image"
-            className="object-cover w-[150px] h-[150px] rounded-[10px] hover:scale-105 duration-300"
-          />
-          <span className="text-center font-medium">{categoryName}</span>
-        </div>
-        <div className="mx-2 mt-0 w-full duration-500 border-b-2 opacity-0 border-black border-1 group-hover:opacity-100"></div>
+        <Link to={`/category?id=${id}&level=${level}`}>
+          <figure className="flex flex-col justify-center items-center space-y-2">
+            <img
+              src={image}
+              alt="category image"
+              className="object-cover w-[150px] h-[150px] rounded-[10px] hover:scale-105 duration-300"
+            />
+            <figcaption className="text-center font-medium">{name}</figcaption>
+          </figure>
+          <div className="mx-2 mt-0 w-full duration-500 border-b-2 opacity-0 border-black border-1 group-hover:opacity-100"></div>
+        </Link>
       </li>
     );
   }

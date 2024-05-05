@@ -1,4 +1,4 @@
-import { Fragment, useRef, FC, memo, useState } from 'react';
+import { Fragment, useRef, FC, memo, Dispatch } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
 // Styles
@@ -9,14 +9,14 @@ import GiftComponent from './GiftComponent';
 import { giftBoxData, giftItemData, giftEnvelopeData } from '../data';
 export type ModalProps = {
   isOpen: boolean;
-  setIsOpen: any;
-  setIsDone: any;
+  setIsOpen: Dispatch<boolean>;
+  setIsDone: Dispatch<boolean>;
 };
 
 const GiftDetailModal: FC<ModalProps> = memo(
   ({ isOpen, setIsOpen, setIsDone }) => {
     const cancelButtonRef = useRef(null);
-    
+
     return (
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog

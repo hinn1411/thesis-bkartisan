@@ -24,7 +24,10 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@images/*": ["./src/assets/images/*"],
-      "@apis/*": ["./src/apis/*"]
+      "@apis/*": ["./src/apis/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@contants/*": ["./src/constants/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src"],
