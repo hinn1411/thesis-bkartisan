@@ -122,6 +122,15 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
               </div>
             </Grid>
           );
+        } else if (index == 4 && type == "report") {
+          return (
+            <Grid item xs={layout[index]} key={index}>
+              <div className="truncate mr-8">
+                {formatDate("hh:MM dd/mm/yyyy", new Date(values[index])) ||
+                  "Chưa xác định"}
+              </div>
+            </Grid>
+          );
         } else {
           return (
             <Grid item xs={layout[index]} key={index}>
