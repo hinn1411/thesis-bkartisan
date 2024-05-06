@@ -17,7 +17,7 @@ const apiOptions = {
     }
   },
 
-  getChildOptions: async (optionTerm: number) => {
+  getChildOptions: async (optionTerm: string) => {
     try {
       const { data } = await axiosClient.get(`/child_options`,{
         params: {

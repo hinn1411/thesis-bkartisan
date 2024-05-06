@@ -1,9 +1,7 @@
-import { ChangeEvent, FC, memo, useState } from 'react';
+import { ChangeEvent, FC, memo, useEffect, useState } from 'react';
 import SellerSideBar from '../../../components/sidebar/SellerSideBar';
 import { PiTrashLight } from "react-icons/pi";
 import { FiPlus } from "react-icons/fi";
-import { CiFilter } from "react-icons/ci";
-import { IoIosArrowDown } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import Pagination from '../../../components/common/pagination/Pagination';
 import { useManageProductPagination } from './Hooks/userManageProductPagination';
@@ -13,6 +11,7 @@ import LineProduct, {
   ProductLineProps
 } from '../../../components/seller/LineProducts';
 import TableLoading from './Components/TableLoading';
+import Dropdown from '../../../components/seller/DropDown';
 
 
 
@@ -23,8 +22,12 @@ const Viewproducts: FC = memo(() => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState("");
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
-  console.log(selectedProductIds)
-  mutation.isSuccess ? setSelectedProductIds([]) : null;
+
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      setSelectedProductIds([]);
+    }
+  }, [mutation.isSuccess]);
 
   const { data: products, page, setPage, isSuccess, isFetching } = useManageProductPagination(searchTerm, selectedFilter);
 
@@ -40,6 +43,11 @@ const Viewproducts: FC = memo(() => {
     const { value } = event.target;
     delayedSearch(value);
   };
+
+  const handleSelectFilter = (filter: string) => {
+    setSelectedFilter(filter);
+  };
+  
 
 
 
@@ -66,15 +74,7 @@ const Viewproducts: FC = memo(() => {
     setSelectedProductIds(isChecked ? products.map((product: ProductLineProps) => product.id) : []);
   };
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const handleOptionClick = (option: string) => {
-    setSelectedFilter(option);
-    setIsDropdownOpen(false); // close dropdown after selecting an option
-};
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
 
 
   return (
@@ -90,23 +90,25 @@ const Viewproducts: FC = memo(() => {
                 <p>Thêm</p>
               </div>
             </Link>
-            <div onClick={handleDeleteProduct} className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
+            <div onClick={handleDeleteProduct} className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200 cursor-pointer'>
               <PiTrashLight className = 'w-5 h-5'/>
               <p className='pr-4'>Xóa</p>
             </div>
             <div className='w-auto'>
-              <div onClick={toggleDropdown} className='flex items-center space-x-2 drop-shadow-lg border w-25 px-3 rounded-xl text-gray-500 hover:bg-gray-200 cursor-pointer'>
+              <Dropdown name='Lọc' filterNames={["Tất cả","Đang bán", "Đang duyệt", "Vi phạm", "Tạm ngưng", "Hết hàng"]} onSelectFilter={handleSelectFilter}></Dropdown>
+              {/* <div onClick={toggleDropdown} className='flex items-center space-x-2 drop-shadow-lg border w-25 px-3 rounded-xl text-gray-500 hover:bg-gray-200 cursor-pointer'>
+                  
                   <CiFilter className='w-5 h-5'/>
                   <p>Lọc</p>
                   <IoIosArrowDown className='w-5 h-5'/>
-              </div>
-              <div className={`${isDropdownOpen ? '' : 'hidden'} absolute border rounded-lg min-w-32 bg-white mt-1`}>
+              </div> */}
+              {/* <div className={`${isDropdownOpen ? '' : 'hidden'} absolute border rounded-lg min-w-32 bg-white mt-1`}>
                   <p className='border-b hover:bg-gray-300 px-2 cursor-pointer' onClick={() => handleOptionClick('OnSale')}>Đang bán</p>
                   <p className='border-b hover:bg-gray-300 px-2 cursor-pointer' onClick={() => handleOptionClick('approve')}>Đang duyệt</p>
                   <p className='border-b hover:bg-gray-300 px-2 cursor-pointer' onClick={() => handleOptionClick('V')}>Vi phạm</p>
                   <p className='border-b hover:bg-gray-300 px-2 cursor-pointer' onClick={() => handleOptionClick('NotOnsale')}>Tạm ngưng</p>
                   <p className='border-b hover:bg-gray-300 px-2 cursor-pointer' onClick={() => handleOptionClick('Hết hàng')}>Hết hàng</p>
-              </div>
+              </div> */}
             </div>
           </div>
 
