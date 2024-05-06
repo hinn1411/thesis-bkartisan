@@ -100,7 +100,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
       formData.append("chooseOptions2", chooseOptions2);
     }
     if (videoSrc) {
-      formData.append('video', videoSrc);
+      formData.append('videos', videoSrc);
     }
     mutation.mutate(formData);
   };
