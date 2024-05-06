@@ -4,7 +4,7 @@ import {IOptions} from '../../../../apis/apiOptions';
 interface DropdownProps {
   name: string;
   optionNames: IOptions[];
-  onSelectOption: (option: number) => void;
+  onSelectOption: (option: string) => void;
   on: boolean;
 }
 
@@ -41,9 +41,9 @@ function DropdownOption({name, optionNames, onSelectOption, on }: DropdownProps)
       setIsDropdownOpen(!isDropdownOpen);
     };
   
-    const handleOptionSelect = (optionName: string, optionId: number) => {
+    const handleOptionSelect = (optionName: string) => {
       setSelectedOption(optionName);
-      onSelectOption(optionId);
+      onSelectOption(optionName);
       setIsDropdownOpen(false);
     };
   
@@ -87,7 +87,7 @@ function DropdownOption({name, optionNames, onSelectOption, on }: DropdownProps)
           </div>
             <ul className="max-h-48 px-1 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
               {filteredOptions.map((option: IOptions, index: number) => (
-                <li key={index} className='ps-2 rounded hover:bg-gray-100 w-full py-2 text-sm font-medium text-gray-900 cursor-pointer' onClick={() => handleOptionSelect(option.optionName, option.optionId)}>
+                <li key={index} className='ps-2 rounded hover:bg-gray-100 w-full py-2 text-sm font-medium text-gray-900 cursor-pointer' onClick={() => handleOptionSelect(option.optionName)}>
                   {option.optionName}
                 </li>
               ))}
