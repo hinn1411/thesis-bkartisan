@@ -327,7 +327,7 @@ const Header: FC = memo(() => {
             <TextSkeleton className="h-[30px] w-[150px]" />
           ) : (
             <>
-              <Link to="/favourite/:userId">
+              <Link to="/favorite">
                 <div className="flex items-center justify-center">
                   <HeartOutlined
                     size={24}

@@ -40,16 +40,8 @@ const ProductCard: FC<ProductCardProps> = memo(
     productType,
   }) => {
     const navigate = useNavigate();
-    // const currentPrice = new Intl.NumberFormat('vi-VN', {
-    //   style: 'currency',
-    //   currency: 'VND',
-    // }).format(currentCost);
     const currentPrice = formatCurrency(currentCost, CURRENCIES.VIETNAMDONG);
     const originalPrice = formatCurrency(originalCost, CURRENCIES.VIETNAMDONG);
-    // const originalPrice = new Intl.NumberFormat('vi-VN', {
-    //   style: 'currency',
-    //   currency: 'VND',
-    // }).format(originalCost);
     return (
       <div
         onClick={() => navigate(`/products/${id}`)}
@@ -91,23 +83,14 @@ const ProductCard: FC<ProductCardProps> = memo(
           </div>
           {/* Button container */}
           <div className="flex justify-between items-center mt-1">
-            {isBuyingGiftProcess && (
-              <button className="w-full flex justify-center items-center py-2 space-x-2 font-sans font-medium text-white rounded-md px-full bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
-                Chọn {productType}
-              </button>
-            )}
-            {!isBuyingGiftProcess && (
-              <>
-                <button className="flex items-center justify-center space-x-1 rounded-full border-2 border-black px-7 py-1">
-                  <PlusOutlined className="flex items-center justify-center text-sm" />
-                  <ShoppingOutlined className="flex items-center justify-center text-2xl" />
-                </button>
-                <button className="flex items-center justify-center space-x-1 rounded-full border-2 border-black px-7 py-1">
-                  <PlusOutlined className="flex items-center justify-center text-sm" />
-                  <HeartOutlined className="flex items-center justify-center text-2xl" />
-                </button>
-              </>
-            )}
+            <button className="flex items-center justify-center space-x-1 rounded-full border-2 border-black px-7 py-1">
+              <PlusOutlined className="flex items-center justify-center text-sm" />
+              <ShoppingOutlined className="flex items-center justify-center text-2xl" />
+            </button>
+            <button className="flex items-center justify-center space-x-1 rounded-full border-2 border-black px-7 py-1">
+              <PlusOutlined className="flex items-center justify-center text-sm" />
+              <HeartOutlined className="flex items-center justify-center text-2xl" />
+            </button>
           </div>
         </div>
       </div>

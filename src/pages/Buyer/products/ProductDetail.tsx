@@ -15,6 +15,7 @@ import {
 import { useState } from 'react';
 import { useProductDetail } from './hooks/useProductDetail';
 import { useParams } from 'react-router-dom';
+import { useFavorite } from '@hooks/useFavorite';
 import ImageList from './components/ImageList';
 import TextSkeleton from '@components/common/skeleton/Text';
 import Spinner from '@components/common/ui/Spinner';
@@ -32,7 +33,7 @@ import Button from '@components/common/button/Button';
 const ProductDetail: FC = memo(() => {
   const { productId } = useParams();
   const { data, isFetching } = useProductDetail(productId as string);
-
+  const { mutate } = useFavorite();
   console.log(data);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -59,6 +60,12 @@ const ProductDetail: FC = memo(() => {
     const newExpandedStates = [...expandedStates];
     newExpandedStates[index] = !newExpandedStates[index];
     setExpandedStates(newExpandedStates);
+  };
+  const addToFavoriteList = () => {
+    if (!productId) {
+      return;
+    }
+    mutate(+productId);
   };
   return (
     <div className="mx-4 md:mx-20">
@@ -124,7 +131,7 @@ const ProductDetail: FC = memo(() => {
         {/* Information product */}
         {isFetching ? (
           <div className=" flex justify-center items-center">
-            <Spinner className="h-12 w-12" />
+            <Spinner className="h-12 w-12 bg-white" />
           </div>
         ) : (
           <section className=" md:ml-10 my-2">
@@ -173,7 +180,10 @@ const ProductDetail: FC = memo(() => {
                 <GiftOutlined />
                 <p>Tặng quà</p>
               </Button>
-              <Button className="bg-white flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer border">
+              <Button
+                onClick={addToFavoriteList}
+                className="bg-white flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer border"
+              >
                 <HeartFilled style={{ color: '#DC2626' }} />
                 <p>Yêu thích</p>
               </Button>
