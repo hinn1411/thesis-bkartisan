@@ -20,7 +20,7 @@ export const useOptions = () => {
       };
 };
 
-export const useChooseOptions1 = (optionTerm: number) => {
+export const useChooseOptions1 = (optionTerm: string) => {
   const { data, refetch, isFetching, isSuccess, error } = useQuery({
       queryKey: ['childOptions1', optionTerm],
       queryFn: async () => {
@@ -37,7 +37,7 @@ export const useChooseOptions1 = (optionTerm: number) => {
     };
 };
 
-export const useChooseOptions2 = (optionTerm: number) => {
+export const useChooseOptions2 = (optionTerm: string) => {
   const { data, refetch, isFetching, isSuccess, error } = useQuery({
       queryKey: ['childOptions2', optionTerm],
       queryFn: async () => {

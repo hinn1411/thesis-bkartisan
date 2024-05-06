@@ -9,6 +9,8 @@ import DropdownOption from './Components/DropdownOption';
 import DropdownChooseOption from './Components/DropdownChooseOption';
 import { ICategorys } from '../../../apis/apiCategory';
 import { useProductCategorys, useOptions, useChooseOptions1, useChooseOptions2 } from './Hooks/useQuery';
+import { SuccessAdd } from '../../../components/seller/model/SuccessAdd';
+import { FailureAdd } from '../../../components/seller/model/FailureAdd';
 
 interface YourComponentProps {
   
@@ -28,13 +30,17 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
   const [isVisibleOption1, setIsVisibleOption1] = useState<boolean>(false); 
   const [isVisibleOption2, setIsVisibleOption2] = useState<boolean>(false); 
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedOption1, setSelectedOption1] = useState<number | undefined>();
-  const [selectedOption2, setSelectedOption2] = useState<number | undefined>();
+  const [selectedOption1, setSelectedOption1] = useState<string>('');
+  const [selectedOption2, setSelectedOption2] = useState<string>('');
+
+  const [errorImg, setErrorImg] = useState("");
+
+  const [errorVideo, setErrorVideo] = useState("");
 
 
-  const { data: chooseOptions1, isFetching: isLoading1 } = useChooseOptions1(typeof selectedOption1 === 'number' ? selectedOption1 : -1);
+  const { data: chooseOptions1, isFetching: isLoading1 } = useChooseOptions1(selectedOption1);
 
-  const { data: chooseOptions2, isFetching: isLoading2 } = useChooseOptions2(typeof selectedOption2 === 'number' ? selectedOption2 : -1);
+  const { data: chooseOptions2, isFetching: isLoading2 } = useChooseOptions2(selectedOption2);
 
 
   const handleSelectCategory = (category: string) => {
@@ -42,13 +48,13 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
   };
   
 
-  const handleSelectOption1 = (option: number) => {
+  const handleSelectOption1 = (option: string) => {
     setSelectedOption1(option)
     setIsVisibleOption1(true);
     
   }
 
-  const handleSelectOption2 = (option: number) => {
+  const handleSelectOption2 = (option: string) => {
     setSelectedOption2(option)
     setIsVisibleOption2(true);
     
@@ -70,6 +76,10 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    if(!videoSrc) {
+      setErrorVideo("Vui lòng thêm video sản phẩm!")
+      return;
+    }
     event.preventDefault();
     const formData = new FormData();
     formData.append('name', formDatas.name);
@@ -81,15 +91,14 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
     for (const image of images) {
       formData.append("images", image);
     }
+    formData.append('option1', selectedOption1);
     for (const chooseOptions1 of selectedChooseOptions1) {
       formData.append("chooseOptions1", chooseOptions1);
     }
+    formData.append('option2', selectedOption2);
     for (const chooseOptions2 of selectedChooseOptions2) {
       formData.append("chooseOptions2", chooseOptions2);
     }
-    // images.forEach((file, index) => {
-    //   formData.append(`images[${index}]`, file);
-    // });
     if (videoSrc) {
       formData.append('video', videoSrc);
     }
@@ -97,15 +106,29 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
   };
 
 
-
-
   const handleFileImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     const newImages: File[] = [];
 
     if (files) {
+      setErrorImg('');
       for (let i = 0; i < files.length; i++) {
-        newImages.push(files[i]);
+        const file = files[i];
+
+            // Check file type
+            if (!file.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                const error = "Hình ảnh chỉ hỗ trợ kiểu jpg, jpeg, png và gif.";
+                setErrorImg(error);
+                return;
+            }
+
+            // Check file size
+            if (file.size > 5000000) {
+                const error = "File không được lớn hơn 5MB.";
+                setErrorImg(error);
+                return;
+            }
+        newImages.push(file);
       }
 
       setImages([...images, ...newImages]);
@@ -119,10 +142,11 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
   };
 
   const isVideoValid = async (file: File): Promise<boolean> => {
+    setErrorVideo('')
     // Check file size (in megabytes)
     const maxSizeMB = 20;
     if (file.size > maxSizeMB * 1024 * 1024) {
-      alert(`File size exceeds ${maxSizeMB} MB. Please choose a smaller file.`);
+      setErrorVideo(`Kích thước tệp vượt quá ${maxSizeMB} MB. Vui lòng chọn một tập tin nhỏ hơn.`);
       return false;
     }
   
@@ -137,7 +161,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
     });
   
     if (video.duration > maxDurationSec) {
-      alert(`Video duration exceeds ${maxDurationSec} seconds. Please choose a shorter video.`);
+      setErrorVideo(`Độ dài video vượt quá ${maxDurationSec} giây. Vui lòng chọn video ngắn hơn.`);
       return false;
     }
   
@@ -186,14 +210,51 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
       
   };
 
-
+  const handleMutationSuccess = () => {
+    // Xóa hết dữ liệu đã lưu
+    setImages([]);
+    setVideoSrc(undefined);
+    setSelectedChooseOptions1([]);
+    setSelectedChooseOptions2([]);
+    setIsVisibleOption1(false);
+    setIsVisibleOption2(false);
+    setSelectedCategory("");
+    setSelectedOption1('');
+    setSelectedOption2('');
+    setFormData({
+      name: '',
+      price: 0,
+      quantity: 0,
+      material: '',
+      description: '',
+    });
+  };
 
 
   return (
     <div>
       <SellerSideBar name = "ManageProducts"/>
 
-      <div className="p-4 sm:ml-64 mt-16">
+      <div className="p-4 sm:ml-64 mt-16 relative">
+
+
+      { mutation.isPending && (
+        <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50'>
+          <Loading></Loading>
+        </div>
+      )
+      }
+
+      {
+        mutation.isSuccess && (
+          <SuccessAdd onDismiss={handleMutationSuccess}></SuccessAdd>
+        )
+      }
+      {
+        mutation.isError && (
+          <FailureAdd ></FailureAdd>
+        )
+      }
 
         <form className="max-w-3xl mx-auto" onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -203,11 +264,11 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
           <div className="mb-4">
             <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hình ảnh (Tối đa 6 hình)</p>
 
-            
+            <div>
             <div className='flex'>
               {/* list hình ảnh */}
               <div className='flex max-w-2xl space-x-2'>
-                {images.map((imageFiles, index) => (
+                {errorImg == '' && images.map((imageFiles, index) => (
                   <div key={index} className='relative group'>
                     <img className='w-20 h-20 rounded-md' src={URL.createObjectURL(imageFiles)} alt={`Image ${index + 1}`} />
                     <div className='absolute top-0 right-0 flex items-center w-4 h-4 text-white bg-red-500 rounded-full p-1 cursor-pointer'
@@ -224,7 +285,8 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
                 </label>
               )}
             </div>
-            
+            {errorImg != '' && (<p className='text-sm text-red-500'>{errorImg}</p>)}
+            </div>
           </div>
           <div className="mb-4">
             <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Video (Tối đa 20mb)</p>
@@ -251,7 +313,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
               )
               }
             </div>
-            
+            {errorVideo != '' && (<p className='text-sm text-red-500'>{errorVideo}</p>)}
           </div> 
           <div className="flex mb-4 justify-between">
             <div>

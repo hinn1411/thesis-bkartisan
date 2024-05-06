@@ -1,10 +1,16 @@
 import { FC, memo } from 'react';
 import SellerSideBar from '../../../components/sidebar/SellerSideBar';
-import { PiTrashLight } from "react-icons/pi";
 import { CiFilter } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
+import TableLoading from '../ManageProducts/Components/TableLoading';
+import { useManageOrderPagination } from './Hooks/userManageOrderPagination';
+import { IOrders } from '../../../apis/apiOrders';
+import Pagination from '../../../components/common/pagination/Pagination';
 
 const ViewOrders: FC = memo(() => {
+  const { data: orders, page, setPage, isSuccess, isFetching } = useManageOrderPagination('');
+  // const { data } = useQueryOrderDetail(1);
+  // console.log(data)
 
 
   const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,23 +25,36 @@ const ViewOrders: FC = memo(() => {
   
   const navigate = useNavigate();
 
-  const handleRowClick = (orderId: string) => {
+  const handleRowClick = (orderId: number) => {
     navigate(`/seller/manage_orders/${orderId}`);
   };
 
   const handleCheckboxClick = (event: React.MouseEvent<HTMLTableDataCellElement>) => {
     event.stopPropagation(); // Ngăn chặn sự kiện click trên input lan truyền đến hàng
   };
+
+  const formatDate = (inputDate: string) => {
+
+    const dateObj = new Date(inputDate);
+
+
+    const time = `${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}`;
+    const date = `${String(dateObj.getDate()).padStart(2, '0')}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${dateObj.getFullYear()}`;
+
+
+    const formattedTime = time;
+    const formattedDate = date;
+
+
+    return `${formattedTime} - ${formattedDate}`;
+  };
   
   return (
     <div>
       <SellerSideBar name = "ManageOrders"></SellerSideBar>
-      <div className="p-4 sm:ml-64 mt-16">
+      <div className='pt-4 px-4 sm:ml-64 mt-16 max-h-[91vh] min-h-[91vh] flex flex-col justify-between'>
+      <div>
         <div className='flex items-center space-x-4'>
-          <div className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
-            <PiTrashLight className = 'w-5 h-5'/>
-            <p className='pr-4'>Xóa</p>
-          </div>
           <div>
             <select className='p-0  hover:drop-shadow-lg border border-gray-300 px-3 rounded-xl text-gray-500  hover:bg-gray-200' id="status">
               <CiFilter className = 'w-5 h-5'/>
@@ -72,37 +91,34 @@ const ViewOrders: FC = memo(() => {
             </tr>
           </thead>
           <tbody>
-            <tr onClick={() => handleRowClick('1')} className='text-center  border-b hover:bg-gray-200  '>
-              <td onClick={handleCheckboxClick}><input id='check_1' className='rounded-sm bg-white focus:ring-2 focus:ring-orange-300' type="checkbox" /></td>
-              <td>MT08</td>
-              <td>Giang Tuấn Hiền</td>
-              <td className='py-1'><p className='p-2 rounded-full bg-blue-100 border'>Chờ xác nhận</p></td>
-              <td>200.000</td>
-              <td>12h30-13/08/2022</td>
-              <td>Có</td>
-            </tr>
-            <tr onClick={() => handleRowClick('2')} className='text-center border-b hover:bg-gray-200  '>
-              <td onClick={handleCheckboxClick}><input id='check_2' className='rounded-sm focus:ring-2 focus:ring-orange-300' type="checkbox" /></td>
-              <td>MT08</td>
-              <td>Lầu Hội</td>
-              <td className='py-1'><p className='p-2 rounded-full bg-blue-600 border'>Chấp nhận trả hàng</p></td>
-              <td>200.000</td>
-              <td>12h30-13/08/2022</td>
-              <td>Có</td>
-            </tr>
-            <tr onClick={() => handleRowClick('3')} className='text-center border-b hover:bg-gray-200  '>
-              <td onClick={handleCheckboxClick}><input id='check_2' className='rounded-sm focus:ring-2 focus:ring-orange-300' type="checkbox" /></td>
-              <td>MT09</td>
-              <td>Chúng Đức Quang</td>
-              <td className='py-1'><p className='p-2 rounded-full bg-red-400 border'>Chờ lấy hàng</p></td>
-              <td>200.000</td>
-              <td>12h30-13/08/2022</td>
-              <td>Có</td>
-            </tr>
+          {isFetching && (
+              <TableLoading></TableLoading>
+            )
+
+            }
+           {isSuccess && !isFetching && (
+              <>
+                {orders.map((order: IOrders) => (
+                  <tr key={order.orderId} onClick={() => handleRowClick(order.orderId)} className='text-center border-b hover:bg-gray-200'>
+                    <td onClick={handleCheckboxClick}><input id='check_1' className='rounded-sm bg-white focus:ring-2 focus:ring-orange-300' type="checkbox" /></td>
+                    <td>{order.orderId}</td>
+                    <td>{order.buyer}</td>
+                    <td className='py-1'><p className='p-2 rounded-full bg-blue-100 border'>{order.status}</p></td>
+                    <td>{order.totalPrice}</td>
+                    <td>{formatDate(order.createAt.toLocaleString())}</td>
+                    <td>{order.isGift ? 'Có' : 'Không'}</td>
+                  </tr>
+                ))}
+              </>
+            )}
             
            
           </tbody>
         </table>
+      </div>
+      <div> 
+            <Pagination currentPage={page} goToPage={setPage} />
+      </div>
       </div>
     </div>
   );
