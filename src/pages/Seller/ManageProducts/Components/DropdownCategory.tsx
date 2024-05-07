@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-
+import { ICategories } from '@apis/apiCategory';
 
 interface DropdownProps {
   name: string;
-  categoryNames: string[]
-  onSelectCategory: (category: string) => void;
+  categories: ICategories[];
+  onSelectCategory: (category: number) => void;
 }
 
 
-function DropdownCategory({name, categoryNames, onSelectCategory }: DropdownProps) {
+function DropdownCategory({name, categories, onSelectCategory }: DropdownProps) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(name);
     const [searchTerm, setSearchTerm] = useState(""); 
@@ -34,15 +34,15 @@ function DropdownCategory({name, categoryNames, onSelectCategory }: DropdownProp
       setIsDropdownOpen(!isDropdownOpen);
     };
   
-    const handleCategorySelect = (category: string) => {
+    const handleCategorySelect = (category: string, categoryId: number) => {
       setSelectedCategory(category);
-      onSelectCategory(category);
+      onSelectCategory(categoryId);
       setIsDropdownOpen(false);
     };
   
    
-    const filteredCategorys = categoryNames.filter((category: string) =>
-      category.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredCategorys = categories.filter((category: ICategories) =>
+      category.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   
     return (
@@ -74,9 +74,9 @@ function DropdownCategory({name, categoryNames, onSelectCategory }: DropdownProp
             </div>
           </div>
           <ul className="max-h-48 px-1 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-            {filteredCategorys.map((category: string, index: number) => (
-              <li key={index} className='ps-2 rounded hover:bg-gray-100 w-full py-2 text-sm font-medium text-gray-900 cursor-pointer' onClick={() => handleCategorySelect(category)}>
-                {category}
+            {filteredCategorys.map((category: ICategories) => (
+              <li key={category.categoryId} className='ps-2 rounded hover:bg-gray-100 w-full py-2 text-sm font-medium text-gray-900 cursor-pointer' onClick={() => handleCategorySelect(category.name, category.categoryId)}>
+                {category.name}
               </li>
             ))}
           </ul>
