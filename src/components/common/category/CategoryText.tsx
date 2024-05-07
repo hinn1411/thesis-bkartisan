@@ -1,12 +1,12 @@
 import { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
 
-export interface CategoryTextProps {
+export type CategoryTextProps = {
   className?: string;
   id: number;
   name: string;
   level: number;
-}
+};
 
 const CategoryText: FC<CategoryTextProps> = memo(
   ({ id, name, level, className }) => {
@@ -15,7 +15,7 @@ const CategoryText: FC<CategoryTextProps> = memo(
       style = className;
     }
     return (
-      <Link to={`/category?id=${id}&level=${level}`}>
+      <Link to={`/category?id=${id}&level=${level}&name=${encodeURIComponent(name)}`}>
         <p className={`${style}`}>{name}</p>
       </Link>
     );

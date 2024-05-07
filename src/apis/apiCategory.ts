@@ -1,3 +1,4 @@
+
 import { axiosClient } from './axiosClient';
 export interface ICategories {
   categoryId: number;
