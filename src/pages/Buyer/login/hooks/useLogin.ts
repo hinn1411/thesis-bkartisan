@@ -9,8 +9,8 @@ export const useLogin = () => {
       console.log(`user login info = `, data);
       return data;
     },
-    onSuccess: () => {
-      navigate('/');
+    onSuccess: (data, variables, context) => {
+      navigate(data.redirect);
     },
   });
   return {

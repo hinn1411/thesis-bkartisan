@@ -141,7 +141,7 @@ const UserManagement: FC = memo(() => {
       {isPending ? (
         <LoadingMessage />
       ) : error ? (
-        <ErrorMessage msg={error.message} />
+        <ErrorMessage msg={error.response.data.msg} />
       ) : data.length === 0 ? (
         <ErrorMessage msg={"Không tìm thấy kết quả trùng khớp"} />
       ) : (
