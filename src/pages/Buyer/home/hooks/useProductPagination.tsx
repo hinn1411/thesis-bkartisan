@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import {PAGE, OFFSET} from "../../../../constants/pagination";
+import { PAGE, OFFSET } from '../../../../constants/pagination';
 import apiProducts from '@apis/apiProducts';
 export interface usePaginationProps {}
 
@@ -12,6 +12,7 @@ export const useProductPagination = () => {
     queryFn: async () => {
       return await apiProducts.getProducts(searchTerm, page, OFFSET);
     },
+    refetchOnWindowFocus: false,
   });
   return {
     page,

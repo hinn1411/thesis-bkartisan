@@ -16,7 +16,7 @@ const TextSkeleton: FC<TextSkeletonProps> = ({ className }) => {
 export const TextListSkeleton = (props) => {
   const list = [];
   for (let i = 0; i < props.numberOfElement; i++) {
-    list.push(<TextSkeleton className="h-4 w-32" />);
+    list.push(<TextSkeleton className="h-4 w-32 rounded-full" />);
   }
   return (
     <ul className="hidden md:flex justify-between items-center mt-4 text-[13px] md:space-x-4 mx-auto">

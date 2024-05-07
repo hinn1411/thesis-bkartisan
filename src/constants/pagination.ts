@@ -1,2 +1,2 @@
 export const PAGE = 1;
-export const OFFSET = 3;
+export const OFFSET = 10;

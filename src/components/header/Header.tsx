@@ -1,4 +1,4 @@
-import React, { memo, FC } from 'react';
+import React, { memo, FC, ChangeEvent } from 'react';
 // Icons
 import {
   HeartOutlined,
@@ -32,7 +32,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import AvatarSkeleton from '../common/skeleton/Avatar';
 import TextSkeleton, { TextListSkeleton } from '../common/skeleton/Text';
 import LogoSkeleton from '../common/skeleton/Logo';
-import { CategoryText } from '@components/common/category/index';
+import { CategoryCardProps, CategoryText } from '@components/common/category/index';
 const Header: FC = memo(() => {
   // Navigation
   const navigate = useNavigate();
@@ -55,14 +55,23 @@ const Header: FC = memo(() => {
   const userRef = useRef<HTMLDivElement>(null);
 
   // Data
-  const [searchKey, setSearchKey] = useState();
+  const [searchKey, setSearchKey] = useState<string>('');
   const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile();
   const { categories, isPending: isLoadingCategories } = useCategory();
   console.log(`user = `, user);
-
   useEffect(() => {
-    const categorySelectionHandler = (e) => {
-      if (!categoryRef.current?.contains(e.target)) {
+    const userSelectionHandler = (e: MouseEvent) => {
+      if (!userRef.current?.contains(e.target as Node)) {
+        setIsUserDropdownOpened(false);
+      }
+    };
+    document.addEventListener('mousedown', userSelectionHandler);
+    return () =>
+      document.removeEventListener('mousedown', userSelectionHandler);
+  });
+  useEffect(() => {
+    const categorySelectionHandler = (e: MouseEvent) => {
+      if (!categoryRef.current?.contains(e.target as Node)) {
         setIsCategoryDropdownOpened(false);
         // console.log(categoryRef.current);
       }
@@ -73,8 +82,8 @@ const Header: FC = memo(() => {
   });
 
   useEffect(() => {
-    const languageSelectionHandler = (e: any) => {
-      if (!languageRef.current?.contains(e.target)) {
+    const languageSelectionHandler = (e: MouseEvent) => {
+      if (!languageRef.current?.contains(e.target as Node)) {
         setIsLanguageDropdownOpened(false);
         // console.log(languageRef.current);
       }
@@ -83,17 +92,6 @@ const Header: FC = memo(() => {
     return () =>
       document.removeEventListener('mousedown', languageSelectionHandler);
   });
-
-  // useEffect(() => {
-  //   let userSelectionHandler = (e: any) => {
-  //     if (!userRef.current?.contains(e.targer)) {
-  //       setIsUserDropdownOpened(false);
-  //     }
-  //   };
-  //   document.addEventListener('mousedown', userSelectionHandler);
-  //   return () =>
-  //     document.removeEventListener('mousedown', userSelectionHandler);
-  // });
 
   const changeCurrentLanguage = (newFlag: string, newLanguage: string) => {
     setCurrentFlag(newFlag);
@@ -180,7 +178,7 @@ const Header: FC = memo(() => {
         </span>
         {/* Category droplist */}
         {isLoadingUser ? (
-          <TextSkeleton className="w-[150px] h-[40px]" />
+          <TextSkeleton className="w-[150px] h-[40px] rounded-full" />
         ) : (
           <div className="category-container relative" ref={categoryRef}>
             <div
@@ -206,10 +204,13 @@ const Header: FC = memo(() => {
               <div
                 className={`${
                   isCategoryDropdownOpened ? 'block' : 'hidden'
-                }  z-10 absolute border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48`}
+                }  z-10 absolute right-[50%] translate-x-[50%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48`}
               >
-                <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
-                  {categories.map((category) => (
+                <ul
+                  onClick={() => setIsCategoryDropdownOpened(false)}
+                  className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                >
+                  {categories.map((category: CategoryCardProps) => (
                     <CategoryText key={category.id} {...category} />
                     // <li key={category.id}>
                     //   <a
@@ -228,17 +229,19 @@ const Header: FC = memo(() => {
 
         {/* Search container */}
         {isLoadingUser ? (
-          <TextSkeleton className="w-[500px] h-[70px]" />
+          <TextSkeleton className="w-[500px] h-[70px] rounded-full" />
         ) : (
           <form
             onSubmit={search}
             className="flex justify-center items-center border-2 border-black md:w-1/3 px-8 py-3 rounded-full"
           >
             <input
-              onChange={(e) => setSearchKey(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchKey(e.target.value)
+              }
               type="text"
               placeholder={t('header.search')}
-              className="w-full border-none placeholder:font-thin focus:outline-none"
+              className="w-full focus:outline-none border-none placeholder:font-thin border-transparent focus:border-transparent focus:ring-0 "
             />
             <button
               onClick={() =>
@@ -278,12 +281,15 @@ const Header: FC = memo(() => {
                 <div
                   className={`${
                     isUserDropdownOpened ? 'block' : 'hidden'
-                  } z-10 absolute  right-[0%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48 mx-auto`}
+                  } z-10 absolute  right-[50%] translate-x-[50%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48 mx-auto`}
                 >
-                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 mx-auto">
-                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  <ul
+                    onClick={() => setIsUserDropdownOpened(false)}
+                    className="py-2 text-sm text-gray-700 dark:text-gray-200 mx-auto"
+                  >
+                    <a className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                       <p className="font-semibold">{user.name}</p>
-                    </li>
+                    </a>
                     <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                       <FileSearchOutlined />
                       <p>Lịch sử mua hàng</p>
@@ -296,10 +302,12 @@ const Header: FC = memo(() => {
                       <BellOutlined />
                       <p>Thông báo</p>
                     </li>
-                    <li className="flex items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <HeartOutlined />
-                      <div>Danh sách yêu thích</div>
-                    </li>
+                    <Link to="/favorite">
+                      <li className="flex items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <HeartOutlined />
+                        <div>Danh sách yêu thích</div>
+                      </li>
+                    </Link>
                     <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                       <UserOutlined />
                       <p>Trang cá nhân</p>
@@ -324,10 +332,10 @@ const Header: FC = memo(() => {
             )}
           </div>
           {isLoadingUser ? (
-            <TextSkeleton className="h-[30px] w-[150px]" />
+            <TextSkeleton className="h-[30px] w-[150px] rounded-full" />
           ) : (
             <>
-              <Link to="/favourite/:userId">
+              <Link to="/favorite">
                 <div className="flex items-center justify-center">
                   <HeartOutlined
                     size={24}
@@ -369,7 +377,7 @@ const Header: FC = memo(() => {
                 <div
                   className={`${
                     isLanguageDropdownOpened ? 'block' : 'hidden'
-                  }  z-10 absolute left-[-100%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-36 mx-auto `}
+                  }  z-10 absolute right-[50%] translate-x-[50%]  border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-36 mx-auto `}
                 >
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                     <li
@@ -410,12 +418,14 @@ const Header: FC = memo(() => {
         <TextListSkeleton numberOfElement={7} />
       ) : (
         <ul className="hidden md:flex justify-between items-center mt-4 text-[13px] md:space-x-4 mx-auto">
-          {categories.map((category) => {
+          {categories.map((category: CategoryCardProps) => {
             if (category.isSelected) {
               return (
-                <CategoryText 
-                className='duration-300 hover:-translate-y-0.5'
-                key={category.id} {...category} />
+                <CategoryText
+                  className="duration-300 hover:-translate-y-0.5"
+                  key={category.id}
+                  {...category}
+                />
               );
             }
           })}

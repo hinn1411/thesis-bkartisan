@@ -1,6 +1,6 @@
 import { ASSETS } from '@contants/assets';
 import { FC, memo, Dispatch } from 'react';
-
+import { PlayCircleFilled } from '@ant-design/icons';
 export interface ImageSliderProps {
   isLoading: boolean;
   data: any;
@@ -61,7 +61,11 @@ const ImageList: FC<ImageSliderProps> = memo(
     return (
       <ul className={`${style}`}>
         {data.assets.map((asset: any, index: number) => (
-          <li className="w-20 h-20" key={index} onClick={() => setSide(index)}>
+          <li
+            className="w-20 h-20 relative"
+            key={index}
+            onClick={() => setSide(index)}
+          >
             {asset.type == ASSETS.IMAGE ? (
               <img
                 className={`${
@@ -77,13 +81,18 @@ const ImageList: FC<ImageSliderProps> = memo(
                 src={asset.link}
                 className={`${
                   index != currentSlide
-                    ? 'opacity-50 border-2'
+                    ? 'opacity-75 border-2'
                     : 'border-2 border-black shadow-md'
                 } w-20 h-20 rounded-[10px] overflow-hidden`}
                 // controls
               >
                 Your browser does not support the video tag.
               </video>
+            )}
+            {asset.type === ASSETS.VIDEO && (
+              <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex items-center justify-center">
+                <PlayCircleFilled />
+              </div>
             )}
           </li>
         ))}

@@ -11,3 +11,6 @@ export {
   ChildCategoryCard,
   ChildCategoryCardSkeleton,
 };
+
+export type { CategoryTextProps } from './CategoryText.tsx';
+export type { CategoryCardProps} from "./CategoryCard.tsx"

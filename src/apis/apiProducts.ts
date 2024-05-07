@@ -62,18 +62,21 @@ const apiProducts = {
       const { data } = await axiosClient.get(`/products/${productId}`);
       // return data;
       return {
-          id: productId,
-          name: data.name,
-          percentageOfDiscount: data.discount,
-          assets: data.assets,
-          seller: data.seller,
-          currentCost: data.price * (1 - data.discount / 100),
-          originalCost: data.price,
-          star: data.numberOfStar,
-          numOfRating: data.numberOfRating,
-          comments: data.comments,
-          description: data.description
-        }
+        id: productId,
+        name: data.name,
+        assets: data.assets,
+        seller: data.seller,
+        sellerName: data.sellerName,
+        sellerImage: data.avatar,
+        currentCost: data.price * (1 - data.discount / 100),
+        discount: data.discount,
+        isOnSale: data.isOnSale,
+        originalCost: data.price,
+        star: data.numberOfStar,
+        numOfRating: data.numberOfRating,
+        comments: data.comments,
+        description: data.description,
+      };
     } catch (err) {
       console.log(err);
       throw err;

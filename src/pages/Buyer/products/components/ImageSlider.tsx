@@ -1,8 +1,7 @@
-import { Dispatch, FC, memo, useEffect, useRef } from 'react';
+import { Dispatch, FC, memo} from 'react';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { BsCircleFill } from 'react-icons/bs';
 import { ASSETS } from '@contants/assets';
-import ReactPlayer from 'react-player';
 export interface NativeSliderProps {
   isLoading: boolean;
   data: any;
@@ -74,7 +73,7 @@ const ImageSlider: FC<NativeSliderProps> = memo(
           <video
             src={data.assets[currentSlide].link}
             // controls
-            className="rounded-[10px] h-full"
+            className="rounded-[10px] mx-auto h-full"
             autoPlay={true}
           ></video>
         ) : (
