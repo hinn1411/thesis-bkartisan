@@ -1,16 +1,17 @@
 
 import { axiosClient } from './axiosClient';
-export interface ICategorys {
+export interface ICategories {
+  categoryId: number;
   name: string;
 }
 const apiCategorys = {
   getCategorys: async () => {
     try {
-      const { data } = await axiosClient.get(`/categorys`);
+      const { data } = await axiosClient.get(`/categories`);
       console.log(data);
 
       // console.log(res);
-      return data.categorys;
+      return data.categories;
     } catch (err) {
       console.log(err);
       throw err;

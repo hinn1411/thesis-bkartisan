@@ -7,7 +7,6 @@ import {useCreateProductMutation} from "./Hooks/useProductMutation"
 import DropdownCategory from './Components/DropdownCategory';
 import DropdownOption from './Components/DropdownOption';
 import DropdownChooseOption from './Components/DropdownChooseOption';
-import { ICategorys } from '../../../apis/apiCategory';
 import { useProductCategorys, useOptions, useChooseOptions1, useChooseOptions2 } from './Hooks/useQuery';
 import { SuccessAdd } from '../../../components/seller/model/SuccessAdd';
 import { FailureAdd } from '../../../components/seller/model/FailureAdd';
@@ -18,8 +17,8 @@ interface YourComponentProps {
 const CreateProducts: FC<YourComponentProps> = memo(() => {
   const mutation = useCreateProductMutation();
 
-  const { data: categorys } = useProductCategorys();
-  const categoryNames = categorys ? categorys.map((category: ICategorys) => category.name) : [];
+  const { data: categories } = useProductCategorys();
+  const listCategory = categories ? categories : [];
 
   const { data: options } = useOptions();
   
@@ -29,7 +28,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
   const [selectedChooseOptions2, setSelectedChooseOptions2] = useState<string[]>([]); 
   const [isVisibleOption1, setIsVisibleOption1] = useState<boolean>(false); 
   const [isVisibleOption2, setIsVisibleOption2] = useState<boolean>(false); 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedOption1, setSelectedOption1] = useState<string>('');
   const [selectedOption2, setSelectedOption2] = useState<string>('');
 
@@ -43,7 +42,8 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
   const { data: chooseOptions2, isFetching: isLoading2 } = useChooseOptions2(selectedOption2);
 
 
-  const handleSelectCategory = (category: string) => {
+  const handleSelectCategory = (category: number) => {
+    console.log(category)
     setSelectedCategory(category);
   };
   
@@ -66,6 +66,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
     quantity: 0,
     material: '',
     description: '',
+    introduction: '',
   });
   
 
@@ -80,14 +81,19 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
       setErrorVideo("Vui lòng thêm video sản phẩm!")
       return;
     }
+    if(!selectedCategory) {
+      setSelectedCategory(-1);
+      return;
+    }
     event.preventDefault();
     const formData = new FormData();
     formData.append('name', formDatas.name);
     formData.append('price', String(formDatas.price));
     formData.append('quantity', String(formDatas.quantity));
     formData.append('material', formDatas.material);
-    formData.append('category', selectedCategory);
+    formData.append('category', String(selectedCategory));
     formData.append('description', formDatas.description);
+    formData.append('introduction', formDatas.introduction);
     for (const image of images) {
       formData.append("images", image);
     }
@@ -100,7 +106,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
       formData.append("chooseOptions2", chooseOptions2);
     }
     if (videoSrc) {
-      formData.append('video', videoSrc);
+      formData.append('videos', videoSrc);
     }
     mutation.mutate(formData);
   };
@@ -218,7 +224,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
     setSelectedChooseOptions2([]);
     setIsVisibleOption1(false);
     setIsVisibleOption2(false);
-    setSelectedCategory("");
+    setSelectedCategory(0);
     setSelectedOption1('');
     setSelectedOption2('');
     setFormData({
@@ -227,6 +233,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
       quantity: 0,
       material: '',
       description: '',
+      introduction: '',
     });
   };
 
@@ -332,8 +339,8 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
             </div>
             <div>
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loại sản phẩm</label>
-              <DropdownCategory name='Chọn loại sản phẩm' categoryNames={categoryNames} onSelectCategory={handleSelectCategory}/>
-              
+              <DropdownCategory name='Chọn loại sản phẩm' categories={listCategory} onSelectCategory={handleSelectCategory}/>
+              {selectedCategory == -1 && (<p className='text-sm text-red-500'>Bạn chưa chọn loại sản phẩm!</p>)}
             </div>
           </div>
 
@@ -396,6 +403,11 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
           <div className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mô tả sản phẩm</label>
             <textarea rows={4} id="Description" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " name="description" value={formDatas.description} onChange={handleChange} required/>
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giới thiệu sản phẩm</label>
+            <textarea rows={4} id="Introduction" className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 " name="introduction" value={formDatas.introduction} onChange={handleChange} required/>
           </div>
           
           <div className='flex justify-center space-x-10 sm:space-x-40 '>
