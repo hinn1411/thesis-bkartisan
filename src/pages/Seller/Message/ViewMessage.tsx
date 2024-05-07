@@ -3,6 +3,7 @@ import SellerSideBar from '../../../components/sidebar/SellerSideBar';
 import { PiTrashLight } from 'react-icons/pi';
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { BiSolidSend } from "react-icons/bi";
+import ChatRoom from './components/ChatRoom';
 
 const ViewMessage: FC = memo(() => {
   return (
@@ -11,6 +12,7 @@ const ViewMessage: FC = memo(() => {
       <div className="p-4 sm:ml-64 mt-16">
         <div className='grid grid-cols-2' style={{ gridTemplateColumns: '30% 70%' }}>
           <div className='border-r-2 pr-1'>
+            {/**Thanh tìm kiếm */}
               <form className="max-w-lg mx-auto">
                   <div className="flex">
                       <div className="relative w-full m-2">
@@ -25,6 +27,7 @@ const ViewMessage: FC = memo(() => {
                   </div>
               </form>
             <div className='overflow-y-auto max-h-[79vh] min-h-[79vh]'>
+              {/**Danh sách Chat Room */}
                   <div className="flex items-center hover:bg-gray-100 p-1 rounded-md cursor-pointer">
                       <div className="flex-shrink-0">
                           <img className="w-10 h-10 rounded-full" src="https://duan24h.net/wp-content/uploads/2023/10/pam-2.webp" alt="Neil image"/>
@@ -59,10 +62,7 @@ const ViewMessage: FC = memo(() => {
                       </div>
                   </div>
 
-                  
-
-                  
-
+                  <ChatRoom />
             </div>
               
           </div>
@@ -74,24 +74,21 @@ const ViewMessage: FC = memo(() => {
                     Pamyeuoi
                 </p>
               </div>
-              <div className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
+              {/* <div className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
                 <PiTrashLight className = 'w-5 h-5'/>
                 <p className='pr-4'>Xóa</p>
-              </div>
+              </div> */}
             </div>
 
-            <div className='max-h-[79vh] min-h-[79vh] flex flex-col justify-between'>
+            <div className='my-7 max-h-[79vh] min-h-[79vh] flex flex-col justify-between'>
 
               <div className='space-y-2 overflow-y-auto'>
                 
                 {/* Gửi về */}
                 <div className="flex items-start mx-2">
-                  <div className="flex-shrink-0">
-                      <img className="w-10 h-10 rounded-full" src="https://duan24h.net/wp-content/uploads/2023/10/pam-2.webp" alt="Neil image"/>
-                  </div>
                   <div className="rounded-md p-1 max-w-sm ms-2 flex flex-col items-end bg-blue-100 whitespace-normal">
                       <p className=" text-gray-900 overflowWrap">
-                        Bạn: Hellooaaaaaaaaaaaaaaaaaaaaaaaaaa aaa aaaa aaaaa aaaaa
+                        Hellooaaaaaaaaaaaaaaaaaaaaaaaaaa aaa aaaa aaaaa aaaaa
                       </p>
                       <p>
                         13:30
