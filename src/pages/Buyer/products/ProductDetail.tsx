@@ -15,7 +15,6 @@ import {
 import { useState } from 'react';
 import { useProductDetail } from './hooks/useProductDetail';
 import { useParams } from 'react-router-dom';
-import { useFavorite } from '@hooks/useFavorite';
 import ImageList from './components/ImageList';
 import TextSkeleton from '@components/common/skeleton/Text';
 import Spinner from '@components/common/ui/Spinner';
@@ -23,6 +22,7 @@ import ImageSlider from './components/ImageSlider';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { CURRENCIES } from '@contants/currencies';
 import Button from '@components/common/button/Button';
+import { useModifyFavorite } from '@hooks/useModifyFavorite';
 // const slides = [
 //   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
 //   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
@@ -33,13 +33,10 @@ import Button from '@components/common/button/Button';
 const ProductDetail: FC = memo(() => {
   const { productId } = useParams();
   const { data, isFetching } = useProductDetail(productId as string);
-  const { mutate } = useFavorite();
+  const { mutate } = useModifyFavorite();
   console.log(data);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const changeSlide = () => {
-    setCurrentSlide(1);
-  };
   const starShop: number = 2;
   const starProduct: number = 2;
   const starsProduct = Array.from({ length: 5 }, (_, index) => (
@@ -81,11 +78,7 @@ const ProductDetail: FC = memo(() => {
         <CategoryLink linkTo="" categoryName="Cờ"></CategoryLink>
         <p>Cờ gỗ của nga</p>
       </div>
-      {/* Image slider experiment */}
-      {/* <div className="image__slider w-[500px] h-48 sm:h-64 xl:h-80 2xl:h-96"></div> */}
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2">
-        {/* Carousel */}
-
         <div className="h-auto">
           <div className="h-48 sm:h-64 xl:h-80 2xl:h-96">
             <ImageSlider
@@ -103,30 +96,6 @@ const ProductDetail: FC = memo(() => {
             currentSlide={currentSlide}
             setSide={setCurrentSlide}
           />
-          {/* <ImageList className="flex mt-10 space-x-4 flex-wrap" /> */}
-          {/* <div className="flex mt-10 space-x-4 flex-wrap"></div> */}
-          {/* <div className="flex mt-10 space-x-4 flex-wrap">
-            <img
-              className="w-20 h-20 my-4"
-              src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Chess_board_opening_staunton.jpg"
-              alt=""
-            />
-            <img
-              className="w-20 h-20 my-4"
-              src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Chess_board_opening_staunton.jpg"
-              alt=""
-            />
-            <img
-              className="w-20 h-20 my-4"
-              src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Chess_board_opening_staunton.jpg"
-              alt=""
-            />
-            <img
-              className="w-20 h-20 my-4"
-              src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-              alt=""
-            />
-          </div> */}
         </div>
         {/* Information product */}
         {isFetching ? (
@@ -135,9 +104,7 @@ const ProductDetail: FC = memo(() => {
           </div>
         ) : (
           <section className=" md:ml-10 my-2">
-            <p onClick={changeSlide} className="text-red-700 mb-3">
-              Hàng hiếm
-            </p>
+            <p className="text-red-700 mb-3">Hàng hiếm</p>
             {isFetching ? (
               <TextSkeleton className="h-4 w-48 rounded-full" />
             ) : (
@@ -153,10 +120,10 @@ const ProductDetail: FC = memo(() => {
                 </p>
               )}
 
-              {data?.percentageOfDiscount > 0 && (
-                <p className="text-neutral-400 line-through text-xs">
+              {data?.isOnSale > 0 && (
+                <p className="text-neutral-400 line-through text-sm">
                   {formatCurrency(data?.originalCost, CURRENCIES.VIETNAMDONG)}(
-                  {data?.percentageOfDiscount}%)
+                  {data?.discount}%)
                 </p>
               )}
             </div>
@@ -208,10 +175,7 @@ const ProductDetail: FC = memo(() => {
               >
                 <p className="my-3">Chất liệu: Gỗ</p>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur. Sollicitudin a tellus
-                  mattis eu fringilla id vestibulum egestas diam. Pellentesque
-                  mauris malesuada viverra et nunc cras bibendum elementum diam.
-                  Congue mollis cum duis aenean senectus est viverra at.
+                  {data?.description}
                 </p>
               </div>
             </div>
@@ -288,19 +252,16 @@ const ProductDetail: FC = memo(() => {
                   expandedStates[3] ? 'max-h-96' : 'max-h-0'
                 }`}
               >
-                <div className="my-3 flex space-x-4">
-                  <div className="w-20 h-20 rounded-md">
-                    <img
-                      src="https://nguoinoitieng.tv/images/nnt/96/0/bbh0.jpg"
-                      alt=""
-                    />
+                <div className="my-3 flex items-start space-x-4">
+                  <div className="">
+                    <img className='object-cover w-[60px] h-[60px] rounded-[6px]' src={data?.sellerImage} alt="" />
                   </div>
                   <div>
-                    <p>Tuấn Hiền</p>
-                    <p className="text-xs">
+                    <p className='text-base'>{data?.sellerName}</p>
+                    <p className="text-sm">
                       Chủ sở hữu của{' '}
-                      <a className="underline text-xs" href="#">
-                        sadboizaintcry
+                      <a className="underline text-sm" href="#">
+                        {data.seller}
                       </a>
                     </p>
                     <button

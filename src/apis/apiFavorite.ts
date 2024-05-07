@@ -1,4 +1,3 @@
-import { TiEdit } from 'react-icons/ti';
 import { axiosClient } from './axiosClient';
 
 export const apiFavorite = {
@@ -14,12 +13,19 @@ export const apiFavorite = {
       throw err;
     }
   },
-  getFavorites: async () => {
+  getFavorites: async (page: number, offset: number, searchTerm: string) => {
     try {
-      const { data } = await axiosClient.get('/favorites');
+      const { data } = await axiosClient.get('/favorites', {
+        params: {
+          page,
+          offset,
+          name: searchTerm,
+        },
+      });
       console.log(data);
-      return data.map((item) => ({
+      return data.map((item: any) => ({
         id: item.id,
+        productId: item.productId,
         image: item.coverImage,
         name: item.name,
         numberOfStars: item.numberOfStar,
@@ -29,6 +35,15 @@ export const apiFavorite = {
         seller: item.seller,
         discount: item.discount,
       }));
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  toggleFavorites: async (id: number) => {
+    try {
+      const { data } = await axiosClient.delete(`favorites/${id}`);
+      return data;
     } catch (err) {
       console.log(err);
       throw err;

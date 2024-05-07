@@ -1,17 +1,18 @@
-import { every } from 'lodash';
+
 import { FC, memo } from 'react';
 import { Link } from 'react-router-dom';
-interface CategoryCardProps {
+export interface CategoryCardProps {
   id: number;
   image: string;
   name: string;
   level: number;
+  isSelected?: boolean;
 }
 const CategoryCard: FC<CategoryCardProps> = memo(
   ({ id, image, name, level }) => {
     return (
       <li className="group hover:cursor-pointer flex flex-col justify-center items-center">
-        <Link to={`/category?id=${id}&level=${level}`}>
+        <Link to={`/category?id=${id}&level=${level}&name=${name}`}>
           <figure className="flex flex-col justify-center items-center space-y-2">
             <img
               src={image}

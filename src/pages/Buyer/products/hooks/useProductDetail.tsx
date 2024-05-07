@@ -9,7 +9,8 @@ export const useProductDetail = (id: string) => {
     queryFn: async () => {
       return await apiProducts.getProductDetails(id);
     },
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    
   });
 
   return {

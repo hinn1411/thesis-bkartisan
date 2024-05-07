@@ -9,6 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { CURRENCIES } from '@contants/currencies';
+import { useModifyFavorite } from '@hooks/useModifyFavorite';
 export interface ProductCardProps {
   id: number;
   srcImage: string;
@@ -40,8 +41,14 @@ const ProductCard: FC<ProductCardProps> = memo(
     productType,
   }) => {
     const navigate = useNavigate();
+    const {mutate} = useModifyFavorite()
     const currentPrice = formatCurrency(currentCost, CURRENCIES.VIETNAMDONG);
     const originalPrice = formatCurrency(originalCost, CURRENCIES.VIETNAMDONG);
+
+    const addToFavoriteList = (e) => {
+      e.stopPropagation();
+      mutate(id);
+    }
     return (
       <div
         onClick={() => navigate(`/products/${id}`)}
@@ -87,7 +94,9 @@ const ProductCard: FC<ProductCardProps> = memo(
               <PlusOutlined className="flex items-center justify-center text-sm" />
               <ShoppingOutlined className="flex items-center justify-center text-2xl" />
             </button>
-            <button className="flex items-center justify-center space-x-1 rounded-full border-2 border-black px-7 py-1">
+            <button
+            onClick={addToFavoriteList} 
+            className="flex items-center justify-center space-x-1 rounded-full border-2 border-black px-7 py-1">
               <PlusOutlined className="flex items-center justify-center text-sm" />
               <HeartOutlined className="flex items-center justify-center text-2xl" />
             </button>

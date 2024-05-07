@@ -1,11 +1,15 @@
 import Button from '@components/common/button/Button';
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 import { StarFilled, PlusOutlined, HeartFilled } from '@ant-design/icons';
 import DotIcon from '@images/product/dot.png';
 import { formatCurrency } from '@utils/formatCurrency';
+import { useNavigate } from 'react-router-dom';
 import { CURRENCIES } from '@contants/currencies';
+import { useFavorite } from '@hooks/useFavorite';
+import { useHandleFavorite } from '../hooks/useHandleFavorite';
 export interface FavoriteCardProps {
   id: number;
+  productId: number;
   image: string;
   name: string;
   numberOfStars: number;
@@ -18,6 +22,8 @@ export interface FavoriteCardProps {
 
 const FavoriteCard: FC<FavoriteCardProps> = memo(
   ({
+    id,
+    productId,
     image,
     name,
     numberOfRatings,
@@ -27,18 +33,32 @@ const FavoriteCard: FC<FavoriteCardProps> = memo(
     originalPrice,
     discount,
   }) => {
+    const navigate = useNavigate();
+    const { isFavorite, deleteFavorite } = useHandleFavorite();
     const currentCost = formatCurrency(currentPrice, CURRENCIES.VIETNAMDONG);
     const originalCost = formatCurrency(originalPrice, CURRENCIES.VIETNAMDONG);
+
+    const handleDelete = () => {
+      deleteFavorite(id);
+    };
     return (
-      <div className="mx-auto relative max-w-sm rounded-[10px] border overflow-hidden shadow-sm">
+      <div
+        onClick={() => navigate(`/products/${productId}`)}
+        className="mx-auto relative max-w-sm rounded-[10px] border overflow-hidden shadow-sm"
+      >
         {/* Inner container */}
         <div className="p-3">
           <div className="">
-            <div className="flex items-center justify-center absolute top-6 right-6 z-1 p-2 rounded-full border-2 border-slate-200 bg-white ">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center justify-center absolute top-6 right-6 z-1 p-2 rounded-full border-2 border-slate-200 bg-white "
+            >
               <HeartFilled
                 style={{
-                  color: '#B50330',
+                  color: isFavorite ? '#B50330' : 'black',
+                  fontSize: 20,
                 }}
+                onClick={handleDelete}
               />
             </div>
 
@@ -48,7 +68,9 @@ const FavoriteCard: FC<FavoriteCardProps> = memo(
               alt="product image"
             />
           </div>
-          <p className="w-[300px] md:w-auto line-clamp-1 text-[14px] font-medium">{name}</p>
+          <p className="w-[300px] md:w-auto line-clamp-1 text-[14px] font-medium">
+            {name}
+          </p>
           {/* Details container */}
           <div className="flex justify-start items-center font-medium text-[13px] space-x-1">
             <span>{numberOfStars}</span>
@@ -72,7 +94,12 @@ const FavoriteCard: FC<FavoriteCardProps> = memo(
           </div>
           {/* Button container */}
           <div className="flex justify-between items-center mt-1">
-            <Button className="flex items-center space-x-2 bg-white px-4 py-2 border border-black rounded-full hover:shadow-md">
+            <Button
+              onClick={(e: any) => {
+                e.stopPropagation();
+              }}
+              className="flex items-center space-x-2 bg-white px-4 py-2 border border-black rounded-full hover:shadow-md"
+            >
               <PlusOutlined />
               <p className="text-sm">Add to card </p>
             </Button>

@@ -1,21 +1,15 @@
 import { FC, memo } from 'react';
 import CategoryCard from '../../../components/common/category/CategoryCard';
 
-// Product images
-import ProductCard, {
-  ProductCardProps,
-} from '../../../components/common/product/ProductCard';
 import Pagination from '../../../components/common/pagination/Pagination';
 import { useProductPagination } from './hooks/useProductPagination';
 import { useTranslation } from 'react-i18next';
-import { useCategory } from '../../../hooks/useCategory';
 import { useGift } from './hooks/useGift';
 
-import CategoryCardSkeleton, {
+import {
   CategoryCardSkeletonList,
 } from '../../../components/common/category/CategoryCardSkeleton';
 import ProductList from '@components/common/product/ProductList';
-import ProductSkeleton, { ProductSkeletonList } from '@components/common/product/ProductSkeleton';
 
 /*
   remember adding skeleton when fetching data
@@ -28,7 +22,6 @@ const Home: FC = memo(() => {
     data: products,
     page,
     setPage,
-    isSuccess,
     isFetching,
   } = useProductPagination();
   const { gifts, isPending: isLoadingGifts } = useGift();
@@ -49,15 +42,7 @@ const Home: FC = memo(() => {
         </ul>
       )}
 
-      {/* Product list */}
-      {/* <ProductSkeleton /> */}
       <ProductList data={products} isLoading={isFetching} />
-      {/* <ul className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {isSuccess &&
-          products.map((product: ProductCardProps, index: number) => (
-            <ProductCard key={index} {...product} />
-          ))}
-      </ul> */}
       <Pagination currentPage={page} goToPage={setPage} />
     </main>
   );
