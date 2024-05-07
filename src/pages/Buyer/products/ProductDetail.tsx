@@ -1,10 +1,8 @@
 import { FC, memo } from 'react';
-import { Rating } from 'flowbite-react';
-import { Textarea } from 'flowbite-react';
+import { Rating, Breadcrumb, Textarea } from 'flowbite-react';
 
 import Pagination from '@components/common/pagination/Pagination';
 import Comment from '@components/common/comment/Comment';
-import CategoryLink from '@components/common/categotylink/CategoryLink';
 import {
   HeartOutlined,
   HeartFilled,
@@ -23,6 +21,9 @@ import { formatCurrency } from '../../../utils/formatCurrency';
 import { CURRENCIES } from '@contants/currencies';
 import Button from '@components/common/button/Button';
 import { useModifyFavorite } from '@hooks/useModifyFavorite';
+import { HiHome } from 'react-icons/hi';
+import { CategoryText, CategoryTextProps } from '@components/common/category';
+import { Link } from 'react-router-dom';
 // const slides = [
 //   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
 //   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
@@ -67,7 +68,38 @@ const ProductDetail: FC = memo(() => {
   return (
     <div className="mx-4 md:mx-20">
       {/* Links navigation */}
-      <div className="flex items-center space-x-2 md:space-x-5 text-xs p-4 ">
+      <Breadcrumb className='className="flex items-center space-x-2 md:space-x-5 text-xs p-4 "'>
+        <div className="flex items-center text-sm font-medium space-x-1 hover:text-gray-700">
+          <HiHome />
+          <Link to="/">Trang chủ</Link>
+        </div>
+
+        {data &&
+          data.categories.map((category: CategoryTextProps) => (
+            <div className="flex items-center">
+              <svg
+                className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 6 10"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 9 4-4-4-4"
+                />
+              </svg>
+              <CategoryText
+                className=" text-sm font-medium text-black hover:text-gray-700"
+                {...category}
+              />
+            </div>
+          ))}
+      </Breadcrumb>
+      {/* <div>
         <CategoryLink linkTo="/" categoryName="Trang chủ"></CategoryLink>
         <CategoryLink
           linkTo=""
@@ -77,7 +109,7 @@ const ProductDetail: FC = memo(() => {
         <CategoryLink linkTo="" categoryName="Board game"></CategoryLink>
         <CategoryLink linkTo="" categoryName="Cờ"></CategoryLink>
         <p>Cờ gỗ của nga</p>
-      </div>
+      </div> */}
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2">
         <div className="h-auto">
           <div className="h-48 sm:h-64 xl:h-80 2xl:h-96">
@@ -130,7 +162,7 @@ const ProductDetail: FC = memo(() => {
             <p className="text-green-600 mb-2">
               Chương trình khuyến mãi được áp dụng đến 27/11/2023
             </p>
-            <p>{data.description}</p>
+            <p>{data?.introduction}</p>
             <div className="flex items-center text-sm space-x-2 my-1">
               <a className="underline" href="#">
                 {data?.seller}
@@ -161,7 +193,7 @@ const ProductDetail: FC = memo(() => {
                 className="flex items-center justify-between w-full"
                 onClick={() => handleButtonClick(0)}
               >
-                <p>Chi tiết sản phẩm</p>
+                <p className="font-medium">Chi tiết sản phẩm</p>
                 <DownOutlined
                   className={`transform ${
                     expandedStates[0] ? 'rotate-180' : ''
@@ -174,9 +206,7 @@ const ProductDetail: FC = memo(() => {
                 }`}
               >
                 <p className="my-3">Chất liệu: Gỗ</p>
-                <p>
-                  {data?.description}
-                </p>
+                <p>{data?.description}</p>
               </div>
             </div>
 
@@ -186,7 +216,7 @@ const ProductDetail: FC = memo(() => {
                 className="flex items-center justify-between w-full"
                 onClick={() => handleButtonClick(1)}
               >
-                <p>Vận chuyển và chính sách đổi trả</p>
+                <p className="font-medium">Vận chuyển và chính sách đổi trả</p>
                 <DownOutlined
                   className={`transform ${
                     expandedStates[1] ? 'rotate-180' : ''
@@ -213,7 +243,7 @@ const ProductDetail: FC = memo(() => {
                 className="flex items-center justify-between w-full"
                 onClick={() => handleButtonClick(2)}
               >
-                <p>Câu hỏi thường gặp</p>
+                <p className="font-medium">Câu hỏi thường gặp</p>
                 <DownOutlined
                   className={`transform ${
                     expandedStates[2] ? 'rotate-180' : ''
@@ -240,7 +270,7 @@ const ProductDetail: FC = memo(() => {
                 className="flex items-center justify-between w-full"
                 onClick={() => handleButtonClick(3)}
               >
-                <p>Gặp gỡ người bán</p>
+                <p className="font-medium">Gặp gỡ người bán</p>
                 <DownOutlined
                   className={`transform ${
                     expandedStates[3] ? 'rotate-180' : ''
@@ -254,10 +284,14 @@ const ProductDetail: FC = memo(() => {
               >
                 <div className="my-3 flex items-start space-x-4">
                   <div className="">
-                    <img className='object-cover w-[60px] h-[60px] rounded-[6px]' src={data?.sellerImage} alt="" />
+                    <img
+                      className="object-cover w-[60px] h-[60px] rounded-[6px]"
+                      src={data?.sellerImage}
+                      alt=""
+                    />
                   </div>
                   <div>
-                    <p className='text-base'>{data?.sellerName}</p>
+                    <p className="text-base">{data?.sellerName}</p>
                     <p className="text-sm">
                       Chủ sở hữu của{' '}
                       <a className="underline text-sm" href="#">
