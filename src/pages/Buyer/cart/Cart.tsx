@@ -1,12 +1,10 @@
 import { FC, memo } from 'react';
-import ItemCard from './components/ItemCard';
-import shopImage from '../../../assets/images/cart/shop-image.png';
-import productImage from '../../../assets/images/cart/img.png';
-import momoImage from '../../../assets/images/cart/momo.png';
-import visaImage from '../../../assets/images/cart/visa.png';
-import mastercardImage from '../../../assets/images/cart/mastercard.png';
-import paypalImage from '../../../assets/images/cart/paypal.png';
+import momoImage from '@images/cart/momo.png';
+import { useCart } from './hooks/useFetchCart';
+import ItemList from './components/ItemList';
 const Cart: FC = memo(() => {
+  const { cart, isFetching, numOfItems } = useCart();
+
   const orderPrice = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
@@ -29,61 +27,17 @@ const Cart: FC = memo(() => {
   }).format(1950000);
   return (
     <div className="min-h-screen px-4 md:px-20 my-5">
-      <p className="text-2xl ">Tổng số sản phẩm: 4</p>
-      <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-6 mt-3">
-        <div className="w-[100%] md:w-[65%] flex flex-col space-y-6">
-          <ItemCard
-            sellerImage={shopImage}
-            sellerName="PrintCraftsmenCo"
-            itemName="Ghost Plant Lady Sweatshirt"
-            itemImage={productImage}
-            size="XL"
-            quantity={3}
-            currentPrice={920147}
-            originalPrice={1314602}
-            percentageOfDiscount={30}
-            color="Xanh sáng"
-          />
-          <ItemCard
-            sellerImage={shopImage}
-            sellerName="PrintCraftsmenCo"
-            itemName="Ghost Plant Lady Sweatshirt"
-            itemImage={productImage}
-            size="XL"
-            quantity={3}
-            currentPrice={920147}
-            originalPrice={1314602}
-            percentageOfDiscount={30}
-            color="Xanh sáng"
-          />
-          <ItemCard
-            sellerImage={shopImage}
-            sellerName="PrintCraftsmenCo"
-            itemName="Ghost Plant Lady Sweatshirt"
-            itemImage={productImage}
-            size="XL"
-            quantity={3}
-            currentPrice={920147}
-            originalPrice={1314602}
-            percentageOfDiscount={30}
-            color="Xanh sáng"
-          />
-          <ItemCard
-            sellerImage={shopImage}
-            sellerName="PrintCraftsmenCo"
-            itemName="Ghost Plant Lady Sweatshirt"
-            itemImage={productImage}
-            size="XL"
-            quantity={3}
-            currentPrice={920147}
-            originalPrice={1314602}
-            percentageOfDiscount={30}
-            color="Xanh sáng"
-          />
-        </div>
+      <h1 className="text-2xl my-3">Tổng số sản phẩm: {numOfItems}</h1>
+      <div className="flex flex-col sm:flex-row justify-between space-y-8 md:space-y-0 md:space-x-6">
+        {/* Items container */}
+        <ItemList
+          className="w-full md:w-[50%] flex flex-col space-y-3"
+          isLoading={isFetching}
+          data={cart}
+        />
         {/* Payment container */}
-        <div className="w-[100%] md:w-[30%] text-start">
-          <div className="text-lg text-center md:text-start">
+        <div className="w-full md:w-[30%] text-start">
+          <div className="text-lg font-medium text-center md:text-start">
             Hình thức thanh toán
           </div>
           {/* Radio container  */}
@@ -119,7 +73,7 @@ const Cart: FC = memo(() => {
                 <img src={momoImage} alt="Momo icon" />
               </label>
             </div>
-            <div className="flex items-center mb-4">
+            {/* <div className="flex items-center mb-4">
               <input
                 id="default-radio-3"
                 type="radio"
@@ -136,8 +90,8 @@ const Cart: FC = memo(() => {
                   <img src={mastercardImage} alt="Momo icon" />
                 </div>
               </label>
-            </div>
-            <div className="flex items-center mb-4">
+            </div> */}
+            {/* <div className="flex items-center mb-4">
               <input
                 id="default-radio-4"
                 type="radio"
@@ -151,7 +105,7 @@ const Cart: FC = memo(() => {
               >
                 <img src={paypalImage} alt="Momo icon" />
               </label>
-            </div>
+            </div> */}
           </div>
           {/* Bill container */}
           <div className="w-full mt-6">

@@ -1,10 +1,10 @@
-import { Fragment, useRef, FC, memo } from 'react';
+import { Fragment, useRef, FC, memo, Dispatch } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 export type ModalProps = {
   isOpen: boolean;
-  setIsOpen: any;
+  setIsOpen: Dispatch<boolean>;
 };
 
 const Modal: FC<ModalProps> = memo(({ isOpen, setIsOpen }) => {
