@@ -1,9 +1,11 @@
 //const users = /\/admin\/users((\/)*$|\/\w)/
 
 export function urlMatch(pageToMatch: string, url: string) {
-    if (pageToMatch === "dashboard") {
-        const reg = /\/admin(\/)*$/;
-        return reg.test(url);
+    if (pageToMatch === "users") {
+        const reg1 = /\/admin(\/)*$/;
+        const regStr = `\\/admin\\/users((\\/)*$|\\/\\w)`;
+        const reg2 = new RegExp(regStr);
+        return reg1.test(url) || reg2.test(url);
     }
     else {
         const regStr = `\\/admin\\/${pageToMatch}((\\/)*$|\\/\\w)`;
