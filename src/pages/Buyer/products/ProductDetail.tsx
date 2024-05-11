@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons';
 import { useState } from 'react';
 import { useProductDetail } from './hooks/useProductDetail';
+import { useAddItem } from './hooks/useAddItem';
 import { useParams } from 'react-router-dom';
 import ImageList from './components/ImageList';
 import TextSkeleton from '@components/common/skeleton/Text';
@@ -33,7 +34,11 @@ import { Link } from 'react-router-dom';
 
 const ProductDetail: FC = memo(() => {
   const { productId } = useParams();
+  if (!productId) {
+    window.location.href = '/';
+  }
   const { data, isFetching } = useProductDetail(productId as string);
+  const { addToCart } = useAddItem();
   const { mutate } = useModifyFavorite();
   console.log(data);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -64,6 +69,15 @@ const ProductDetail: FC = memo(() => {
       return;
     }
     mutate(+productId);
+  };
+  const handleAddItem = () => {
+    if (!productId) {
+      return;
+    }
+    addToCart({
+      quantity: 1,
+      productId: +productId,
+    });
   };
   return (
     <div className="mx-4 md:mx-20">
@@ -140,7 +154,7 @@ const ProductDetail: FC = memo(() => {
             {isFetching ? (
               <TextSkeleton className="h-4 w-48 rounded-full" />
             ) : (
-              <h1 className="text-2xl font-semibold">{data.name}</h1>
+              <h1 className="text-2xl font-semibold">{data?.name}</h1>
             )}
 
             <div className="flex items-center mb-3">
@@ -148,7 +162,10 @@ const ProductDetail: FC = memo(() => {
                 <TextSkeleton />
               ) : (
                 <p className="text-green-600 mr-1 text-xl">
-                  {formatCurrency(data?.currentCost, CURRENCIES.VIETNAMDONG)}
+                  {formatCurrency(
+                    data?.currentCost as number,
+                    CURRENCIES.VIETNAMDONG
+                  )}
                 </p>
               )}
 
@@ -171,7 +188,10 @@ const ProductDetail: FC = memo(() => {
               <Rating className="mt-2 mb-1">{starsShop}</Rating>
             </div>
             <div className="max-w-full flex flex-col my-5 space-y-3">
-              <button className="flex items-center justify-center space-x-3 bg-black w-full md:w-3/4 mx-auto text-white py-3 rounded-full cursor-pointer">
+              <button
+                onClick={handleAddItem}
+                className="flex items-center justify-center space-x-3 bg-black w-full md:w-3/4 mx-auto text-white py-3 rounded-full cursor-pointer"
+              >
                 <ShoppingCartOutlined />
                 <p>Thêm vào giỏ hàng</p>
               </button>
@@ -295,7 +315,7 @@ const ProductDetail: FC = memo(() => {
                     <p className="text-sm">
                       Chủ sở hữu của{' '}
                       <a className="underline text-sm" href="#">
-                        {data.seller}
+                        {data?.seller}
                       </a>
                     </p>
                     <button
@@ -359,7 +379,7 @@ const ProductDetail: FC = memo(() => {
               date="25 Tháng 10, 2023"
             ></Comment>
 
-            <Pagination />
+            <Pagination currentPage={1} goToPage={() => {}} />
           </div>
         </div>
       </div>

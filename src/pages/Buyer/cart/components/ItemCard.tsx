@@ -1,4 +1,12 @@
-import { FC, memo, useState } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  memo,
+  useDeferredValue,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   MinusCircleOutlined,
   PlusCircleOutlined,
@@ -7,14 +15,20 @@ import {
   TagOutlined,
 } from '@ant-design/icons';
 
-import Modal from '@components/common/modal/Modal';
 import { Link } from 'react-router-dom';
+import { useHandleCart } from '../hooks/useHandleCart';
+import { formatCurrency } from '@utils/formatCurrency';
+import { CURRENCIES } from '@contants/currencies';
+import DeleteItemModal from './DeleteItemModal';
+import { BsPlus } from 'react-icons/bs';
 
-interface ItemCardProps {
+export interface ItemCardProps {
+  productId: number;
   sellerImage: string;
   sellerName: string;
   itemName: string;
   itemImage: string;
+  note: string;
   size?: string;
   color?: string;
   quantity: number;
@@ -24,39 +38,94 @@ interface ItemCardProps {
 }
 const ItemCard: FC<ItemCardProps> = memo(
   ({
+    productId,
     sellerImage,
     sellerName,
     itemName,
     itemImage,
     color,
     size,
+    note,
     quantity,
     currentPrice,
     originalPrice,
     percentageOfDiscount,
   }) => {
+    const [currentQuantity, setCurrentQuantity] = useState(quantity);
+    const [currentNote, setCurrentNote] = useState<string>(note);
+    const deferedQuantity = useDeferredValue(currentQuantity);
+    const deferedNote = useDeferredValue(currentNote);
+    const cartRef = useRef<number>();
+    const { updateCart, deleteCart } = useHandleCart();
     const [isOpenedDeleteModal, setIsOpenedDeleteModal] = useState(false);
-    const currentCost = new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(currentPrice);
-    const originalCost = new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(originalPrice);
+    const [isOpenedAddNote, setIsOpenedAddNote] = useState(false);
+    const currentCost = formatCurrency(
+      currentPrice * currentQuantity,
+      CURRENCIES.VIETNAMDONG
+    );
+    const originalCost = formatCurrency(originalPrice, CURRENCIES.VIETNAMDONG);
+
+    useEffect(() => {
+      cartRef.current = setTimeout(() => {
+        updateCart({
+          productId,
+          quantity: currentQuantity,
+          note: currentNote,
+        });
+      }, 2000);
+      () => clearTimeout(cartRef.current);
+    }, [deferedNote, deferedQuantity]);
 
     const openDeleteItemModal = () => {
       setIsOpenedDeleteModal(true);
     };
+
+    const handleChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {
+      const newQuantiy = +e.target.value;
+      console.log(`newQuantity = ${newQuantiy}`);
+      if (newQuantiy > 999) {
+        return;
+      }
+      if (!newQuantiy) {
+        setCurrentQuantity(quantity);
+        return;
+      }
+      setCurrentQuantity(newQuantiy);
+    };
+    const increaseItem = () => {
+      if (currentQuantity == 999) {
+        return;
+      }
+      setCurrentQuantity((prev) => prev + 1);
+    };
+    const decreaseItem = () => {
+      if (currentQuantity == 1) {
+        return;
+      }
+      setCurrentQuantity((prev) => prev - 1);
+    };
+    const deleteItem = async () => {
+      return await deleteCart({ productId });
+    };
+    const handleChangeNote = (e: ChangeEvent<HTMLTextAreaElement>) => {
+      const newNote = e.target.value;
+      setCurrentNote(newNote);
+    };
+
     return (
       <div className="shadow-lg rounded-[12px] border border-black border-opacity-25">
-        <Modal
+        <DeleteItemModal
+          onDelete={() =>
+            deleteItem().then(() => setIsOpenedDeleteModal(false))
+          }
           isOpen={isOpenedDeleteModal}
           setIsOpen={setIsOpenedDeleteModal}
         />
+
         {/* Inner container */}
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-2">
+        <div className="p-4 flex flex-col space-y-2">
+          {/* Seller information */}
+          <div className="flex items-center justify-between">
             <div className="flex space-x-3 items-center">
               {/* Shop image */}
               <img
@@ -71,52 +140,57 @@ const ItemCard: FC<ItemCardProps> = memo(
               Liên hệ với shop
             </p>
           </div>
-          <div className="flex flex-col md:flex-row justify-between space-y-2   md:space-y-0 md:space-x-3">
-            {/* Content container */}
-            <div>
-              <Link to="/products/:productId">
-                <div className="h-full">
-                  <img
-                    src={itemImage}
-                    alt="product image"
-                    className="rounded-[6px] object-fit w-full h-full hover:cursor-pointer"
-                  />
-                </div>
+          {/* Product information */}
+          <div className="flex items-start space-y-2 md:space-y-0 space-x-3">
+            {/* Image container */}
+            <div className="w-full h-full sm:w-[20%] ">
+              <Link to={`/products/${productId}`}>
+                <img
+                  src={itemImage}
+                  alt="product image"
+                  className="w-full h-full border border-black border-opacity-50 rounded-[6px] object-cover hover:cursor-pointer"
+                />
               </Link>
             </div>
-            <div className="w-full flex-flex-col justify-between space-y-1">
-              <div className="flex items-center justify-between hover:cursor-pointer">
-                <Link to="/products/:productId">
-                  <div>{itemName}</div>
-                </Link>
-
-                <div className="text-[#258635] text-medium text-[20px]">
-                  {currentCost}
+            {/* Buttons container */}
+            <div className="w-full flex-col justify-between space-y-1">
+              <div className="flex items-start justify-between hover:cursor-pointer">
+                <div>
+                  <Link to={`/products/${productId}`}>
+                    <p className="line-clamp-1 overflow-hidden w-[200px]">
+                      {itemName}
+                    </p>
+                  </Link>
                 </div>
+
+                <p className="text-[#258635] text-medium text-[20px]">
+                  {currentCost}
+                </p>
               </div>
               <div className="flex items-center justify-between">
-                <div className="text-[#595959]">Size: {size}</div>
-                <div className="text-[13px] text-thin text-[#595959]">
+                {size && <p className="text-[#595959]">Size: {size}</p>}
+                <p className="text-[13px] text-thin text-[#595959]">
                   {originalCost} ({percentageOfDiscount}%)
-                </div>
+                </p>
               </div>
-              <p className="text-[#595959]">Màu: {color}</p>
+              {color && <p className="text-[#595959]">Màu: {color}</p>}
               {/* Mangage button container */}
               <div className="flex items-center justify-between md:justify-start space-y-0 space-x-3 mt-2">
                 {/* Add/Substract */}
                 <div className="flex justify-center items-center space-x-2">
                   <div className="flex justify-center items-center">
-                    <MinusCircleOutlined />
+                    <MinusCircleOutlined onClick={decreaseItem} />
                   </div>
                   <div>
                     <input
-                      type="number"
-                      className="w-[50px] border-2 border-black rounded-[4px] text-center"
-                      value={quantity}
+                      type="text"
+                      onChange={handleChangeQuantity}
+                      className="w-[60px] rounded-[4px] text-center outline-none"
+                      value={deferedQuantity}
                     />
                   </div>
                   <div className="flex justify-center items-center">
-                    <PlusCircleOutlined />
+                    <PlusCircleOutlined onClick={increaseItem} />
                   </div>
                 </div>
                 {/* Edit/Remove */}
@@ -148,22 +222,33 @@ const ItemCard: FC<ItemCardProps> = memo(
                   <input
                     type="text"
                     placeholder="Nhập mã giảm giá"
-                    className="w-25 border-none md:w-40 text-[13px] placeholder:font-mono focus:outline-none"
+                    className="w-25 border-none outline-none md:w-40 text-[13px] placeholder:font-mono focus:outline-none border-transparent focus:border-transparent focus:ring-0"
                   />
                 </div>
                 <button className="text-white bg-black px-3 py-1 text-[11px] rounded-[4px]">
                   Áp dụng
                 </button>
               </div>
-              <div>
-                <div className="text-[13px]">Thêm lưu ý cho người bán</div>
-                <textarea
-                  rows={2}
-                  className="w-full block p-2.5 bg-[#F3F4F6] rounded-[4px] border-black placeholder:font-mono placeholder:text-[13px]"
-                  placeholder="Mô tả"
-                />
-              </div>
             </div>
+          </div>
+          <div className="text-[13px]">
+            <div
+              onClick={() => setIsOpenedAddNote((prev) => !prev)}
+              className="flex items-center space-x-0"
+            >
+              <BsPlus />
+              <p>Thêm lưu ý cho người bán</p>
+            </div>
+
+            <textarea
+              onChange={handleChangeNote}
+              value={deferedNote}
+              rows={2}
+              className={`w-full overflow-hidden transition-max-h duration-300 ${
+                isOpenedAddNote ? 'max-h-96' : 'hidden'
+              } p-2.5 bg-[#F3F4F6] rounded-[4px] border-black placeholder:font-mono placeholder:text-[13px]`}
+              placeholder="Thêm mô tả cho sản phẩm"
+            />
           </div>
         </div>
       </div>

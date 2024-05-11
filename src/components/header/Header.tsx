@@ -32,7 +32,10 @@ import { useTranslation, Trans } from 'react-i18next';
 import AvatarSkeleton from '../common/skeleton/Avatar';
 import TextSkeleton, { TextListSkeleton } from '../common/skeleton/Text';
 import LogoSkeleton from '../common/skeleton/Logo';
-import { CategoryCardProps, CategoryText } from '@components/common/category/index';
+import {
+  CategoryCardProps,
+  CategoryText,
+} from '@components/common/category/index';
 const Header: FC = memo(() => {
   // Navigation
   const navigate = useNavigate();
@@ -58,7 +61,7 @@ const Header: FC = memo(() => {
   const [searchKey, setSearchKey] = useState<string>('');
   const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile();
   const { categories, isPending: isLoadingCategories } = useCategory();
-  console.log(`user = `, user);
+  // console.log(`user = `, user);
   useEffect(() => {
     const userSelectionHandler = (e: MouseEvent) => {
       if (!userRef.current?.contains(e.target as Node)) {
@@ -348,7 +351,7 @@ const Header: FC = memo(() => {
               <Link to="/cart">
                 <div className="relative flex items-center justify-center">
                   <div className="flex items-center justify-center absolute top-[-75%] right-[-60%] w-4 h-4 bg-orange-600 text-[10px] text-white text-center rounded-full">
-                    2
+                    {user?.cartItems}
                   </div>
 
                   <ShoppingOutlined className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer" />
