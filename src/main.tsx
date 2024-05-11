@@ -7,10 +7,10 @@ import './index.css';
 import './translation/index.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  
     <React.Suspense fallback="loading">
       <App />
       <ToastContainer position="top-right" autoClose={2000} draggable={true} />
     </React.Suspense>
-  </React.StrictMode>
+  
 );

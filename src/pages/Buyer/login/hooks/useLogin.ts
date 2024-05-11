@@ -12,8 +12,7 @@ export const useLogin = () => {
     },
     onSuccess: (userInfo) => {
       const { role } = userInfo.data;
-      console.log(userInfo);
-      if (role === USERS.ADMIN) {
+      if (role === USERS.ADMIN || role === USERS.COLLABORATOR) {
         return navigate('/admin');
       }
       if (role === USERS.SELLER) {

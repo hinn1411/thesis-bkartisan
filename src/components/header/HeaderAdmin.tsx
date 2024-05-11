@@ -1,12 +1,31 @@
-import React, { FC, memo } from "react";
+import React, { FC, memo, useState } from "react";
 import logo from "../../assets/images/logo/dummy logo.png";
+import apiAuth from "@apis/apiAuth";
+import { useNavigate } from "react-router-dom";
+import { Button } from "flowbite-react";
 
 interface ToggleSidebarProp {
   toggleSidebar: (event: React.MouseEvent) => void;
+  name: string;
 }
 
-const HeaderAdmin: FC<ToggleSidebarProp> = memo(({toggleSidebar}) => {
-  const nameuser = "ADMIN";
+const HeaderAdmin: FC<ToggleSidebarProp> = memo(({toggleSidebar, name}) => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await apiAuth.logout().then(() => {
+        navigate("/login");
+      });
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err);
+      throw err;
+    }
+  };
+
 
   return (
     <>
@@ -44,14 +63,9 @@ const HeaderAdmin: FC<ToggleSidebarProp> = memo(({toggleSidebar}) => {
                 </span>
               </a>
             </div>
-            <div className="space-x-8">
-              <span className="text-base font-semibold">{nameuser}</span>
-              <button
-                type="button"
-                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-              >
-                Thoát
-              </button>
+            <div className="space-x-8 flex">
+              <div className="text-base font-semibold self-center">{name}</div>
+              <Button onClick={handleLogout} color="dark" isProcessing={isLoading} disabled={isLoading}>Thoát</Button>
             </div>
           </div>
         </div>
