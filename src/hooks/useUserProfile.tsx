@@ -6,7 +6,7 @@ export const useUserProfile = () => {
   const { updateNumberOfItems, updateOriginalPrice } = useContext(
     CartContext
   ) as CartContextType;
-  const { data: user, isPending } = useQuery({
+  const { data: user, isPending, error } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
       const user = await apiUsers.getProfile();
@@ -22,5 +22,6 @@ export const useUserProfile = () => {
     user,
     isAuthenticated: !!user,
     isPending,
+    error
   };
 };

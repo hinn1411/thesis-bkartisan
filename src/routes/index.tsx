@@ -37,7 +37,7 @@ import CreateDiscount from '../pages/Seller/ManageDiscounts/CreateDiscount';
 import ViewGift from '../pages/Seller/ManageGift/ViewGift';
 import ChangeGift from '../pages/Seller/ManageGift/ChangeGift';
 import CreateGift from '../pages/Seller/ManageGift/CreateGift';
-import ViewMessage from '../pages/Seller/Message/ViewMessage';
+import SellerMessagePage from 'src/pages/Seller/Message/SellerMessagePage';
 import ViewReport from '../pages/Seller/Report/ViewReport';
 import ViewTransport from '../pages/Seller/ManageTransport/ViewTransport';
 import SellerRegistrationPage from '../pages/Seller/Registration/SellerRegistration';
@@ -50,7 +50,6 @@ import ProductManagement from '../pages/Admin/Product/ProductManament';
 import ReportManagement from '../pages/Admin/Report/ReportManagement';
 import ReviewProduct from '../pages/Admin/ReviewProduct/ReviewProduct';
 import OrderManagement from '../pages/Admin/Order/OrderManagement';
-import Message from '../pages/Admin/Message';
 import UserDetail from '../pages/Admin/User/UserDetail';
 import CollabDetail from '../pages/Admin/Collab/CollabDetail';
 import HandledReports from '../pages/Admin/Collab/HandledReports';
@@ -59,6 +58,9 @@ import AddCollab from '../pages/Admin/Collab/AddCollab';
 import ReportDetail from '../pages/Admin/Report/ReportDetail';
 import OrderDetail from '../pages/Admin/Order/OrderDetail';
 import ChangeInfo from '../pages/Admin/Collab/ChangeInfo';
+
+// Trang tin nhắn
+import ViewMessage from 'src/pages/Message/ViewMessage';
 
 const router = createBrowserRouter([
   {
@@ -106,7 +108,8 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <DashboardAdmin /> },
+      { index: true, element: <UserManagement /> },
+      { path: 'dashboard', element: <DashboardAdmin /> },
       { path: 'users', element: <UserManagement /> },
       { path: 'users/:id', element: <UserDetail /> },
       { path: 'collabs', element: <CollabManagement /> },
@@ -122,7 +125,7 @@ const router = createBrowserRouter([
       { path: 'reviewproducts', element: <ReviewProduct /> },
       { path: 'orders', element: <OrderManagement /> },
       { path: 'orders/:id', element: <OrderDetail /> },
-      { path: 'message', element: <Message /> },
+      { path: 'message', element: <ViewMessage /> },
     ],
   },
   {
@@ -146,7 +149,7 @@ const router = createBrowserRouter([
         element: <CreateDiscount />,
       },
       { path: 'report', element: <ViewReport /> },
-      { path: 'message', element: <ViewMessage /> },
+      { path: 'message', element: <SellerMessagePage /> },
       { path: 'manage_transport', element: <ViewTransport /> },
       { path: 'manage_gift', element: <ViewGift /> },
       { path: 'manage_gift/change_gift/:giftId', element: <ChangeGift /> },
