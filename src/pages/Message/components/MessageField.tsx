@@ -1,10 +1,15 @@
 import apiChat from "@apis/apiChat";
 import { Avatar } from "@mui/material";
-import { FC, memo, useRef } from "react";
+import { FC, memo, useEffect, useRef, useState } from "react";
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { BiSolidSend } from "react-icons/bi";
 import MessageList from "./MessageList";
 import { useOutletContext } from "react-router-dom";
+import LoadingMessage from "@components/admin/LoadingMessage";
+import ErrorMessage from "@components/admin/ErrorMessage";
+import { useQuery } from "@tanstack/react-query";
+import { pusherClient } from "@utils/pusher";
+import Message from "./Message";
 
 interface MessageFieldProps {
   receiver: any;
@@ -33,10 +38,85 @@ const MessageField: FC<MessageFieldProps> = memo(({ receiver, chatrooms }) => {
         chatroomId: receiver.chatroomId,
       };
       console.log(message);
-      const res = await apiChat.sendMessage(message);
+      const resultMessage = await apiChat.sendMessage(message);
+
       window.document.getElementById("text-field").value = "";
     }
   };
+
+  const {
+    data: initialMsg,
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: ["messages", receiver.chatroomId],
+    queryFn: async () => {
+      if (receiver.chatroomId) {
+        return await apiChat.getMessages(receiver.chatroomId);
+      }
+      return [];
+    },
+    refetchOnWindowFocus: false,
+  });
+  const [incomingMsg, setIncomingMsg] = useState([]);
+  const [newMessage, setNewMessage] = useState();
+  const dummy = useRef(null);
+
+  useEffect(() => {
+    dummy.current?.scrollIntoView({ behavior: "instant" });
+  }, [initialMsg, incomingMsg]);
+
+  useEffect(() => {
+    pusherClient.subscribe(user.username);
+
+    pusherClient.bind("incoming-message", (message) => {
+      setNewMessage(message);
+    });
+
+    return () => {
+      console.log("kkk");
+      pusherClient.unsubscribe(user.username);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (newMessage && receiver.username === newMessage.sender) {
+      setIncomingMsg(prev => [...prev, newMessage]);
+    }
+  }, [newMessage])
+
+  useEffect(() => {
+    setIncomingMsg([]);
+  }, [receiver])
+
+  useEffect(() => {
+    const input = document.getElementById("text-field");
+    let handleKeyPress;
+    if (input) {
+      handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          document.getElementById("send-msg-btn").click();
+        }
+      };
+
+      input.addEventListener("keypress", handleKeyPress);
+    }
+
+    return () => {
+      if (input) {
+        input.removeEventListener("keypress", handleKeyPress);
+      }
+    };
+  }, [isPending, error]);
+
+  if (isPending) {
+    return <LoadingMessage />;
+  }
+
+  if (error) {
+    return <ErrorMessage msg={error.message} />;
+  }
 
   return (
     <div>
@@ -60,9 +140,27 @@ const MessageField: FC<MessageFieldProps> = memo(({ receiver, chatrooms }) => {
 
       {/**Nội dung tin nhắn */}
       <div className="relative my-3 overflow-y-auto no-scrollbar max-h-[72vh] min-h-[72vh] flex flex-col space-y-2">
-        {receiver.chatroomId && 
-          <MessageList chatroomId={receiver.chatroomId} />
-        }
+        {receiver.chatroomId && (
+          <>
+            {initialMsg.map((message) => (
+              <Message
+                key={message.msgId}
+                isUser={message.sender === user?.username}
+                msg={message.content}
+                createdAt={message.createdAt}
+              />
+            ))}
+            {incomingMsg.map((message) => (
+              <Message
+                key={message.msgId}
+                isUser={message.sender === user?.username}
+                msg={message.content}
+                createdAt={message.createdAt}
+              />
+            ))}
+            <div ref={dummy} />
+          </>
+        )}
       </div>
       {/**Message Input Field */}
       <div className="relative w-full mx-2">
@@ -81,6 +179,7 @@ const MessageField: FC<MessageFieldProps> = memo(({ receiver, chatrooms }) => {
         />
         <button
           type="button"
+          id="send-msg-btn"
           onClick={onSend}
           className="absolute inset-y-0 end-0 flex items-center pe-3"
         >

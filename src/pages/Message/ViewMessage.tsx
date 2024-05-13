@@ -25,18 +25,28 @@ const ViewMessage: FC = memo(() => {
   const [receiver, setReceiver] = useState(state);
 
   const {
-    data: chatrooms,
+    data,
     isPending: isFetchingChatrooms,
     error,
   } = useQuery({
     queryKey: ["chatrooms"],
     queryFn: async () => {
-      return await apiChat.getChatrooms();
+      const res = await apiChat.getChatrooms();
+      return res;
     },
     refetchOnWindowFocus: false,
   });
 
-  if (isFetchingChatrooms) {
+  const [chatrooms, setChatrooms] = useState(null);
+
+  useEffect(() => {
+    // Vì một lí do nào đó data useQuery fetch chưa về lại là []
+    if (data) {
+      setChatrooms(data);
+    }
+  }, [data])
+
+  if (isFetchingChatrooms || (chatrooms == null)) {
     return <LoadingMessage />;
   }
 
@@ -51,6 +61,7 @@ const ViewMessage: FC = memo(() => {
     >
       <ChatroomList
         chatrooms={chatrooms}
+        setChatrooms={setChatrooms}
         setReceiver={setReceiver}
         receiver={receiver}
       />

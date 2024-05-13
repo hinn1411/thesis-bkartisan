@@ -3,7 +3,6 @@ import { axiosClient } from './axiosClient';
 const apiChat = {
   getChatrooms: async () => {
     const { data } = await axiosClient.get("/chatrooms");
-    console.log(data);
     return data;
   },
   getMessages: async (chatroomId) => {

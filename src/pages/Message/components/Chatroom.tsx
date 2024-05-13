@@ -34,7 +34,7 @@ const Chatroom: FC<ChatRoomProps> = memo(
     };
 
     const isRead =
-      (!chatroomInfo.isReceiverRead && chatroomInfo.lastUser !== user.username)
+      !chatroomInfo.isReceiverRead && chatroomInfo.lastUser !== user.username
         ? false
         : true;
 
@@ -57,7 +57,12 @@ const Chatroom: FC<ChatRoomProps> = memo(
           <p className="font-medium text-gray-900 truncate dark:text-white">
             {chatroomInfo.name || "Chưa xác định"}
           </p>
-          <p className={"truncate dark:text-gray-400" + (isRead ? " text-gray-500" : " text-black font-medium")}>
+          <p
+            className={
+              "truncate dark:text-gray-400" +
+              (isRead ? " text-gray-500" : " text-black font-medium")
+            }
+          >
             {lastName + " : " + chatroomInfo.lastMsg}
           </p>
         </div>
