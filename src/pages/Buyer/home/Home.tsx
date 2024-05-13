@@ -1,14 +1,12 @@
 import { FC, memo } from 'react';
-import CategoryCard from '../../../components/common/category/CategoryCard';
+import CategoryCard from '@components/common/category/CategoryCard';
 
-import Pagination from '../../../components/common/pagination/Pagination';
+import Pagination from '@components/common/pagination/Pagination';
 import { useProductPagination } from './hooks/useProductPagination';
 import { useTranslation } from 'react-i18next';
 import { useGift } from './hooks/useGift';
 
-import {
-  CategoryCardSkeletonList,
-} from '../../../components/common/category/CategoryCardSkeleton';
+import { CategoryCardSkeletonList } from '@components/common/category/CategoryCardSkeleton';
 import ProductList from '@components/common/product/ProductList';
 
 /*
@@ -18,12 +16,7 @@ import ProductList from '@components/common/product/ProductList';
 const Home: FC = memo(() => {
   console.log(`render home`);
   const { t } = useTranslation();
-  const {
-    data: products,
-    page,
-    setPage,
-    isFetching,
-  } = useProductPagination();
+  const { data: products, page, setPage, isFetching } = useProductPagination();
   const { gifts, isPending: isLoadingGifts } = useGift();
   return (
     <main className="min-h-screen px-20 my-5">

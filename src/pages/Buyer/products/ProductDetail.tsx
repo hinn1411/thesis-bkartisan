@@ -25,6 +25,7 @@ import { useModifyFavorite } from '@hooks/useModifyFavorite';
 import { HiHome } from 'react-icons/hi';
 import { CategoryText, CategoryTextProps } from '@components/common/category';
 import { Link } from 'react-router-dom';
+import { useCart } from '@hooks/useCart';
 // const slides = [
 //   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
 //   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
@@ -38,7 +39,7 @@ const ProductDetail: FC = memo(() => {
     window.location.href = '/';
   }
   const { data, isFetching } = useProductDetail(productId as string);
-  const { addToCart } = useAddItem();
+  const { addToCart } = useCart();
   const { mutate } = useModifyFavorite();
   console.log(data);
   const [currentSlide, setCurrentSlide] = useState(0);

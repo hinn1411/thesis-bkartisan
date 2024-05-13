@@ -2,9 +2,8 @@ import {
   ChangeEvent,
   FC,
   memo,
+  useContext,
   useDeferredValue,
-  useEffect,
-  useRef,
   useState,
 } from 'react';
 import {
@@ -21,6 +20,7 @@ import { formatCurrency } from '@utils/formatCurrency';
 import { CURRENCIES } from '@contants/currencies';
 import DeleteItemModal from './DeleteItemModal';
 import { BsPlus } from 'react-icons/bs';
+import { CartContext, CartContextType } from 'src/store/cartContext';
 
 export interface ItemCardProps {
   productId: number;
@@ -53,10 +53,13 @@ const ItemCard: FC<ItemCardProps> = memo(
   }) => {
     const [currentQuantity, setCurrentQuantity] = useState(quantity);
     const [currentNote, setCurrentNote] = useState<string>(note);
-    const deferedQuantity = useDeferredValue(currentQuantity);
+
     const deferedNote = useDeferredValue(currentNote);
-    const cartRef = useRef<number>();
+    const { updateNumberOfItems, updateOriginalPrice } = useContext(
+      CartContext
+    ) as CartContextType;
     const { updateCart, deleteCart } = useHandleCart();
+    const deferedQuantity = useDeferredValue(currentQuantity);
     const [isOpenedDeleteModal, setIsOpenedDeleteModal] = useState(false);
     const [isOpenedAddNote, setIsOpenedAddNote] = useState(false);
     const currentCost = formatCurrency(
@@ -65,46 +68,58 @@ const ItemCard: FC<ItemCardProps> = memo(
     );
     const originalCost = formatCurrency(originalPrice, CURRENCIES.VIETNAMDONG);
 
-    useEffect(() => {
-      cartRef.current = setTimeout(() => {
-        updateCart({
-          productId,
-          quantity: currentQuantity,
-          note: currentNote,
-        });
-      }, 2000);
-      () => clearTimeout(cartRef.current);
-    }, [deferedNote, deferedQuantity]);
+    // useEffect(() => {
+    //   updateCart({ productId, quantity: currentQuantity, note: currentNote });
+    // }, [currentQuantity, currentNote]);
 
     const openDeleteItemModal = () => {
       setIsOpenedDeleteModal(true);
     };
 
     const handleChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {
-      const newQuantiy = +e.target.value;
-      console.log(`newQuantity = ${newQuantiy}`);
-      if (newQuantiy > 999) {
+      let newQuantity = +e.target.value;
+      console.log(`newQuantity = ${newQuantity}`);
+      if (newQuantity > 999) {
         return;
       }
-      if (!newQuantiy) {
-        setCurrentQuantity(quantity);
-        return;
+      if (!newQuantity) {
+        newQuantity = 1;
       }
-      setCurrentQuantity(newQuantiy);
+      setCurrentQuantity(newQuantity);
+      updateNumberOfItems(newQuantity - currentQuantity);
+      updateOriginalPrice((newQuantity - currentQuantity) * currentPrice);
+    };
+    const handleUpdateCart = () => {
+      updateCart({ productId, quantity: currentQuantity, note: currentNote });
     };
     const increaseItem = () => {
       if (currentQuantity == 999) {
         return;
       }
-      setCurrentQuantity((prev) => prev + 1);
+      setCurrentQuantity((prev) => {
+        updateCart({ productId, quantity: prev + 1, note: currentNote });
+        return prev + 1;
+      });
+
+      console.log(`update cart when increase`);
+
+      updateNumberOfItems(1);
+      updateOriginalPrice(currentPrice);
     };
     const decreaseItem = () => {
       if (currentQuantity == 1) {
         return;
       }
-      setCurrentQuantity((prev) => prev - 1);
+      setCurrentQuantity((prev) => {
+        updateCart({ productId, quantity: prev - 1, note: currentNote });
+        return prev - 1;
+      });
+
+      updateNumberOfItems(-1);
+      updateOriginalPrice(-currentPrice);
     };
     const deleteItem = async () => {
+      updateNumberOfItems(-currentQuantity);
       return await deleteCart({ productId });
     };
     const handleChangeNote = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -185,6 +200,7 @@ const ItemCard: FC<ItemCardProps> = memo(
                     <input
                       type="text"
                       onChange={handleChangeQuantity}
+                      onBlur={handleUpdateCart}
                       className="w-[60px] rounded-[4px] text-center outline-none"
                       value={deferedQuantity}
                     />
@@ -242,6 +258,7 @@ const ItemCard: FC<ItemCardProps> = memo(
 
             <textarea
               onChange={handleChangeNote}
+              onBlur={handleUpdateCart}
               value={deferedNote}
               rows={2}
               className={`w-full overflow-hidden transition-max-h duration-300 ${
