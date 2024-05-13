@@ -6,7 +6,7 @@ import { DiscountProps, useDiscount } from './hooks/useDiscount';
 import { formatCurrency } from '@utils/formatCurrency';
 import { CURRENCIES } from '@contants/currencies';
 import { useHandleDiscount } from './hooks/useHandleDiscount';
-import { CartContext, CartContextType } from 'src/store/cartContext';
+import { CartContext, CartContextType } from 'src/store/CartContext';
 const Cart: FC = memo(() => {
   const { numberOfItems, originalPrice, discountPrice } = useContext(
     CartContext

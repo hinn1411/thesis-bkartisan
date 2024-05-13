@@ -8,7 +8,7 @@ import {
   SuccessIcon,
   options,
 } from '@components/common/toast/index';
-import { CartContext, CartContextType } from 'src/store/cartContext';
+import { CartContext, CartContextType } from 'src/store/CartContext';
 
 export interface DiscountProps {
   code: string;

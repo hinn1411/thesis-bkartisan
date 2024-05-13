@@ -20,7 +20,7 @@ import { formatCurrency } from '@utils/formatCurrency';
 import { CURRENCIES } from '@contants/currencies';
 import DeleteItemModal from './DeleteItemModal';
 import { BsPlus } from 'react-icons/bs';
-import { CartContext, CartContextType } from 'src/store/cartContext';
+import { CartContext, CartContextType } from 'src/store/CartContext';
 
 export interface ItemCardProps {
   productId: number;

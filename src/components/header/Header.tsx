@@ -36,7 +36,7 @@ import {
   CategoryCardProps,
   CategoryText,
 } from '@components/common/category/index';
-import { CartContext, CartContextType } from 'src/store/cartContext';
+import { CartContext, CartContextType } from 'src/store/CartContext';
 const Header: FC = memo(() => {
   // Navigation
   const navigate = useNavigate();

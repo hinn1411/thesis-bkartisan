@@ -8,7 +8,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { ToastOptions, toast } from 'react-toastify';
-import { CartContext, CartContextType } from 'src/store/cartContext';
+import { CartContext, CartContextType } from 'src/store/CartContext';
 export const useCart = () => {
   const { updateNumberOfItems } = useContext(CartContext) as CartContextType;
   const { mutate } = useMutation({
