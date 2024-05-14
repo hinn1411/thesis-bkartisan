@@ -23,7 +23,7 @@ const AdminSidebar: FC<SidebarProp> = memo(
   ({ isSidebarOpen, role, username }) => {
     const location = useLocation();
 
-    const [count, setCount] = useState(0);
+    const [newMessage, setNewMessage] = useState([]);
 
     const { data } = useQuery({
       queryKey: ["check-new-messages"],
@@ -40,7 +40,13 @@ const AdminSidebar: FC<SidebarProp> = memo(
         const pathname = window.location.href;
         const regexPath = new RegExp("message");
         if (!regexPath.test(pathname)) {
-          setCount((prev) => prev + 1);
+          let newValue = { chatroomId: message.room };
+          newMessage.forEach((element) => {
+            if (element.chatroomId === message.room) {
+              newValue = undefined;
+            }
+          });
+          if (newValue != undefined) setNewMessage([...newMessage, newValue]);
         }
       };
 
@@ -55,7 +61,8 @@ const AdminSidebar: FC<SidebarProp> = memo(
       const pathname = window.location.href;
       const regexPath = new RegExp("message");
       if (!regexPath.test(pathname) && data) {
-        setCount((prev) => prev + data.count);
+        const newArray = [...newMessage, ...data];
+        setNewMessage(newArray);
       }
     }, [data]);
 
@@ -230,7 +237,7 @@ const AdminSidebar: FC<SidebarProp> = memo(
                       ? `bg-orange-500 text-white`
                       : `hover:bg-orange-100 hover:text-gray-900`
                   } group`}
-                  onClick={() => setCount(0)}
+                  onClick={() => setNewMessage([])}
                 >
                   <BiMessageDots
                     className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${
@@ -243,7 +250,9 @@ const AdminSidebar: FC<SidebarProp> = memo(
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Tin nhắn
                   </span>
-                  {count > 0 && <span className="ml-auto">New</span>}
+                  {newMessage && newMessage.length > 0 && (
+                    <span className="ml-auto">{newMessage.length}</span>
+                  )}
                 </Link>
               </li>
             </ul>

@@ -3,7 +3,6 @@ import { axiosClient } from './axiosClient';
 const apiChat = {
   getChatrooms: async () => {
     const { data } = await axiosClient.get("/chatrooms");
-    console.log(data);
     return data;
   },
   getMessages: async (chatroomId) => {
@@ -18,6 +17,10 @@ const apiChat = {
     const { data } = await axiosClient.get(`/check-new-messages`);
     return data;
   },
+  read: async (chatroomId) => {
+    const { data } = await axiosClient.patch(`/chatrooms/${chatroomId}/read`);
+    return data;
+  }
 };
 
 export default apiChat;

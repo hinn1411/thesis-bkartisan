@@ -1,32 +1,59 @@
-import { FC, memo, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import Chatroom from "./Chatroom";
+import { useOutletContext } from "react-router-dom";
 
 interface ChatroomListProp {
   chatrooms: any;
+  setChatrooms: Function;
   setReceiver: Function;
-  receiver: number,
+  receiver: any;
+  newMessage: any;
 }
 
 const ChatroomList: FC<ChatroomListProp> = memo(
-  ({ chatrooms, receiver, setReceiver }) => {
-    const [chatroom, setChatroom] = useState("");
-    const [currentChatroom, setCurrentChatroom] = useState(chatrooms);
+  ({ chatrooms, setChatrooms, receiver, setReceiver, newMessage }) => {
+    const [user] = useOutletContext();
+    const [reg, setReg] = useState(new RegExp(``));
+    const [searchTerm, setSearchTerm] = useState("");
 
     const onSearch = (event) => {
       event.preventDefault();
-      const reg = new RegExp(`${chatroom}`);
-      const matchedChatrooms = chatrooms.filter((chatroom) =>
-        reg.test(chatroom.name)
-      );
-      setCurrentChatroom(matchedChatrooms);
+      const newReg = new RegExp(`${searchTerm}`);
+      setReg(newReg);
     };
 
     const onChangeValue = (event) => {
       const value = event.target.value;
-      setChatroom(value);
+      setSearchTerm(value);
     };
 
-    //const [selectedChat, setSelectedChat] = useState();
+    useEffect(() => {
+      if (newMessage) {
+        const newChatroom = {
+          avatar: newMessage.senderAvatar,
+          chatroomId: newMessage.room,
+          isReceiverRead: false,
+          lastMsg: newMessage.content,
+          lastUpdate: newMessage.createdAt,
+          lastUser: newMessage.sender,
+          name: newMessage.senderName,
+          username: newMessage.sender,
+        };
+
+        // Tìm xem trong chatrooms đã có chatroom với người này chưa và xóa nó
+        let index = chatrooms.findIndex(
+          (chatroom) => chatroom.chatroomId === newMessage.room
+        );
+        if (index !== -1) {
+          newChatroom.avatar = chatrooms[index].avatar;
+          newChatroom.name = chatrooms[index].name;
+          newChatroom.username = chatrooms[index].username;
+          chatrooms.splice(index, 1);
+        }
+        const newChatrooms = [newChatroom, ...chatrooms];
+        setChatrooms(newChatrooms);
+      }
+    }, [newMessage])
 
     return (
       <div className="border-r-2 pr-1">
@@ -69,16 +96,18 @@ const ChatroomList: FC<ChatroomListProp> = memo(
         </div>
         <div className="overflow-y-auto max-h-[79vh] min-h-[79vh]">
           {/**Danh sách Chat Room */}
-          {currentChatroom.map((chatroom) => {
-            return (
-              <Chatroom
-                key={chatroom.chatroomId}
-                receiver={receiver}
-                setReceiver={setReceiver}
-                chatroomInfo={chatroom}
-              />
-            );
-          })}
+          {chatrooms
+            .filter((chatroom) => reg.test(chatroom.name))
+            .map((chatroom) => {
+              return (
+                <Chatroom
+                  key={chatroom.lastUpdate}
+                  receiver={receiver}
+                  setReceiver={setReceiver}
+                  chatroomInfo={chatroom}
+                />
+              );
+            })}
         </div>
       </div>
     );
