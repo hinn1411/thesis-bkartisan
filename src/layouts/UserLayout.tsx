@@ -2,12 +2,15 @@ import { FC, memo, Fragment } from 'react';
 import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 import { Outlet } from 'react-router-dom';
-const UserLayout: FC = memo(({}) => {
+import CartProvider from 'src/store/CartContext';
+const UserLayout: FC = memo(() => {
   return (
     <Fragment>
-      <Header />
-      <Outlet />
-      <Footer />
+      <CartProvider>
+        <Header />
+        <Outlet />
+        <Footer />
+      </CartProvider>
     </Fragment>
   );
 });
