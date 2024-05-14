@@ -1,8 +1,8 @@
 import { FC, memo } from 'react';
-import { Rating, Breadcrumb, Textarea } from 'flowbite-react';
-
+import { Breadcrumb, Textarea } from 'flowbite-react';
+import { Rating } from '@mui/material';
 import Pagination from '@components/common/pagination/Pagination';
-import Comment from '@components/common/comment/Comment';
+import Comment from 'src/pages/Buyer/products/components/Comment';
 import {
   HeartOutlined,
   HeartFilled,
@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import { useState } from 'react';
 import { useProductDetail } from './hooks/useProductDetail';
-import { useAddItem } from './hooks/useAddItem';
+import { BsExclamationCircle } from 'react-icons/bs';
 import { useParams } from 'react-router-dom';
 import ImageList from './components/ImageList';
 import TextSkeleton from '@components/common/skeleton/Text';
@@ -26,12 +26,9 @@ import { HiHome } from 'react-icons/hi';
 import { CategoryText, CategoryTextProps } from '@components/common/category';
 import { Link } from 'react-router-dom';
 import { useCart } from '@hooks/useCart';
-// const slides = [
-//   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
-//   'https://res.cloudinary.com/dpurshaxm/image/upload/v1710783900/bk_artisan/tmp-2-1710783898283_lstfe7.jpg',
-//   'https://i.etsystatic.com/site-assets/gift-category-pages/L0/gifts-for-christmas-L1.jpg?v=1696278259',
-//   'https://i.etsystatic.com/site-assets/gift-category-pages/L0/gifts-for-him-L1.jpg?v=1696278259  ',
-// ];
+import ReportProductModal from './components/ReportProductModal';
+import CommentList from './components/CommentList';
+import { useComment } from './hooks/useComment';
 
 const ProductDetail: FC = memo(() => {
   const { productId } = useParams();
@@ -41,23 +38,17 @@ const ProductDetail: FC = memo(() => {
   const { data, isFetching } = useProductDetail(productId as string);
   const { addToCart } = useCart();
   const { mutate } = useModifyFavorite();
+  const { addComment } = useComment();
   console.log(data);
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  const starShop: number = 2;
-  const starProduct: number = 2;
-  const starsProduct = Array.from({ length: 5 }, (_, index) => (
-    <Rating.Star key={index} filled={index < starProduct} />
-  ));
-  const starsShop = Array.from({ length: 5 }, (_, index) => (
-    <Rating.Star key={index} filled={index < starShop} />
-  ));
-
+  const [isOpenedReportProduct, setIsOpenedReportProduct] = useState(false);
+  const [currentStar, setCurrentStar] = useState(5);
+  const [currentComment, setCurrentComment] = useState<string>('');
   const [expandedStates, setExpandedStates] = useState([
     false,
     false,
     false,
-    false,
+    true,
   ]);
 
   const handleButtonClick = (index: number) => {
@@ -80,8 +71,24 @@ const ProductDetail: FC = memo(() => {
       productId: +productId,
     });
   };
+  const handleAddComment = () => {
+    if (!productId) {
+      return;
+    }
+    addComment({
+      productId: +productId,
+      numberOfStars: currentStar,
+      content: currentComment,
+      parentId: null,
+    });
+    setCurrentComment('')
+  };
   return (
     <div className="mx-4 md:mx-20">
+      <ReportProductModal
+        isOpen={isOpenedReportProduct}
+        setIsOpen={setIsOpenedReportProduct}
+      />
       {/* Links navigation */}
       <Breadcrumb className='className="flex items-center space-x-2 md:space-x-5 text-xs p-4 "'>
         <div className="flex items-center text-sm font-medium space-x-1 hover:text-gray-700">
@@ -91,7 +98,7 @@ const ProductDetail: FC = memo(() => {
 
         {data &&
           data.categories.map((category: CategoryTextProps) => (
-            <div className="flex items-center">
+            <div key={category.id} className="flex items-center">
               <svg
                 className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
                 aria-hidden="true"
@@ -101,9 +108,9 @@ const ProductDetail: FC = memo(() => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="m1 9 4-4-4-4"
                 />
               </svg>
@@ -114,17 +121,6 @@ const ProductDetail: FC = memo(() => {
             </div>
           ))}
       </Breadcrumb>
-      {/* <div>
-        <CategoryLink linkTo="/" categoryName="Trang chủ"></CategoryLink>
-        <CategoryLink
-          linkTo=""
-          categoryName="Đồ chơi & Giải trí"
-        ></CategoryLink>
-        <CategoryLink linkTo="" categoryName="Trò chơi & Câu đố"></CategoryLink>
-        <CategoryLink linkTo="" categoryName="Board game"></CategoryLink>
-        <CategoryLink linkTo="" categoryName="Cờ"></CategoryLink>
-        <p>Cờ gỗ của nga</p>
-      </div> */}
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2">
         <div className="h-auto">
           <div className="h-48 sm:h-64 xl:h-80 2xl:h-96">
@@ -186,7 +182,7 @@ const ProductDetail: FC = memo(() => {
                 {data?.seller}
               </a>
 
-              <Rating className="mt-2 mb-1">{starsShop}</Rating>
+              <Rating name="read-only" value={5} readOnly />
             </div>
             <div className="max-w-full flex flex-col my-5 space-y-3">
               <button
@@ -330,33 +326,52 @@ const ProductDetail: FC = memo(() => {
                 </div>
               </div>
             </div>
+            <div
+              onClick={() => setIsOpenedReportProduct(true)}
+              className="flex items-center text-sm underline space-x-1 cursor-pointer"
+            >
+              <div className="bg-red-200 p-1 rounded-full">
+                <BsExclamationCircle className="text-red-600" />
+              </div>
+              <p>Báo cáo bài đăng</p>
+            </div>
           </section>
         )}
 
         {/* Comment and rating */}
-        <div>
-          {/* Rating */}
-          <Rating className="mt-2 mb-1">
-            <p className="border-r-2 pr-1 border-black">Đánh giá sản phẩm</p>
-            {starsProduct}
-            <p className="ml-1 mb-4 text-sm">(302)</p>
-          </Rating>
+        <div className="space-y-2">
+          <div className="flex items-center">
+            <p>Đánh giá sản phẩm | </p>
+            <Rating
+              name="simple-controlled"
+              value={currentStar}
+              onChange={(_, newValue) => {
+                setCurrentStar(newValue as number);
+              }}
+            />
+            <p className="text-xs font-medium">(325)</p>
+          </div>
+
           {/* Comment box */}
-          <form className="max-w flex flex-col">
+          <div className="max-w flex flex-col">
             <Textarea
               className="resize-none"
               id="comment"
               placeholder="Nhập bình luận"
               rows={4}
+              value={currentComment}
+              onChange={(e) => setCurrentComment(e.target.value)}
             />
             <button
-              type="submit"
+              onClick={handleAddComment}
+              type="button"
               className="bg-green-500 mt-3 w-1/6 p-1 rounded-md text-white self-end"
             >
               Gửi
             </button>
-          </form>
+          </div>
           {/* List comment */}
+          <CommentList isLoading={isFetching} data={data} />
           <div id="ListComment" className=" flex flex-col items-center mb-10">
             <Comment
               star={5}
@@ -365,7 +380,7 @@ const ProductDetail: FC = memo(() => {
               userImage="https://baoduongmaynenkhi.vn/wp-content/uploads/2022/03/Bieu-cam-Noi-vay-ma-nghe-duoc-a-cua-meo-Tom.jpg"
               date="25 Tháng 10, 2023"
             ></Comment>
-            <Comment
+            {/* <Comment
               star={5}
               content="Lorem ipsum dolor sit amet consectetur. Odio integer pellentesque justo eget volutpat nisl cursus quis pretium."
               userName="sweetcake12"
@@ -378,7 +393,7 @@ const ProductDetail: FC = memo(() => {
               userName="sweetcake12"
               userImage="https://baoduongmaynenkhi.vn/wp-content/uploads/2022/03/Bieu-cam-Noi-vay-ma-nghe-duoc-a-cua-meo-Tom.jpg"
               date="25 Tháng 10, 2023"
-            ></Comment>
+            ></Comment> */}
 
             <Pagination currentPage={1} goToPage={() => {}} />
           </div>
