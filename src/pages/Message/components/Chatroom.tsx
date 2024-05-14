@@ -1,23 +1,18 @@
 import { Avatar } from "@mui/material";
 import { formatDate } from "@utils/formatDate";
-import { FC, memo } from "react";
+import { FC, memo, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
 interface ChatRoomProps {
   receiver: any;
   setReceiver: Function;
-  // chatroomId: number;
-  // avatar: string;
-  // name: string;
-  // lastMsg: string;
-  // lastUpdate: string;
-  // lastUser: string;   // Username của sender cuối cùng trong phòng chat
   chatroomInfo: any;
 }
 
 const Chatroom: FC<ChatRoomProps> = memo(
   ({ receiver, setReceiver, chatroomInfo }) => {
     const [user] = useOutletContext();
+
     let isSelected = "";
     if (receiver) {
       isSelected =
@@ -26,17 +21,20 @@ const Chatroom: FC<ChatRoomProps> = memo(
     const lastName =
       chatroomInfo.lastUser === user.username ? user.name : chatroomInfo.name;
 
+    const defaultIsRead =
+      (!chatroomInfo.isReceiverRead && chatroomInfo.lastUser !== user.username)
+        ? false
+        : true;
+
+    const [isRead, setIsRead] = useState(defaultIsRead);
+
     const onChangeChatroom = () => {
       if (window.document.getElementById("text-field")) {
         window.document.getElementById("text-field").value = "";
       }
       setReceiver(chatroomInfo);
+      setIsRead(true);
     };
-
-    const isRead =
-      !chatroomInfo.isReceiverRead && chatroomInfo.lastUser !== user.username
-        ? false
-        : true;
 
     return (
       <div

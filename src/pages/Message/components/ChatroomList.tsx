@@ -1,21 +1,20 @@
 import { FC, memo, useEffect, useState } from "react";
 import Chatroom from "./Chatroom";
 import { useOutletContext } from "react-router-dom";
-import { pusherClient } from "@utils/pusher";
 
 interface ChatroomListProp {
   chatrooms: any;
   setChatrooms: Function;
   setReceiver: Function;
   receiver: any;
+  newMessage: any;
 }
 
 const ChatroomList: FC<ChatroomListProp> = memo(
-  ({ chatrooms, setChatrooms, receiver, setReceiver }) => {
+  ({ chatrooms, setChatrooms, receiver, setReceiver, newMessage }) => {
     const [user] = useOutletContext();
     const [reg, setReg] = useState(new RegExp(``));
     const [searchTerm, setSearchTerm] = useState("");
-    const [newMessage, setNewMessage] = useState();
 
     const onSearch = (event) => {
       event.preventDefault();
@@ -27,39 +26,6 @@ const ChatroomList: FC<ChatroomListProp> = memo(
       const value = event.target.value;
       setSearchTerm(value);
     };
-
-    useEffect(() => {
-      pusherClient.subscribe(user.username);
-
-      pusherClient.bind("incoming-message", (message) => {
-        // const newChatroom = {
-        //   avatar: message.senderAvatar,
-        //   chatroomId: message.room,
-        //   isReceiverRead: false,
-        //   lastMsg: message.content,
-        //   lastUpdate: message.createdAt,
-        //   lastUser: message.sender,
-        //   name: message.senderName,
-        //   username: message.sender,
-        // };
-
-        // // Tìm xem trong chatrooms đã có chatroom với người này chưa và xóa nó
-        // let index = chatrooms.findIndex(
-        //   (chatroom) => chatroom.chatroomId === message.room
-        // );
-        // if (index !== -1) {
-        //   console.log(chatrooms[index]);
-        //   chatrooms.splice(index, 1);
-        // }
-        // const newChatrooms = [newChatroom, ...chatrooms];
-        // setChatrooms(newChatrooms);
-        setNewMessage(message);
-      });
-
-      return () => {
-        pusherClient.unsubscribe(user.username);
-      };
-    }, []);
 
     useEffect(() => {
       if (newMessage) {
@@ -79,7 +45,9 @@ const ChatroomList: FC<ChatroomListProp> = memo(
           (chatroom) => chatroom.chatroomId === newMessage.room
         );
         if (index !== -1) {
-          console.log(chatrooms[index]);
+          newChatroom.avatar = chatrooms[index].avatar;
+          newChatroom.name = chatrooms[index].name;
+          newChatroom.username = chatrooms[index].username;
           chatrooms.splice(index, 1);
         }
         const newChatrooms = [newChatroom, ...chatrooms];
@@ -133,7 +101,7 @@ const ChatroomList: FC<ChatroomListProp> = memo(
             .map((chatroom) => {
               return (
                 <Chatroom
-                  key={chatroom.chatroomId}
+                  key={chatroom.lastUpdate}
                   receiver={receiver}
                   setReceiver={setReceiver}
                   chatroomInfo={chatroom}

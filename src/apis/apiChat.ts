@@ -17,6 +17,10 @@ const apiChat = {
     const { data } = await axiosClient.get(`/check-new-messages`);
     return data;
   },
+  read: async (chatroomId) => {
+    const { data } = await axiosClient.patch(`/chatrooms/${chatroomId}/read`);
+    return data;
+  }
 };
 
 export default apiChat;

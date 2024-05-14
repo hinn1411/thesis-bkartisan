@@ -1,16 +1,17 @@
 import { FC, memo, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useUserProfile } from "@hooks/useUserProfile";
+import { useLocation, useOutletContext } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import apiChat from "@apis/apiChat";
 import LoadingMessage from "@components/admin/LoadingMessage";
 import ErrorMessage from "@components/admin/ErrorMessage";
 import ChatroomList from "./components/ChatroomList";
 import MessageField from "./components/MessageField";
+import { pusherClient } from "@utils/pusher";
 
 const ViewMessage: FC = memo(() => {
   //const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile();
   const state = useLocation().state;
+  const [user] = useOutletContext();
 
   /**
    * receiver:
@@ -38,15 +39,28 @@ const ViewMessage: FC = memo(() => {
   });
 
   const [chatrooms, setChatrooms] = useState(null);
+  const [newMessage, setNewMessage] = useState();
+
+  useEffect(() => {
+    pusherClient.subscribe(user.username);
+
+    pusherClient.bind("incoming-message", (message) => {
+      setNewMessage(message);
+    });
+
+    return () => {
+      pusherClient.unsubscribe(user.username);
+    };
+  }, []);
 
   useEffect(() => {
     // Vì một lí do nào đó data useQuery fetch chưa về lại là []
     if (data) {
       setChatrooms(data);
     }
-  }, [data])
+  }, [data]);
 
-  if (isFetchingChatrooms || (chatrooms == null)) {
+  if (isFetchingChatrooms || chatrooms == null) {
     return <LoadingMessage />;
   }
 
@@ -64,8 +78,17 @@ const ViewMessage: FC = memo(() => {
         setChatrooms={setChatrooms}
         setReceiver={setReceiver}
         receiver={receiver}
+        newMessage={newMessage}
       />
-      {receiver && <MessageField receiver={receiver} chatrooms={chatrooms} />}
+      {receiver && (
+        <MessageField
+          receiver={receiver}
+          setReceiver={setReceiver}
+          chatrooms={chatrooms}
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+        />
+      )}
     </div>
   );
 });
