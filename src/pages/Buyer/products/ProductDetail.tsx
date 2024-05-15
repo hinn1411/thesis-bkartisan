@@ -90,7 +90,7 @@ const ProductDetail: FC = memo(() => {
         setIsOpen={setIsOpenedReportProduct}
       />
       {/* Links navigation */}
-      <Breadcrumb className='className="flex items-center space-x-2 md:space-x-5 text-xs p-4 "'>
+      <Breadcrumb className="flex items-center space-x-2 md:space-x-5 text-xs p-4 ">
         <div className="flex items-center text-sm font-medium space-x-1 hover:text-gray-700">
           <HiHome />
           <Link to="/">Trang chủ</Link>

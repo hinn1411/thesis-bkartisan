@@ -1,9 +1,8 @@
-
 import { RouterProvider } from 'react-router';
 import router from './routes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-export const queryClient = new QueryClient();
-// import './App.css';
+import CartProvider from './store/CartContext';
+ const queryClient = new QueryClient();
 
 export default function App() {
   window.addEventListener('load', (e) => {
@@ -15,7 +14,9 @@ export default function App() {
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
     </QueryClientProvider>
   );
 }
