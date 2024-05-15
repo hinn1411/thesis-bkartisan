@@ -7,6 +7,7 @@ import { formatCurrency } from '@utils/formatCurrency';
 import { CURRENCIES } from '@contants/currencies';
 import { useHandleDiscount } from './hooks/useHandleDiscount';
 import { CartContext, CartContextType } from 'src/store/CartContext';
+import { Link } from 'react-router-dom';
 const Cart: FC = memo(() => {
   const { numberOfItems, originalPrice, discountPrice } = useContext(
     CartContext
@@ -158,15 +159,16 @@ const Cart: FC = memo(() => {
             <hr className="my-2 h-0.5 border-t-0 bg-gray-300 opacity-100 dark:opacity-50" />
             <div className="flex items-center justify-between">
               <p>Tổng tiền</p>
-              <p>
-               {orderPrice}
-              </p>
+              <p>{orderPrice}</p>
             </div>
             {/* Button container */}
             <div className="flex flex-col space-y-3 my-4">
-              <button className="text-base text-center bg-black rounded-full text-white w-full py-2">
-                Thanh toán
-              </button>
+              <Link to='/checkout'>
+                <button className="text-base text-center bg-black rounded-full text-white w-full py-2">
+                  Thanh toán
+                </button>
+              </Link>
+
               <div className="flex py-2">
                 <input
                   onChange={handleChangeDiscount}

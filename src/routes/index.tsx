@@ -20,6 +20,7 @@ import SearchPage from '../pages/Buyer/search/Search';
 import ProductDetailPage from '../pages/Buyer/products/ProductDetail';
 import FavouriteProductPage from '../pages/Buyer/favourite/FavouriteProduct';
 import CartPage from '../pages/Buyer/cart/Cart';
+import CheckoutPage from 'src/pages/Buyer/checkout/Checkout';
 import CategoryPage from '../pages/Buyer/Category/Category';
 // -- Gifts
 import ChooseBoxPage from '../pages/Buyer/gift/Gift';
@@ -69,8 +70,9 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'search', element: <SearchPage />},
+      { path: 'search', element: <SearchPage /> },
       { path: 'cart', element: <CartPage /> },
+      { path: 'checkout', element: <CheckoutPage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
       { path: 'favorite', element: <FavouriteProductPage /> },
       { path: 'seller_registration', element: <SellerRegistrationPage /> },

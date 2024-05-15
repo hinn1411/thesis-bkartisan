@@ -1,15 +1,16 @@
+import { floor } from 'lodash';
 import { axiosClient } from './axiosClient';
 // import { ProductProps } from '../pages/Seller/ManageProducts/Hooks/useProductMutation';
 export interface IOrders {
-    orderId: number;
-    seller: string;
-    createAt: Date;
-    status: string;
-    paymentMethod: string;
-    isGift: boolean;
-    totalPrice: number;
-    buyer: string;
-  }
+  orderId: number;
+  seller: string;
+  createAt: Date;
+  status: string;
+  paymentMethod: string;
+  isGift: boolean;
+  totalPrice: number;
+  buyer: string;
+}
 export interface IOrderProduct {
   productId: number;
   quantity: number;
@@ -17,7 +18,23 @@ export interface IOrderProduct {
   name: string;
 }
 const apiOrders = {
-  getOrders: async (searchTerm:string, page: number, offset: number) => {
+  getBuyerOrder: async () => {
+    try {
+      const { data } = await axiosClient.get('/orders');
+      data.orderItems = data.orderItems.map((item: any) => ({
+        productImage: item.coverImage,
+        productName: item.name,
+        finalPrice: floor(item.price * (1 - item.discount / 100)),
+        quantity: item.quantity,
+      }));
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  getOrders: async (searchTerm: string, page: number, offset: number) => {
     try {
       const { data } = await axiosClient.get(`/orders`, {
         params: {
@@ -48,7 +65,6 @@ const apiOrders = {
       throw err;
     }
   },
-
 };
 
 export default apiOrders;

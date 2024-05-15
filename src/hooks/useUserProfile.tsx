@@ -14,8 +14,8 @@ export const useUserProfile = () => {
     queryKey: ['user'],
     queryFn: async () => {
       const user = await apiUsers.getProfile();
-      updateNumberOfItems(+user.cartItems);
-      updateOriginalPrice(+user.totalPrice);
+      updateNumberOfItems(+user.cartItems || 0);
+      updateOriginalPrice(+user.totalPrice || 0 );
       return user;
     },
     refetchOnWindowFocus: false,
