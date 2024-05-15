@@ -1,40 +1,47 @@
-import { FC, memo } from 'react';
-import { Breadcrumb, Textarea } from 'flowbite-react';
-import { Rating } from '@mui/material';
-import Pagination from '@components/common/pagination/Pagination';
-import Comment from 'src/pages/Buyer/products/components/Comment';
+import { FC, memo } from "react";
+import { Breadcrumb, Textarea } from "flowbite-react";
+import { Rating } from "@mui/material";
+import Pagination from "@components/common/pagination/Pagination";
+import Comment from "src/pages/Buyer/products/components/Comment";
 import {
   HeartOutlined,
   HeartFilled,
   DownOutlined,
   GiftOutlined,
   ShoppingCartOutlined,
-} from '@ant-design/icons';
-import { useState } from 'react';
-import { useProductDetail } from './hooks/useProductDetail';
-import { BsExclamationCircle } from 'react-icons/bs';
-import { useParams } from 'react-router-dom';
-import ImageList from './components/ImageList';
-import TextSkeleton from '@components/common/skeleton/Text';
-import Spinner from '@components/common/ui/Spinner';
-import ImageSlider from './components/ImageSlider';
-import { formatCurrency } from '../../../utils/formatCurrency';
-import { CURRENCIES } from '@contants/currencies';
-import Button from '@components/common/button/Button';
-import { useModifyFavorite } from '@hooks/useModifyFavorite';
-import { HiHome } from 'react-icons/hi';
-import { CategoryText, CategoryTextProps } from '@components/common/category';
-import { Link } from 'react-router-dom';
-import { useCart } from '@hooks/useCart';
-import ReportProductModal from './components/ReportProductModal';
-import CommentList from './components/CommentList';
-import { useComment } from './hooks/useComment';
+} from "@ant-design/icons";
+import { useState } from "react";
+import { useProductDetail } from "./hooks/useProductDetail";
+import { BsExclamationCircle } from "react-icons/bs";
+import { useLocation, useParams } from "react-router-dom";
+import ImageList from "./components/ImageList";
+import TextSkeleton from "@components/common/skeleton/Text";
+import Spinner from "@components/common/ui/Spinner";
+import ImageSlider from "./components/ImageSlider";
+import { formatCurrency } from "../../../utils/formatCurrency";
+import { CURRENCIES } from "@contants/currencies";
+import Button from "@components/common/button/Button";
+import { useModifyFavorite } from "@hooks/useModifyFavorite";
+import { HiHome } from "react-icons/hi";
+import { CategoryText, CategoryTextProps } from "@components/common/category";
+import { Link } from "react-router-dom";
+import { useCart } from "@hooks/useCart";
+import ReportProductModal from "./components/ReportProductModal";
+import CommentList from "./components/CommentList";
+import { useComment } from "./hooks/useComment";
+import { urlMatch } from "@utils/urlMatch";
+import ReturnIcon from "@components/admin/ReturnIcon";
+import { Button as FlowbiteBtn } from "flowbite-react";
 
 const ProductDetail: FC = memo(() => {
   const { productId } = useParams();
   if (!productId) {
-    window.location.href = '/';
+    window.location.href = "/";
   }
+
+  const location = useLocation();
+  const isAdminPage = urlMatch("products", location.pathname);
+
   const { data, isFetching } = useProductDetail(productId as string);
   const { addToCart } = useCart();
   const { mutate } = useModifyFavorite();
@@ -43,7 +50,7 @@ const ProductDetail: FC = memo(() => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isOpenedReportProduct, setIsOpenedReportProduct] = useState(false);
   const [currentStar, setCurrentStar] = useState(5);
-  const [currentComment, setCurrentComment] = useState<string>('');
+  const [currentComment, setCurrentComment] = useState<string>("");
   const [expandedStates, setExpandedStates] = useState([
     false,
     false,
@@ -81,7 +88,7 @@ const ProductDetail: FC = memo(() => {
       content: currentComment,
       parentId: null,
     });
-    setCurrentComment('')
+    setCurrentComment("");
   };
   return (
     <div className="mx-4 md:mx-20">
@@ -90,37 +97,44 @@ const ProductDetail: FC = memo(() => {
         setIsOpen={setIsOpenedReportProduct}
       />
       {/* Links navigation */}
-      <Breadcrumb className="flex items-center space-x-2 md:space-x-5 text-xs p-4 ">
-        <div className="flex items-center text-sm font-medium space-x-1 hover:text-gray-700">
-          <HiHome />
-          <Link to="/">Trang chủ</Link>
+      {isAdminPage ? (
+        <div className="flex flex-row-reverse">
+          <ReturnIcon />
         </div>
+      ) : (
+        <Breadcrumb className="flex items-center space-x-2 md:space-x-5 text-xs p-4 ">
+          <div className="flex items-center text-sm font-medium space-x-1 hover:text-gray-700">
+            <HiHome />
+            <Link to="/">Trang chủ</Link>
+          </div>
 
-        {data &&
-          data.categories.map((category: CategoryTextProps) => (
-            <div key={category.id} className="flex items-center">
-              <svg
-                className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 9 4-4-4-4"
+          {data &&
+            data.categories.map((category: CategoryTextProps) => (
+              <div key={category.id} className="flex items-center">
+                <svg
+                  className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 6 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m1 9 4-4-4-4"
+                  />
+                </svg>
+                <CategoryText
+                  className=" text-sm font-medium text-black hover:text-gray-700"
+                  {...category}
                 />
-              </svg>
-              <CategoryText
-                className=" text-sm font-medium text-black hover:text-gray-700"
-                {...category}
-              />
-            </div>
-          ))}
-      </Breadcrumb>
+              </div>
+            ))}
+        </Breadcrumb>
+      )}
+
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2">
         <div className="h-auto">
           <div className="h-48 sm:h-64 xl:h-80 2xl:h-96">
@@ -184,26 +198,29 @@ const ProductDetail: FC = memo(() => {
 
               <Rating name="read-only" value={5} readOnly />
             </div>
-            <div className="max-w-full flex flex-col my-5 space-y-3">
-              <button
-                onClick={handleAddItem}
-                className="flex items-center justify-center space-x-3 bg-black w-full md:w-3/4 mx-auto text-white py-3 rounded-full cursor-pointer"
-              >
-                <ShoppingCartOutlined />
-                <p>Thêm vào giỏ hàng</p>
-              </button>
-              <Button className="bg-[#E5E5E5] flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer">
-                <GiftOutlined />
-                <p>Tặng quà</p>
-              </Button>
-              <Button
-                onClick={addToFavoriteList}
-                className="bg-white flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer border"
-              >
-                <HeartFilled style={{ color: '#DC2626' }} />
-                <p>Yêu thích</p>
-              </Button>
-            </div>
+            {!isAdminPage && (
+              <div className="max-w-full flex flex-col my-5 space-y-3">
+                <button
+                  onClick={handleAddItem}
+                  className="flex items-center justify-center space-x-3 bg-black w-full md:w-3/4 mx-auto text-white py-3 rounded-full cursor-pointer"
+                >
+                  <ShoppingCartOutlined />
+                  <p>Thêm vào giỏ hàng</p>
+                </button>
+                <Button className="bg-[#E5E5E5] flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer">
+                  <GiftOutlined />
+                  <p>Tặng quà</p>
+                </Button>
+                <Button
+                  onClick={addToFavoriteList}
+                  className="bg-white flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer border"
+                >
+                  <HeartFilled style={{ color: "#DC2626" }} />
+                  <p>Yêu thích</p>
+                </Button>
+              </div>
+            )}
+
             <div className="my-3">
               <button
                 type="button"
@@ -213,13 +230,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Chi tiết sản phẩm</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[0] ? 'rotate-180' : ''
+                    expandedStates[0] ? "rotate-180" : ""
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[0] ? 'max-h-96' : 'max-h-0'
+                  expandedStates[0] ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <p className="my-3">Chất liệu: Gỗ</p>
@@ -236,13 +253,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Vận chuyển và chính sách đổi trả</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[1] ? 'rotate-180' : ''
+                    expandedStates[1] ? "rotate-180" : ""
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[1] ? 'max-h-96' : 'max-h-0'
+                  expandedStates[1] ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <p className="my-3">
@@ -263,13 +280,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Câu hỏi thường gặp</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[2] ? 'rotate-180' : ''
+                    expandedStates[2] ? "rotate-180" : ""
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[2] ? 'max-h-96' : 'max-h-0'
+                  expandedStates[2] ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <p className="my-3">
@@ -290,13 +307,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Gặp gỡ người bán</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[3] ? 'rotate-180' : ''
+                    expandedStates[3] ? "rotate-180" : ""
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[3] ? 'max-h-96' : 'max-h-0'
+                  expandedStates[3] ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <div className="my-3 flex items-start space-x-4">
@@ -310,7 +327,7 @@ const ProductDetail: FC = memo(() => {
                   <div>
                     <p className="text-base">{data?.sellerName}</p>
                     <p className="text-sm">
-                      Chủ sở hữu của{' '}
+                      Chủ sở hữu của{" "}
                       <a className="underline text-sm" href="#">
                         {data?.seller}
                       </a>
@@ -326,15 +343,17 @@ const ProductDetail: FC = memo(() => {
                 </div>
               </div>
             </div>
-            <div
-              onClick={() => setIsOpenedReportProduct(true)}
-              className="flex items-center text-sm underline space-x-1 cursor-pointer"
-            >
-              <div className="bg-red-200 p-1 rounded-full">
-                <BsExclamationCircle className="text-red-600" />
+            {!isAdminPage ? (
+              <div
+                onClick={() => setIsOpenedReportProduct(true)}
+                className="flex items-center text-sm underline space-x-1 cursor-pointer"
+              >
+                <div className="bg-red-200 p-1 rounded-full">
+                  <BsExclamationCircle className="text-red-600" />
+                </div>
+                <p>Báo cáo bài đăng</p>
               </div>
-              <p>Báo cáo bài đăng</p>
-            </div>
+            ) : <div className="flex justify-center"><FlowbiteBtn color="failure">Xóa sản phẩm</FlowbiteBtn></div>}
           </section>
         )}
 

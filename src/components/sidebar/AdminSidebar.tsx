@@ -20,49 +20,6 @@ const AdminSidebar: FC<SidebarProp> = memo(
   ({ isSidebarOpen, role, username }) => {
     const location = useLocation();
 
-    // const [newMessage, setNewMessage] = useState([]);
-
-    // const { data } = useQuery({
-    //   queryKey: ["check-new-messages"],
-    //   queryFn: async () => {
-    //     return await apiChat.checkNewMessage();
-    //   },
-    //   refetchOnWindowFocus: false,
-    // });
-
-    // useEffect(() => {
-    //   pusherClient.subscribe(username);
-
-    //   const handleMessage = (message) => {
-    //     const pathname = window.location.href;
-    //     const regexPath = new RegExp("message");
-    //     if (!regexPath.test(pathname)) {
-    //       let newValue = { chatroomId: message.room };
-    //       newMessage.forEach((element) => {
-    //         if (element.chatroomId === message.room) {
-    //           newValue = undefined;
-    //         }
-    //       });
-    //       if (newValue != undefined) setNewMessage([...newMessage, newValue]);
-    //     }
-    //   };
-
-    //   pusherClient.bind("incoming-message", handleMessage);
-
-    //   return () => {
-    //     pusherClient.unsubscribe(username);
-    //   };
-    // }, []);
-
-    // useEffect(() => {
-    //   const pathname = window.location.href;
-    //   const regexPath = new RegExp("message");
-    //   if (!regexPath.test(pathname) && data) {
-    //     const newArray = [...newMessage, ...data];
-    //     setNewMessage(newArray);
-    //   }
-    // }, [data]);
-
     const {newMessage, setNewMessage} = useNotifyMessage(username);
 
 
