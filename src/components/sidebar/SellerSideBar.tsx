@@ -5,13 +5,15 @@ import { BiMessageDots, BiBox } from "react-icons/bi";
 import { AiOutlineLineChart, AiOutlineGift } from "react-icons/ai";
 import { BsCart3 } from 'react-icons/bs';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
+import { useNotifyMessage } from '@hooks/useNotifyMessage';
 
 interface sideBarName {
   name: string;
 }
 
 const SellerSideBar: FC<sideBarName> = memo(({name}) => {
+  const [user] = useOutletContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -36,6 +38,8 @@ const SellerSideBar: FC<sideBarName> = memo(({name}) => {
       setIsDropdownOpen(false);
     }
   };
+
+  const {newMessage, setNewMessage} = useNotifyMessage(user.username);
 
   React.useEffect(() => {
     document.addEventListener('click', handleOutsideClick);
@@ -152,11 +156,14 @@ const SellerSideBar: FC<sideBarName> = memo(({name}) => {
             
             </li>
             <li>
-              <Link to="/seller/message">
+              <Link to="/seller/message" onClick={() => setNewMessage([])}>
                 <a href="#" className={`flex  items-center p-2 text-gray-500 rounded-lg  group ${name == "Message"? `bg-orange-500 text-white` : `hover:bg-orange-100 hover:text-gray-900`} group`}>
                   <BiMessageDots className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${name == "Message"? ` text-white` : `group-hover:text-gray-900 `} `} />
                   
                   <span className="flex-1 ms-3 whitespace-nowrap">Tin nhắn</span>
+                  {newMessage && newMessage.length > 0 && (
+                    <span className="ml-auto">{newMessage.length}</span>
+                  )}
                 </a>
               </Link>
                 
