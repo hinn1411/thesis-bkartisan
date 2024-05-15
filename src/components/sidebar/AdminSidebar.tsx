@@ -1,4 +1,4 @@
-import { memo, FC, useEffect, useState } from "react";
+import { memo, FC } from "react";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { BiMessageDots } from "react-icons/bi";
 import { AiOutlineLineChart } from "react-icons/ai";
@@ -7,11 +7,8 @@ import { HiUser } from "react-icons/hi2";
 import { BsCart3, BsClipboard2Check } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
 import { RiErrorWarningLine } from "react-icons/ri";
-
 import { urlMatch } from "../../utils/urlMatch";
-import { pusherClient } from "@utils/pusher";
-import { useQuery } from "@tanstack/react-query";
-import apiChat from "@apis/apiChat";
+import { useNotifyMessage } from "@hooks/useNotifyMessage";
 
 interface SidebarProp {
   isSidebarOpen: boolean;
@@ -23,48 +20,8 @@ const AdminSidebar: FC<SidebarProp> = memo(
   ({ isSidebarOpen, role, username }) => {
     const location = useLocation();
 
-    const [newMessage, setNewMessage] = useState([]);
+    const {newMessage, setNewMessage} = useNotifyMessage(username);
 
-    const { data } = useQuery({
-      queryKey: ["check-new-messages"],
-      queryFn: async () => {
-        return await apiChat.checkNewMessage();
-      },
-      refetchOnWindowFocus: false,
-    });
-
-    useEffect(() => {
-      pusherClient.subscribe(username);
-
-      const handleMessage = (message) => {
-        const pathname = window.location.href;
-        const regexPath = new RegExp("message");
-        if (!regexPath.test(pathname)) {
-          let newValue = { chatroomId: message.room };
-          newMessage.forEach((element) => {
-            if (element.chatroomId === message.room) {
-              newValue = undefined;
-            }
-          });
-          if (newValue != undefined) setNewMessage([...newMessage, newValue]);
-        }
-      };
-
-      pusherClient.bind("incoming-message", handleMessage);
-
-      return () => {
-        pusherClient.unsubscribe(username);
-      };
-    }, []);
-
-    useEffect(() => {
-      const pathname = window.location.href;
-      const regexPath = new RegExp("message");
-      if (!regexPath.test(pathname) && data) {
-        const newArray = [...newMessage, ...data];
-        setNewMessage(newArray);
-      }
-    }, [data]);
 
     return (
       <div>

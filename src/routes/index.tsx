@@ -123,7 +123,7 @@ const router = createBrowserRouter([
       { path: 'reports', element: <ReportManagement /> },
       { path: 'reports/:id', element: <ReportDetail /> },
       { path: 'products', element: <ProductManagement /> },
-      { path: 'products/:id', element: <ProductDetailPage /> },
+      { path: 'products/:productId', element: <ProductDetailPage /> },
       { path: 'reviewproducts', element: <ReviewProduct /> },
       { path: 'orders', element: <OrderManagement /> },
       { path: 'orders/:id', element: <OrderDetail /> },

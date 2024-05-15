@@ -13,6 +13,8 @@ const ViewMessage: FC = memo(() => {
   const state = useLocation().state;
   const [user] = useOutletContext();
 
+  //còn đã set up receiver chưa có phòng chat nhưng nó gửi tn tới mình trc khi mình gửi
+
   /**
    * receiver:
    * {

@@ -8,6 +8,7 @@ const apiReports = {
         byStatus: filterOpts.byStatus,
         byType: filterOpts.byType,
         searchTerm: filterOpts.searchTerm,
+        mode: filterOpts.mode,
         page: page,
         offset: offset,
       },
