@@ -19,7 +19,20 @@ const apiReports = {
 
   getReportDetails: async (id: string) => {
     const { data } = await axiosClient.get(`/reports/${id}`);
-    console.log(data);
+    return data;
+  },
+
+  createReport: async (report: {
+    reporter: string;
+    reporterName: string;
+    reportedUser: string;
+    reportedUserName: string;
+    reason: string;
+    additionalInfo: string;
+    type: "Sản phẩm" | "Bình luận" | "Mua bán";
+    refId: number;
+  }) => {
+    const { data } = await axiosClient.post(`/reports`, report);
     return data;
   },
 };
