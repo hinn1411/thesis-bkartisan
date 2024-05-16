@@ -7,17 +7,24 @@ export type TextInputProps = {
   errors?: any;
   type: string;
   placeholder: string;
+  className?: string;
+  labelStyle?: string;
 };
 
 const TextInput: FC<TextInputProps> = memo(
   /*
     use className if you want to overwrite styling of this component
   */
-  ({ type, label, register, validatedObject, errors, ...props }) => {
+  ({ type, label, register, validatedObject, errors, className, ...props }) => {
+    let style =
+      'w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light placeholder:text-sm hover:outline hover:outline-black hover:outline-1';
+    if (className) {
+      style = className;
+    }
     return (
       <div>
         <input
-          className="w-full py-4 px-6 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light placeholder:text-sm hover:outline hover:outline-black hover:outline-1"
+          className={style}
           {...props}
           {...register(label, { ...validatedObject })}
           type={type}
