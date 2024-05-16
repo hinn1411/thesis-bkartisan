@@ -20,7 +20,10 @@ import SearchPage from '../pages/Buyer/search/Search';
 import ProductDetailPage from '../pages/Buyer/products/ProductDetail';
 import FavouriteProductPage from '../pages/Buyer/favourite/FavouriteProduct';
 import CartPage from '../pages/Buyer/cart/Cart';
+// Payments
 import CheckoutPage from 'src/pages/Buyer/checkout/Checkout';
+import CheckoutFailPage from 'src/pages/Buyer/checkout/CheckoutFail';
+import CheckoutSuccessPage from 'src/pages/Buyer/checkout/CheckoutSuccess';
 import CategoryPage from '../pages/Buyer/Category/Category';
 // -- Gifts
 import ChooseBoxPage from '../pages/Buyer/gift/Gift';
@@ -62,6 +65,7 @@ import ChangeInfo from '../pages/Admin/Collab/ChangeInfo';
 
 // Trang tin nhắn
 import ViewMessage from 'src/pages/Message/ViewMessage';
+import PaymentLayout from 'src/layouts/PaymentLayout';
 
 const router = createBrowserRouter([
   {
@@ -72,11 +76,23 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'search', element: <SearchPage /> },
       { path: 'cart', element: <CartPage /> },
-      { path: 'checkout', element: <CheckoutPage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
       { path: 'favorite', element: <FavouriteProductPage /> },
       { path: 'seller_registration', element: <SellerRegistrationPage /> },
       { path: 'category', element: <CategoryPage /> },
+    ],
+  },
+  {
+    path: '/checkout',
+    element: <PaymentLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <CheckoutPage />,
+      },
+      { path: 'success', element: <CheckoutSuccessPage /> },
+      { path: 'fail', element: <CheckoutFailPage /> },
     ],
   },
   {

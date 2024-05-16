@@ -27,6 +27,12 @@ const apiOrders = {
         finalPrice: floor(item.price * (1 - item.discount / 100)),
         quantity: item.quantity,
       }));
+      data.discountInfo = {
+        totalDiscount: data.discounts.reduce(
+          (acc, cur) => acc + cur.discountPrice,
+          0
+        ),
+      };
       console.log(data);
       return data;
     } catch (err) {
