@@ -46,7 +46,8 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
   const onPress = () => {
     if (type === "handled-product" || type === "handled-report") {
       navigate(`/admin/products/${values[values.length - 1]}`);
-    } else {
+    }
+    else {
       navigate(`${values[values.length - 1]}`);
     }
   };

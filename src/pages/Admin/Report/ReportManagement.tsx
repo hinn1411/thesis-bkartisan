@@ -1,4 +1,4 @@
-import { FC, Fragment, memo, useState } from "react";
+import { FC, Fragment, memo, useRef, useState } from "react";
 import { Grid } from "@mui/material";
 import ListItem from "../../../components/admin/ListItem";
 import apiReports from "../../../apis/apiReports";
@@ -31,7 +31,7 @@ const ReportManagement: FC = memo(() => {
   };
   const queryKey = ["reports", page];
 
-  const { register, data, isPending, onSubmit, error } =
+  const { register, data, isPending, onSubmit, error, getValues } =
     useFilterFetch<FormData>(
       filterName,
       defaultFieldValues,
@@ -88,7 +88,7 @@ const ReportManagement: FC = memo(() => {
         </Grid>
 
         <Grid item xs={2}>
-          <Select id="byStatus" {...register("byType")}>
+          <Select id="byType" {...register("byType")}>
             <option value={"Toàn bộ"}>Toàn bộ</option>
             <option value={"Bình luận"}>Bình luận</option>
             <option value={"Sản phẩm"}>Sản phẩm</option>
@@ -103,12 +103,13 @@ const ReportManagement: FC = memo(() => {
         </Grid>
 
         <Grid item xs={2}>
-          <Select id="byStatus" {...register("mode")}>
+          <Select id="mode" {...register("mode")} defaultValue={"Của bản thân"}>
             <option value={"Của bản thân"}>Của bản thân</option>
-            <option value={"Của các cộng tác viên khác"}>Của các cộng tác viên khác</option>
+            <option value={"Của các cộng tác viên khác"}>
+              Của các cộng tác viên khác
+            </option>
           </Select>
         </Grid>
-
       </Grid>
       <hr style={{ borderWidth: "0.01rem" }} />
 
@@ -141,7 +142,30 @@ const ReportManagement: FC = memo(() => {
         <ErrorMessage msg={"Không tìm thấy kết quả trùng khớp"} />
       ) : (
         data.map((element: any, index: number) => {
-          if (element.status === "done") {
+          if (
+            user.role === "collab" ||
+            (user.role === "admin" &&
+            getValues("mode") === "Của bản thân")
+          ) {
+            if (element[3] === "Chưa xem") {
+              return (
+                <ListItem
+                  key={index}
+                  type="report"
+                  values={element}
+                  className="font-bold"
+                />
+              );
+            }
+            else if (element[3] === "Chưa xử lý") {
+              return (
+                <ListItem
+                  key={index}
+                  type="report"
+                  values={element}
+                />
+              );
+            } else {
             return (
               <ListItem
                 key={index}
@@ -149,16 +173,28 @@ const ReportManagement: FC = memo(() => {
                 values={element}
                 className="bg-[#F2F6FC] hover:bg-[#F2F6FC]"
               />
-            );
+            );}
+          } else {
+            if (element[3] === "Chưa xem" || element[3] === "Chưa xử lý") {
+              return (
+                <ListItem
+                  key={index}
+                  type="report"
+                  values={element}
+                />
+              );
+            }
+            else {
+              return (
+                <ListItem
+                  key={index}
+                  type="report"
+                  values={element}
+                  className="bg-[#F2F6FC] hover:bg-[#F2F6FC]"
+                />
+              );
+            }
           }
-          return (
-            <ListItem
-              key={index}
-              type="report"
-              values={element}
-              className="bg-[#F2F6FC] hover:bg-[#F2F6FC]"
-            />
-          );
         })
       )}
     </Fragment>

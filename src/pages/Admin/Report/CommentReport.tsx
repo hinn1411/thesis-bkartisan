@@ -1,14 +1,12 @@
-import { FC, Fragment, memo } from "react";
+import { FC, memo } from "react";
 import { Box, Grid } from "@mui/material";
 import ReturnIcon from "../../../components/admin/ReturnIcon";
-import { TextInput, Button, Select, Rating } from "flowbite-react";
+import { Button } from "flowbite-react";
 import TextField from "../../../components/admin/TextField";
 import { Avatar } from "@mui/material";
 import ReportFeedback from "./ReportFeedback";
 import { formatDate } from "../../../utils/formatDate";
-
-const img_example =
-  "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg";
+import { Rating } from '@mui/material';
 
 interface CommentReportProps {
   report: any;
@@ -24,11 +22,11 @@ const CommentReport: FC<CommentReportProps> = memo(({ report }) => {
       <Grid container p={1} columnGap={9} rowGap={2} paddingBottom={2}>
         <Grid item xs={3.5}>
           <Box className="font-medium pb-2">Người bị report</Box>
-          <TextField value={report.reportedUser} />
+          <TextField value={report.reportedUserName} />
         </Grid>
         <Grid item xs={3.5}>
           <Box className="font-medium pb-2">Người gửi</Box>
-          <TextField value={report.reporter} />
+          <TextField value={report.reporterName} />
         </Grid>
         <Grid item xs={3.5}>
           <Box className="font-medium pb-2">Thời gian gửi</Box>
@@ -54,37 +52,20 @@ const CommentReport: FC<CommentReportProps> = memo(({ report }) => {
           </Box>
           <TextField value={report.handler} />
         </Grid>
-        <Grid item xs={2.5} paddingTop={4}>
-          <Button fullSized className="h-9">
-            Xem chi tiết sản phẩm
-          </Button>
-        </Grid>
       </Grid>
 
       <hr style={{ borderWidth: "0.01rem" }} />
       <Box className="flex flex-col space-y-4" paddingBottom={3}>
         <h1 className="text-3xl font-bold py-3">Thông tin bình luận</h1>
 
-        <Rating>
-          <Rating.Star />
-          <Rating.Star />
-          <Rating.Star />
-          <Rating.Star />
-          <Rating.Star />
-        </Rating>
+        <Rating name="read-only" value={report.numberOfStars} readOnly />
         <p>
-          Lorem ipsum dolor sit amet consectetur. Odio integer pellentesque
-          justo eget volutpat nisl cursus quis pretium.Lorem ipsum dolor sit
-          amet consectetur. Odio integer pellentesque justo eget volutpat nisl
-          cursus quis pretium.Lorem ipsum dolor sit amet consectetur. Odio
-          integer pellentesque justo eget volutpat nisl cursus quis
-          pretium.Lorem ipsum dolor sit amet consectetur. Odio integer
-          pellentesque justo eget volutpat nisl cursus quis pretium.
+          {report.content}
         </p>
         <Box className="flex items-center space-x-2.5">
-          <Avatar src={img_example} sx={{ width: "3rem", height: "3rem" }} />
-          <Box className="font-bold">Lầu Hội</Box>
-          <Box className="font-thin">25 Tháng 10, 2023</Box>
+          <Avatar src={report.writerAvatar} sx={{ width: "3rem", height: "3rem" }} />
+          <Box className="font-bold">{report.reportedUserName}</Box>
+          <Box className="font-thin">{formatDate("hh:MM dd/mm/yyyy", new Date(report.commentCreatedAt))}</Box>
         </Box>
       </Box>
       {report.status == "Đã xử lý" ? (
