@@ -35,7 +35,6 @@ const apiUsers = {
         offset: offset,
       },
     });
-
     return data;
   },
   createCollab: async (collab: any) => {
