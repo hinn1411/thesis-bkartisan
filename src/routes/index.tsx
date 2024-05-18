@@ -17,8 +17,11 @@ import SendPasswordPage from '../pages/Buyer/send-password/SendPassword';
 // Buyer pages
 import HomePage from '../pages/Buyer/home/Home';
 import SearchPage from '../pages/Buyer/search/Search';
+// - Product pages
 import ProductDetailPage from '../pages/Buyer/products/ProductDetail';
+// - Favorite pages
 import FavouriteProductPage from '../pages/Buyer/favourite/FavouriteProduct';
+// - Cart pages
 import CartPage from '../pages/Buyer/cart/Cart';
 // Payments
 import CheckoutPage from 'src/pages/Buyer/checkout/Checkout';
@@ -27,6 +30,8 @@ import CheckoutSuccessPage from 'src/pages/Buyer/checkout/CheckoutSuccess';
 import CategoryPage from '../pages/Buyer/Category/Category';
 // -- Gifts
 import ChooseBoxPage from '../pages/Buyer/gift/Gift';
+// Order pages
+import OrderPage from 'src/pages/Buyer/order/Order';
 
 // Seller pages
 import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
@@ -76,6 +81,7 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'search', element: <SearchPage /> },
       { path: 'cart', element: <CartPage /> },
+      { path: 'order', element: <OrderPage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
       { path: 'favorite', element: <FavouriteProductPage /> },
       { path: 'seller_registration', element: <SellerRegistrationPage /> },
