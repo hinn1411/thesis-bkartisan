@@ -49,7 +49,7 @@ import CreateGift from '../pages/Seller/ManageGift/CreateGift';
 import SellerMessagePage from 'src/pages/Seller/Message/SellerMessagePage';
 import ViewReport from '../pages/Seller/Report/ViewReport';
 import ViewTransport from '../pages/Seller/ManageTransport/ViewTransport';
-import SellerRegistrationPage from '../pages/Seller/Registration/SellerRegistration';
+import SellerRegistrationPage from '../pages/Seller/registration/SellerRegistration';
 
 // Admin pages
 import DashboardAdmin from '../pages/Admin/Dashboard/DashboardAdmin';
