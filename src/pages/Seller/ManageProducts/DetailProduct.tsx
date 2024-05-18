@@ -20,7 +20,7 @@ interface YourComponentProps {
 }
 
 
-const DetailProduct: FC<YourComponentProps> = memo(() => {
+const DetailProduct: FC = memo(() => {
   const [images, setImages] = useState<string[]>([]);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
