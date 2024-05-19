@@ -3,7 +3,13 @@ import { useState } from "react";
 import { HiCheck } from "react-icons/hi";
 import { Link } from 'react-router-dom';
 
-export function SuccessAdd({ onDismiss }: { onDismiss: () => void }) {
+interface SuccessAddProps {
+  onDismiss: () => void;
+  url: string;
+  message: string;
+}
+
+export function SuccessAdd({ onDismiss, url, message }: SuccessAddProps) {
     const [openModal, setOpenModal] = useState(true);
 
     const handleDismiss = () => {
@@ -20,10 +26,10 @@ export function SuccessAdd({ onDismiss }: { onDismiss: () => void }) {
                     <HiCheck className="mx-auto mb-4 h-14 w-14 bg-green text-gray-400 dark:text-gray-200" />
                 </div>
                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Thêm sản phẩm thành công!
+                  {message}
                 </h3>
                 <div className="flex justify-center gap-4">
-                  <Link to="/seller/manage_products">
+                  <Link to={url}>
                   <Button color="success" >
                     {"OK"}
                   </Button>
