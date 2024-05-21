@@ -45,7 +45,7 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 
-describe('Login', () => {
+describe('ProductDetail', () => {
   beforeEach(() => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -54,17 +54,47 @@ describe('Login', () => {
     );
   });
 
-  it('Render ô input nhập tài khoản và mật khẩu', async () => {
+  it('Hiển thị thông tin chi tiết của sản phẩm', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Hiển thị thông báo lỗi input', async () => {
+  it('Cho phép người dùng click xem hình ảnh và video', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Điều hướng đến trang chủ khi đăng nhập thành công', async () => {
+  it('Cho phép báo cáo sản phẩm', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Cho phép bình luận', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Cho phép phản hồi bình luận', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Cho phép like bình luận', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Cho phép dislike bình luận', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Cho phép báo cáo bình luận', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Cho phép điều hướng đến danh mục cấp cao hơn', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });

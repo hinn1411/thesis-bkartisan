@@ -93,7 +93,11 @@ const Cart: FC = memo(() => {
                 htmlFor="default-radio-2"
                 className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
-                <img src={momoImage} alt="Momo icon" />
+                <img
+                  src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png"
+                  alt="Momo icon"
+                  className='object-cover w-16 p-1 rounded-[7.5px]'
+                />
               </label>
             </div>
             {/* <div className="flex items-center mb-4">
@@ -163,7 +167,7 @@ const Cart: FC = memo(() => {
             </div>
             {/* Button container */}
             <div className="flex flex-col space-y-3 my-4">
-              <Link to='/checkout'>
+              <Link to="/checkout">
                 <button className="text-base text-center bg-black rounded-full text-white w-full py-2">
                   Thanh toán
                 </button>

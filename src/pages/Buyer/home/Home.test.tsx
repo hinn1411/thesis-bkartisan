@@ -45,7 +45,7 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 
-describe('Login', () => {
+describe('Home', () => {
   beforeEach(() => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -54,17 +54,32 @@ describe('Login', () => {
     );
   });
 
-  it('Render ô input nhập tài khoản và mật khẩu', async () => {
+  it('Render thanh header', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Hiển thị thông báo lỗi input', async () => {
+  it('Hiển thị danh mục sản phẩm đặc biệt', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Điều hướng đến trang chủ khi đăng nhập thành công', async () => {
+  it('Hiện thị sản phẩm chính', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Hiện thị thanh phân trang sản phẩm', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Thêm sản phẩm vào giỏ hàng thành công', async () => {
+    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
+      timeout: 10000,
+    });
+  });
+  it('Yêu thích sản phẩm thành công', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });

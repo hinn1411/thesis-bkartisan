@@ -1,17 +1,20 @@
 import Button from '@components/common/button/Button';
 import { FC, memo, useState } from 'react';
+import OrderDetailsModal from './components/OrderDetailsModal';
 
 const Order: FC = memo(() => {
   const [currentTab, setCurrentTab] = useState(0);
   const tabTitles = [
     'Tất cả',
     'Đang xử lý',
+    'Đang giao hàng',
     'Hoàn thành',
     'Đổi trả',
     'Đơn hủy',
   ];
   return (
     <div className=" min-h-screen mx-4 md:mx-20 space-y-6 my-6">
+      {/* <OrderDetailsModal isOpen={true} /> */}
       <h1 className="text-2xl font-semibold font-sans text-center mt-4">
         Quản lý đơn hàng
       </h1>
@@ -45,20 +48,20 @@ const Order: FC = memo(() => {
         {/* Order information */}
         <span className="flex flex-col md:flex-row justify-between border-b-2 border-b-gray-300 pb-4">
           <span className="text-[14px]">
-            Đơn hàng <span className="font-semibold">#365878090</span> -{' '}
-            <span className="text-[#258635]">Đã nhận hàng</span>
+            Đơn hàng <span className="font-semibold">#365878092</span> -{' '}
+            <span className="text-orange-600">Đang xử lý</span>
           </span>
-          <span className="text-[13px]">
+          {/* <span className="text-[13px]">
             Hỗ trợ trả hàng đến{' '}
             <span className="font-sans font-bold">23/4/2024</span>
-          </span>
+          </span> */}
         </span>
         {/* Item container */}
         <ul className="space-y-4 pb-6 border-b-2 border-b-gray-300">
           <li className="flex space-x-4">
             <div>
               <img
-                className="object-fit h-[65px] rounded-[7.5px]"
+                className="object-fit h-[65px] w-[65px] rounded-[7.5px]"
                 src="https://i.etsystatic.com/41110180/c/1428/1135/250/409/il/dda275/5202883218/il_340x270.5202883218_b9y8.jpg"
               />
             </div>
@@ -75,10 +78,10 @@ const Order: FC = memo(() => {
               <p className="text-[13px] font-medium">x1</p>
             </div>
           </li>
-          <li className="flex space-x-4">
+          {/* <li className="flex space-x-4">
             <div>
               <img
-                className="object-fit h-[65px] rounded-[7.5px]"
+                className="object-fit h-[65px] w-[65px] rounded-[7.5px]"
                 src="https://i.etsystatic.com/41110180/c/1428/1135/250/409/il/dda275/5202883218/il_340x270.5202883218_b9y8.jpg"
               />
             </div>
@@ -94,7 +97,7 @@ const Order: FC = memo(() => {
               </p>
               <p className="text-[13px] font-medium">x1</p>
             </div>
-          </li>
+          </li> */}
         </ul>
         {/* Bill container */}
         <div className="space-y-4">
@@ -104,9 +107,9 @@ const Order: FC = memo(() => {
           {/* Button container */}
           <div className="flex flex-col md:flex-row justify-end space-x-0 md:space-x-4 space-y-2 md:space-y-0">
             <Button className="text-[13px] font-sans text-center border-2 border-[#DC2626]  py-[10px] px-[45px] rounded-[6px]">
-              Trả hàng
+              Hủy đơn
             </Button>
-            <Button className="text-[13px] font-sans text-center border-2 border-orange-600 py-[10px] px-[27px] rounded-[6px]">
+            <Button className="text-[13px] font-sans text-center border-2 border-orange-600 bg-orange-600 text-white  py-[10px] px-[27px] rounded-[6px]">
               Xem đơn hàng
             </Button>
             <Button className="text-[13px] font-sans text-center border-2 border-[#D1D5DB] py-[10px] px-[15px] rounded-[6px]">
@@ -115,6 +118,7 @@ const Order: FC = memo(() => {
           </div>
         </div>
       </div>
+    
     </div>
   );
 });

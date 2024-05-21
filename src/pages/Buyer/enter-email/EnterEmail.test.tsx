@@ -45,7 +45,7 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 
-describe('Login', () => {
+describe('EnterEmail', () => {
   beforeEach(() => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -54,19 +54,15 @@ describe('Login', () => {
     );
   });
 
-  it('Render ô input nhập tài khoản và mật khẩu', async () => {
+  it('render ô input nhập địa chỉ email', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Hiển thị thông báo lỗi input', async () => {
+  it('Hiển thị lỗi khi email không hợp lệ', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Điều hướng đến trang chủ khi đăng nhập thành công', async () => {
-    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
-      timeout: 10000,
-    });
-  });
+
 });

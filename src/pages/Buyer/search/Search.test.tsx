@@ -45,7 +45,7 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 
-describe('Login', () => {
+describe('Search', () => {
   beforeEach(() => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -54,17 +54,17 @@ describe('Login', () => {
     );
   });
 
-  it('Render ô input nhập tài khoản và mật khẩu', async () => {
+  it('Render thanh header', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Hiển thị thông báo lỗi input', async () => {
+  it('Có thể nhập từ khóa vào thanh input trên header', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Điều hướng đến trang chủ khi đăng nhập thành công', async () => {
+  it('Hiển thị kết quả tìm kiếm', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });

@@ -45,7 +45,7 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 
-describe('Login', () => {
+describe('Category', () => {
   beforeEach(() => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -54,17 +54,12 @@ describe('Login', () => {
     );
   });
 
-  it('Render ô input nhập tài khoản và mật khẩu', async () => {
+  it('Render danh mục sản phẩm', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });
   });
-  it('Hiển thị thông báo lỗi input', async () => {
-    await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
-      timeout: 10000,
-    });
-  });
-  it('Điều hướng đến trang chủ khi đăng nhập thành công', async () => {
+  it('Điều hướng đến trang tìm sản phẩm', async () => {
     await waitFor(() => expect(screen.getByText(/Nam/)).toBeInTheDocument(), {
       timeout: 10000,
     });

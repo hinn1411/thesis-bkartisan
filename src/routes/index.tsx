@@ -4,6 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import UserLayout from '../layouts/UserLayout';
 import AdminLayout from '../layouts/AdminLayout';
 import SellerLayout from '../layouts/SellerLayout';
+import PaymentLayout from 'src/layouts/PaymentLayout';
 
 // Common pages
 import ErrorPage from '../components/common/errors/Error';
@@ -50,6 +51,7 @@ import SellerMessagePage from 'src/pages/Seller/Message/SellerMessagePage';
 import ViewReport from '../pages/Seller/Report/ViewReport';
 import ViewTransport from '../pages/Seller/ManageTransport/ViewTransport';
 import SellerRegistrationPage from '../pages/Seller/registration/SellerRegistration';
+import ShopPage from '../pages/Seller/Shop/Shop';
 
 // Admin pages
 import DashboardAdmin from '../pages/Admin/Dashboard/DashboardAdmin';
@@ -70,7 +72,6 @@ import ChangeInfo from '../pages/Admin/Collab/ChangeInfo';
 
 // Trang tin nhắn
 import ViewMessage from 'src/pages/Message/ViewMessage';
-import PaymentLayout from 'src/layouts/PaymentLayout';
 
 const router = createBrowserRouter([
   {
@@ -86,6 +87,7 @@ const router = createBrowserRouter([
       { path: 'favorite', element: <FavouriteProductPage /> },
       { path: 'seller_registration', element: <SellerRegistrationPage /> },
       { path: 'category', element: <CategoryPage /> },
+      { path: 'shop', element: <ShopPage /> },
     ],
   },
   {

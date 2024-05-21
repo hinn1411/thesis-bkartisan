@@ -70,7 +70,7 @@ const Checkout: FC<CheckoutProps> = memo(() => {
               <TextInput
                 label="Nhập tên người nhận"
                 type="text"
-                placeholder="Nhập tỉnh/thành phố"
+                placeholder="Nhập tên người nhận hàng"
                 register={register}
                 errors={errors}
                 validatedObject={{}}
@@ -148,7 +148,7 @@ const Checkout: FC<CheckoutProps> = memo(() => {
             </Table.Row>
           </Table.Body>
         </Table>
-        <div className="flex flex-col md:flex-row justify-center space-x-0 md:space-x-4 space-y-4 md:space-y-0">
+        <div className="flex flex-col md:flex-row justify-end space-x-0 md:space-x-4 space-y-4 md:space-y-0">
           <Button className="flex justify-center items-center py-3 space-x-2 font-sans font-bold text-orange-600 rounded-md px-6 bg-white shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border border-orange-600">
             Mua sau
           </Button>
