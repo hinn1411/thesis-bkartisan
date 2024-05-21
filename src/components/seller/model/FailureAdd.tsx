@@ -19,7 +19,7 @@ export function FailureAdd() {
                 </h3>
                 <div className="flex justify-center gap-4">
 
-                  <Button color="failure" >
+                  <Button color="failure" onClick={() => setOpenModal(false)}>
                     {"OK"}
                   </Button>
                 </div>
