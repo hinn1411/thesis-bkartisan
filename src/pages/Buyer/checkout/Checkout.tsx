@@ -1,8 +1,7 @@
-import { Checkbox, Label, Table } from 'flowbite-react';
+import { Checkbox, Label } from 'flowbite-react';
 import { FC, memo } from 'react';
 import { useFetchOrder } from './hooks/useFetchOrder';
 import Spinner from '@components/common/ui/Spinner';
-import ItemRow from './components/ItemRow';
 import Button from '@components/common/button/Button';
 import { formatCurrency } from '@utils/formatCurrency';
 import { CURRENCIES } from '@contants/currencies';
@@ -12,15 +11,16 @@ import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { shippingAddressSchema } from './shippingAddressSchema';
+import OrderTable from './components/OrderTable';
 
 export interface CheckoutProps {}
 type ShippingAddress = z.infer<typeof shippingAddressSchema>;
 const Checkout: FC<CheckoutProps> = memo(() => {
-  const { order, isFetching } = useFetchOrder();
+  const { data, isFetching } = useFetchOrder();
   const { goToPaymentGateway } = usePayment();
   const {
     register,
-    handleSubmit,
+    // handleSubmit,
     formState: { errors },
   } = useForm<ShippingAddress>({
     resolver: zodResolver(shippingAddressSchema),
@@ -32,16 +32,8 @@ const Checkout: FC<CheckoutProps> = memo(() => {
       </div>
     );
   }
-  const orderPrice = order.orderInfo.totalPrice;
-  const discountPrice = order.discountInfo.totalDiscount;
-  const formattedDiscount = formatCurrency(
-    discountPrice,
-    CURRENCIES.VIETNAMDONG
-  );
-  const finalPrice = formatCurrency(
-    orderPrice - discountPrice,
-    CURRENCIES.VIETNAMDONG
-  );
+  const { orderPrice, discountPrice } = data.orderInfo;
+
   const handleCheckout = () => {
     goToPaymentGateway();
   };
@@ -96,11 +88,11 @@ const Checkout: FC<CheckoutProps> = memo(() => {
             </div>
           </div>
 
-          <div className='flex space-x-3 items-center'>
+          <div className="flex space-x-3 items-center">
             <p className="block text-sm font-medium text-gray-900 ">
               Địa chỉ: 268 Lý Thường Kiệt, Q.10, TP.HCM
             </p>
-            <p className='underline cursor-pointer'>Thay đổi</p>
+            <p className="underline cursor-pointer">Thay đổi</p>
           </div>
         </form>
       </section>
@@ -108,15 +100,18 @@ const Checkout: FC<CheckoutProps> = memo(() => {
       <section className="space-y-4">
         <h2 className="text-xl font-medium">Thông tin đơn hàng</h2>
 
-        <Table>
+        {data.orders.map((order, index: number) => (
+          <OrderTable key={index} {...order} />
+        ))}
+        {/* <Table>
           <Table.Head className="text-md normal-case text-black">
             <Table.HeadCell>Tên sản phẩm</Table.HeadCell>
             <Table.HeadCell>Đơn giá</Table.HeadCell>
             <Table.HeadCell>Số lượng</Table.HeadCell>
             <Table.HeadCell>Thành tiền</Table.HeadCell>
-            {/* <Table.HeadCell>
+            <Table.HeadCell>
               <span className="sr-only">Edit</span>
-            </Table.HeadCell> */}
+            </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {order.orderItems.map((item: any, index: number) => (
@@ -147,7 +142,7 @@ const Checkout: FC<CheckoutProps> = memo(() => {
               <Table.Cell>{finalPrice}</Table.Cell>
             </Table.Row>
           </Table.Body>
-        </Table>
+        </Table> */}
         <div className="flex flex-col md:flex-row justify-end space-x-0 md:space-x-4 space-y-4 md:space-y-0">
           <Button className="flex justify-center items-center py-3 space-x-2 font-sans font-bold text-orange-600 rounded-md px-6 bg-white shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border border-orange-600">
             Mua sau
