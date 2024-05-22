@@ -16,12 +16,12 @@ const ItemRow: FC<ItemRowProps> = memo(
       finalPrice * quantity,
       CURRENCIES.VIETNAMDONG
     );
-    const formattedName = productName.slice(0, 50) + '...';
+    const formattedName = productName.slice(0, 20) + '...' ;
     return (
       <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 flex items-center space-x-1">
+        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 flex items-center space-x-2">
           <img className="object-cover w-6 h-6" src={productImage} />
-          <p className="line-clamp-1">{formattedName}</p>
+          <p className="">{formattedName}</p>
         </Table.Cell>
         <Table.Cell>{pricePerItem}</Table.Cell>
         <Table.Cell>{quantity}</Table.Cell>

@@ -1,12 +1,14 @@
-import { memo, FC, useState } from 'react';
+import { memo, FC, useState, Fragment } from 'react';
 import Stepper from './components/Stepper';
 import { GiftOutlined } from '@ant-design/icons';
 import { boxData, giftData, envelopeData } from './data.js';
 
-
 import ProductCard from '../../../components/common/product/ProductCard.js';
 import GiftDetailModal from './components/GiftDetailModal.js';
 import SuccessfulModal from './components/SuccessfulModal.js';
+import { useProductPagination } from '../home/hooks/useProductPagination.js';
+import ProductList from '@components/common/product/ProductList.js';
+import Pagination from '@components/common/pagination/Pagination.js';
 /* 
   Remember adding loading indicator for item list
 */
@@ -19,6 +21,7 @@ const Gift: FC = memo(() => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [isOpenedGiftDetailModal, setIsOpenedGiftDetailModal] = useState(false);
   const [isDone, setIsDone] = useState(false);
+  const { data: products, page, setPage, isFetching } = useProductPagination();
   return (
     <div className="min-h-screen px-20 my-5 space-y-5">
       <GiftDetailModal
@@ -36,7 +39,11 @@ const Gift: FC = memo(() => {
           >
             Xem trước quà tặng
           </div>
-          <GiftOutlined size={16} />
+          <GiftOutlined
+            size={16}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
+          />
         </div>
       </div>
 
@@ -48,16 +55,21 @@ const Gift: FC = memo(() => {
       />
       {/* Choose gift box */}
       {current == 1 && (
-        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {boxData.map((box, idx) => (
-            <ProductCard
-              key={idx}
-              {...box}
-              isBuyingGiftProcess={true}
-              productType="hộp quà"
-            />
-          ))}
-        </div>
+        <Fragment>
+          <ProductList isLoading={isFetching} data={products} />
+          <Pagination currentPage={page} goToPage={setPage} />
+        </Fragment>
+
+        // <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        //   {boxData.map((box, idx) => (
+        //     <ProductCard
+        //       key={idx}
+        //       {...box}
+        //       isBuyingGiftProcess={true}
+        //       productType="hộp quà"
+        //     />
+        //   ))}
+        // </div>
       )}
       {/* Choose gift */}
       {current == 2 && (

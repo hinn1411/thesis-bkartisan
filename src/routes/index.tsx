@@ -4,6 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import UserLayout from '../layouts/UserLayout';
 import AdminLayout from '../layouts/AdminLayout';
 import SellerLayout from '../layouts/SellerLayout';
+import PaymentLayout from 'src/layouts/PaymentLayout';
 
 // Common pages
 import ErrorPage from '../components/common/errors/Error';
@@ -17,8 +18,11 @@ import SendPasswordPage from '../pages/Buyer/send-password/SendPassword';
 // Buyer pages
 import HomePage from '../pages/Buyer/home/Home';
 import SearchPage from '../pages/Buyer/search/Search';
+// - Product pages
 import ProductDetailPage from '../pages/Buyer/products/ProductDetail';
+// - Favorite pages
 import FavouriteProductPage from '../pages/Buyer/favourite/FavouriteProduct';
+// - Cart pages
 import CartPage from '../pages/Buyer/cart/Cart';
 // Payments
 import CheckoutPage from 'src/pages/Buyer/checkout/Checkout';
@@ -27,6 +31,8 @@ import CheckoutSuccessPage from 'src/pages/Buyer/checkout/CheckoutSuccess';
 import CategoryPage from '../pages/Buyer/Category/Category';
 // -- Gifts
 import ChooseBoxPage from '../pages/Buyer/gift/Gift';
+// Order pages
+import OrderPage from 'src/pages/Buyer/order/Order';
 
 // Seller pages
 import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
@@ -45,6 +51,7 @@ import SellerMessagePage from 'src/pages/Seller/Message/SellerMessagePage';
 import ViewReport from '../pages/Seller/Report/ViewReport';
 import ViewTransport from '../pages/Seller/ManageTransport/ViewTransport';
 import SellerRegistrationPage from '../pages/Seller/registration/SellerRegistration';
+import ShopPage from '../pages/Seller/Shop/Shop';
 
 // Admin pages
 import DashboardAdmin from '../pages/Admin/Dashboard/DashboardAdmin';
@@ -65,7 +72,6 @@ import ChangeInfo from '../pages/Admin/Collab/ChangeInfo';
 
 // Trang tin nhắn
 import ViewMessage from 'src/pages/Message/ViewMessage';
-import PaymentLayout from 'src/layouts/PaymentLayout';
 
 const router = createBrowserRouter([
   {
@@ -76,10 +82,12 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'search', element: <SearchPage /> },
       { path: 'cart', element: <CartPage /> },
+      { path: 'order', element: <OrderPage /> },
       { path: 'products/:productId', element: <ProductDetailPage /> },
       { path: 'favorite', element: <FavouriteProductPage /> },
       { path: 'seller_registration', element: <SellerRegistrationPage /> },
       { path: 'category', element: <CategoryPage /> },
+      { path: 'shop', element: <ShopPage /> },
     ],
   },
   {

@@ -15,7 +15,7 @@ const ChildCategoryCard: FC<ChildCategoryCardProps> = ({
     <li className="hover:cursor-pointer">
       <figure className="inline-block space-y-2">
         <img
-          className="w-[150px] h-[150px] rounded-full duration-200 hover:scale-105"
+          className="object-cover w-[150px] h-[150px] rounded-full duration-200 hover:scale-105"
           src={image}
           alt="category image"
         />

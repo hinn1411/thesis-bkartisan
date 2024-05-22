@@ -8,8 +8,10 @@ export const useFetchOrder = () => {
     refetchOnWindowFocus: false,
     retry: false,
   });
+  console.log(data);
+
   return {
     isFetching,
-    order: data,
+    data
   };
 };
