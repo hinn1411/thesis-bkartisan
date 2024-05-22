@@ -20,6 +20,14 @@ interface MessageFieldProps {
 
 const MessageField: FC<MessageFieldProps> = memo(
   ({ receiver, chatrooms, newMessage, setNewMessage, setReceiver }) => {
+    const messages = document.getElementById('messages');
+
+    const scrollToBottom = () => {
+      if (messages) {
+        messages.scrollTop = messages.scrollHeight;
+      }
+    }
+
     const [user] = useOutletContext();
 
     if (!receiver.chatroomId) {
@@ -81,9 +89,21 @@ const MessageField: FC<MessageFieldProps> = memo(
     const [incomingMsg, setIncomingMsg] = useState([]);
     const dummy = useRef(null);
 
+    const foo = () => {
+      if (messages) {
+        console.log(messages.scrollTop, messages.clientHeight, messages.scrollHeight);
+      }
+    }
+    
     useEffect(() => {
-      dummy.current?.scrollIntoView({ behavior: "instant" });
-    }, [initialMsg, incomingMsg]);
+      if (messages) {
+        const shouldScroll = (messages.scrollTop + messages.clientHeight) + 20 >= messages.scrollHeight;
+        // dummy.current?.scrollIntoView({ behavior: "smooth" });
+        if (shouldScroll) {
+          scrollToBottom();
+        }
+      }
+    }, [initialMsg, incomingMsg, messages]);
 
 
     useEffect(() => {
@@ -151,7 +171,7 @@ const MessageField: FC<MessageFieldProps> = memo(
         </div>
 
         {/**Nội dung tin nhắn */}
-        <div className="relative my-3 overflow-y-auto no-scrollbar max-h-[72vh] min-h-[72vh] flex flex-col space-y-2">
+        <div onScroll={foo} id="messages" className="relative my-3 overflow-y-auto no-scrollbar max-h-[72vh] min-h-[72vh] flex flex-col space-y-2">
           {receiver.chatroomId && (
             <>
               {initialMsg.map((message) => (

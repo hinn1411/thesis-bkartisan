@@ -8,6 +8,7 @@ import useFilterFetch from "../../../hooks/useFilterFetch";
 import apiUsers from "../../../apis/apiUsers";
 import LoadingMessage from "../../../components/admin/LoadingMessage";
 import ErrorMessage from "../../../components/admin/ErrorMessage";
+import Pagination from "@components/common/pagination/Pagination";
 
 type FormData = {
   byDate: "newToOld" | "oldToNew";
@@ -17,13 +18,11 @@ type FormData = {
 const CollabManagement: FC = memo(() => {
   const navigate = useNavigate();
 
-  const [page, setPage] = useState(1);
-
   const filterName = "collabmanagement-filter";
   const defaultFieldValues = { byDate: "newToOld", name: "" };
-  const queryKey = ["users", page];
+  const queryKey = ["users", 1];
 
-  const { register, data, isPending, onSubmit, error } =
+  const { register, data, isPending, onSubmit, error, page, setPage } =
     useFilterFetch<FormData>(
       filterName,
       defaultFieldValues,
@@ -103,6 +102,8 @@ const CollabManagement: FC = memo(() => {
           return <ListItem key={index} type="user" values={element} />;
         })
       )}
+
+      <Pagination goToPage={setPage} currentPage={page} />
     </Fragment>
   );
 });

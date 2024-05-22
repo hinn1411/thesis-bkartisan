@@ -62,6 +62,12 @@ const ProductReport: FC<ProductReportProps> = memo(({ report }) => {
             minHeight="min-h-28"
           />
         </Grid>
+        <Grid item xs={3.5}>
+          <Box className="font-medium pb-2">
+            Người xử lý report
+          </Box>
+          <TextField value={report.handlerName} />
+        </Grid>
       </Grid>
       <hr style={{ borderWidth: "0.01rem" }} />
       <Box paddingBottom={3}>

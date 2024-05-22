@@ -1,20 +1,20 @@
-import { FC, memo } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { FC, memo, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
-import FacebookIcon from '@images/login/facebook.png';
-import GoogleIcon from '@images/login/google.png';
-import SideImage from '@images/login/image.png';
-import { useTranslation } from 'react-i18next';
+import FacebookIcon from "@images/login/facebook.png";
+import GoogleIcon from "@images/login/google.png";
+import SideImage from "@images/login/image.png";
+import { useTranslation } from "react-i18next";
 
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { userSchema } from './userSchema';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useLogin } from './hooks/useLogin';
-import TextInput from '@components/common/input/TextInput';
-import Spinner from '@components/common/ui/Spinner';
-import ErrorText from '@components/common/message/ErrorText';
+import { useForm, SubmitHandler } from "react-hook-form";
+import { userSchema } from "./userSchema";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLogin } from "./hooks/useLogin";
+import TextInput from "@components/common/input/TextInput";
+import Spinner from "@components/common/ui/Spinner";
+import ErrorText from "@components/common/message/ErrorText";
 
 type User = z.infer<typeof userSchema>;
 
@@ -26,7 +26,7 @@ const Login: FC = memo(() => {
   } = useForm<User>({
     resolver: zodResolver(userSchema),
   });
-  const { login, isPending, isError, errorMessage } = useLogin();
+  const { login, isPending, isError, errorMessage, error } = useLogin();
 
   const handleLogin: SubmitHandler<User> = async (data: User) => {
     console.log(`user data = `, data);
@@ -49,9 +49,9 @@ const Login: FC = memo(() => {
   };
 
   const handleForgetPassword = async () => {
-    console.log('Forget Password');
+    console.log("Forget Password");
     try {
-      const res = await axios.get('http://localhost:3001/product', {
+      const res = await axios.get("http://localhost:3001/product", {
         withCredentials: true,
       });
       console.log(res.data);
@@ -61,13 +61,19 @@ const Login: FC = memo(() => {
   };
 
   const handleFacebookLogin = () => {
-    window.open(`${import.meta.env.VITE_AUTH_URL}/facebook`, '_self');
+    window.open(`${import.meta.env.VITE_AUTH_URL}/facebook`, "_self");
   };
 
   const handleGoogleLogin = () => {
-    window.open(`${import.meta.env.VITE_AUTH_URL}/google`, '_self');
+    window.open(`${import.meta.env.VITE_AUTH_URL}/google`, "_self");
   };
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (error?.response?.data?.lockResponse) {
+      throw error;
+    }
+  }, [error]);
 
   return (
     <div className="h-screen">
@@ -79,7 +85,7 @@ const Login: FC = memo(() => {
           <div className="p-20">
             {/* <!-- Top Content --> */}
             <h2 className="font-mono mb-5 text-4xl font-bold">
-              {t('login.login')}
+              {t("login.login")}
             </h2>
             {/* <p className="max-w-sm mb-12 font-sans font-light text-gray-600">
             Log in to your account to upload or download pictures, videos or
@@ -89,7 +95,7 @@ const Login: FC = memo(() => {
               <div className="my-6">
                 <TextInput
                   type="text"
-                  placeholder={t('login.enter_account')}
+                  placeholder={t("login.enter_account")}
                   label="username"
                   register={register}
                   errors={errors}
@@ -104,7 +110,7 @@ const Login: FC = memo(() => {
               <div className="my-6">
                 <TextInput
                   type="password"
-                  placeholder={t('login.enter_password')}
+                  placeholder={t("login.enter_password")}
                   label="password"
                   register={register}
                   errors={errors}
@@ -124,7 +130,7 @@ const Login: FC = memo(() => {
               {/* <!-- Middle Content --> */}
               <div className="flex flex-col items-center justify-between mt-6 space-y-6  md:flex-row md:space-y-0 md:space-x-6">
                 <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
-                  <span>{t('login.login')}</span>
+                  <span>{t("login.login")}</span>
                   {isPending ? (
                     <Spinner className="w-4 h-4" />
                   ) : (
@@ -148,7 +154,7 @@ const Login: FC = memo(() => {
 
                 <Link to="/register">
                   <button className="w-full md:w-auto flex justify-center items-center p-4 space-x-2 font-sans font-bold text-orange-600 outline outline-orange-600 bg-white rounded-md px-9 shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150">
-                    {t('login.register')}
+                    {t("login.register")}
                   </button>
                 </Link>
               </div>
@@ -157,7 +163,7 @@ const Login: FC = memo(() => {
                 className="font-regular text-orange-600 hover:cursor-pointer text-center my-4"
               >
                 <Link to="/enter_email" className="text-center mx-auto">
-                  {t('login.forget_password')}
+                  {t("login.forget_password")}
                 </Link>
               </div>
             </form>
@@ -166,7 +172,7 @@ const Login: FC = memo(() => {
             <div className="mt-12 border-b border-b-gray-300"></div>
             {/* <!-- Bottom Content --> */}
             <p className="py-6 text-sm font-regular text-center text-gray-400">
-              {t('login.login_with')}
+              {t("login.login_with")}
             </p>
             {/* <!-- Bottom Buttons Container --> */}
             {/* src\assets\images\login\facebook.png 

@@ -10,7 +10,7 @@ import LockModal from "../../../components/admin/modal/LockModal";
 import UnlockModal from "../../../components/admin/modal/UnlockModal";
 import TextField from "../../../components/admin/TextField";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import apiUsers from "../../../apis/apiUsers";
 import ErrorMessage from "../../../components/admin/ErrorMessage";
 import LoadingMessage from "../../../components/admin/LoadingMessage";
@@ -18,6 +18,8 @@ import { checkLockStatus } from "../../../utils/checkLockStatus";
 import { formatDate } from "../../../utils/formatDate";
 
 const UserDetail: FC = memo(() => {
+  const [user] = useOutletContext();
+  const isAdmin = user.role === "admin";
   const [openDeleteModal, setDeleteModal] = useState(false);
   const [openLockModal, setLockModal] = useState(false);
   const [openUnlockModal, setUnlockModal] = useState(false);
@@ -105,13 +107,9 @@ const UserDetail: FC = memo(() => {
                 </Grid>
                 <Grid item xs={6}>
                   <Box className="font-medium pb-2">Ngày tạo tài khoản</Box>
-                  <TextField value={formatDate("dd/mm/yyyy", new Date(data.createdAt))} />
-                </Grid>
-                <Grid item xs={6}>
-                  <Box className="font-medium pb-2">
-                    Số lần bị khóa tài khoản
-                  </Box>
-                  <TextField value={data.lockCount || 0} />
+                  <TextField
+                    value={formatDate("dd/mm/yyyy", new Date(data.createdAt))}
+                  />
                 </Grid>
               </Grid>
             </Box>
@@ -134,46 +132,50 @@ const UserDetail: FC = memo(() => {
               </Box>
               <Grid container spacing={1.5} p={1} rowGap={1}>
                 {/**Button khóa tài khoản */}
-                <Grid item xs={6}>
-                  <Box
-                    display={"flex"}
-                    alignItems={"center"}
-                    className={
-                      "w-full text-white font-medium rounded-lg text-sm py-2.5 " +
-                      (!checkLockStatus(data.lockUntil)
-                        ? "bg-amber-500 hover:bg-amber-600"
-                        : "bg-green-500 hover:bg-green-600")
-                    }
-                    onClick={openLockOrUnlock}
-                  >
-                    <Box px={2}>
-                      {!checkLockStatus(data.lockUntil) ? (
-                        <CiLock size={"1.5rem"} fill="#ffffff" />
-                      ) : (
-                        <CiUnlock size={"1.5rem"} fill="#ffffff" />
-                      )}
+                {isAdmin && (
+                  <Grid item xs={6}>
+                    <Box
+                      display={"flex"}
+                      alignItems={"center"}
+                      className={
+                        "w-full text-white font-medium rounded-lg text-sm py-2.5 " +
+                        (!checkLockStatus(data.lockUntil)
+                          ? "bg-amber-500 hover:bg-amber-600"
+                          : "bg-green-500 hover:bg-green-600")
+                      }
+                      onClick={openLockOrUnlock}
+                    >
+                      <Box px={2}>
+                        {!checkLockStatus(data.lockUntil) ? (
+                          <CiLock size={"1.5rem"} fill="#ffffff" />
+                        ) : (
+                          <CiUnlock size={"1.5rem"} fill="#ffffff" />
+                        )}
+                      </Box>
+                      <Box>
+                        {!checkLockStatus(data.lockUntil)
+                          ? "Khóa tài khoản"
+                          : "Mở khóa tài khoản"}
+                      </Box>
                     </Box>
-                    <Box>
-                      {!checkLockStatus(data.lockUntil)
-                        ? "Khóa tài khoản"
-                        : "Mở khóa tài khoản"}
-                    </Box>
-                  </Box>
-                </Grid>
+                  </Grid>
+                )}
                 {/**Button xóa tài khoản */}
-                <Grid item xs={6}>
-                  <Box
-                    display={"flex"}
-                    alignItems={"center"}
-                    className="w-full text-white bg-red-500 hover:bg-red-600 font-medium rounded-lg text-sm py-2.5"
-                    onClick={() => setDeleteModal(true)}
-                  >
-                    <Box px={2}>
-                      <MdDeleteForever size={"1.5rem"} fill="#ffffff" />
+                {isAdmin && (
+                  <Grid item xs={6}>
+                    <Box
+                      display={"flex"}
+                      alignItems={"center"}
+                      className="w-full text-white bg-red-500 hover:bg-red-600 font-medium rounded-lg text-sm py-2.5"
+                      onClick={() => setDeleteModal(true)}
+                    >
+                      <Box px={2}>
+                        <MdDeleteForever size={"1.5rem"} fill="#ffffff" />
+                      </Box>
+                      <Box>Xóa tài khoản</Box>
                     </Box>
-                    <Box>Xóa tài khoản</Box>
-                  </Box>
-                </Grid>
+                  </Grid>
+                )}
                 {/**Button nhắn tin */}
                 <Grid item xs={6}>
                   <Box

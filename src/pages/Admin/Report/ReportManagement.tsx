@@ -19,7 +19,6 @@ type FormData = {
 
 const ReportManagement: FC = memo(() => {
   const [user] = useOutletContext();
-  const [page, setPage] = useState(1);
 
   const filterName = "reportmanagement-filter";
   const defaultFieldValues = {
@@ -29,15 +28,23 @@ const ReportManagement: FC = memo(() => {
     byType: "Toàn bộ",
     mode: "Của bản thân",
   };
-  const queryKey = ["reports", page];
+  const queryKey = ["reports", 1];
 
-  const { register, data, isPending, onSubmit, error, getValues } =
-    useFilterFetch<FormData>(
-      filterName,
-      defaultFieldValues,
-      queryKey,
-      apiReports.getReportsList
-    );
+  const {
+    register,
+    data,
+    isPending,
+    onSubmit,
+    error,
+    getValues,
+    page,
+    setPage,
+  } = useFilterFetch<FormData>(
+    filterName,
+    defaultFieldValues,
+    queryKey,
+    apiReports.getReportsList
+  );
 
   return (
     <Fragment>
@@ -98,19 +105,37 @@ const ReportManagement: FC = memo(() => {
           </Select>
         </Grid>
 
-        <Grid item xs={0.8}>
-          <div className="text-base">Hiển thị:</div>
-        </Grid>
+        {user.role === "admin" && (
+          <>
+            <Grid item xs={0.8}>
+              <div className="text-base">Hiển thị:</div>
+            </Grid>
 
-        <Grid item xs={2}>
-          <Select id="mode" {...register("mode")} defaultValue={"Của bản thân"}>
-            <option value={"Của bản thân"}>Của bản thân</option>
-            <option value={"Của các cộng tác viên khác"}>
-              Của các cộng tác viên khác
-            </option>
-          </Select>
-        </Grid>
+            <Grid item xs={2}>
+              <Select
+                id="mode"
+                {...register("mode")}
+                defaultValue={"Của bản thân"}
+              >
+                <option value={"Của bản thân"}>Của bản thân</option>
+                <option value={"Của các cộng tác viên khác"}>
+                  Của các cộng tác viên khác
+                </option>
+              </Select>
+            </Grid>
+
+            <Grid item xs={0.2} />
+            <Grid item xs={3}>
+              <TextInput
+                type="text"
+                placeholder="Nhập tên cộng tác viên xử lí"
+                {...register("searchTerm")}
+              />
+            </Grid>
+          </>
+        )}
       </Grid>
+
       <hr style={{ borderWidth: "0.01rem" }} />
 
       {/**Report */}
@@ -144,8 +169,7 @@ const ReportManagement: FC = memo(() => {
         data.map((element: any, index: number) => {
           if (
             user.role === "collab" ||
-            (user.role === "admin" &&
-            getValues("mode") === "Của bản thân")
+            (user.role === "admin" && getValues("mode") === "Của bản thân")
           ) {
             if (element[3] === "Chưa xem") {
               return (
@@ -156,35 +180,22 @@ const ReportManagement: FC = memo(() => {
                   className="font-bold"
                 />
               );
-            }
-            else if (element[3] === "Chưa xử lý") {
+            } else if (element[3] === "Chưa xử lý") {
+              return <ListItem key={index} type="report" values={element} />;
+            } else {
               return (
                 <ListItem
                   key={index}
                   type="report"
                   values={element}
+                  className="bg-[#F2F6FC] hover:bg-[#F2F6FC]"
                 />
               );
-            } else {
-            return (
-              <ListItem
-                key={index}
-                type="report"
-                values={element}
-                className="bg-[#F2F6FC] hover:bg-[#F2F6FC]"
-              />
-            );}
+            }
           } else {
             if (element[3] === "Chưa xem" || element[3] === "Chưa xử lý") {
-              return (
-                <ListItem
-                  key={index}
-                  type="report"
-                  values={element}
-                />
-              );
-            }
-            else {
+              return <ListItem key={index} type="report" values={element} />;
+            } else {
               return (
                 <ListItem
                   key={index}
@@ -197,6 +208,7 @@ const ReportManagement: FC = memo(() => {
           }
         })
       )}
+      <Pagination goToPage={setPage} currentPage={page} />
     </Fragment>
   );
 });

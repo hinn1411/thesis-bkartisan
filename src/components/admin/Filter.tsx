@@ -22,10 +22,11 @@ interface FilterProps {
   filterOpts: any;
   setFilterOpts: Function;
   defaultValues: FormData;
+  isProductPage: boolean;
 }
 
 const Filter: FC<FilterProps> = memo(
-  ({ filterOpts, setFilterOpts, setOpen, defaultValues }) => {
+  ({ filterOpts, setFilterOpts, setOpen, defaultValues, isProductPage = true }) => {
     const {
       register,
       control,
@@ -73,16 +74,18 @@ const Filter: FC<FilterProps> = memo(
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={2}>
-            Loại ngành hàng:
+            Sắp xếp theo:
           </Grid>
           <Grid item xs={3}>
-            <Select id="catagory" {...register("catagory")}>
-              <option>Trang sức</option>
-              <option>Đồ gốm</option>
+            <Select id="order" {...register("order")}>
+              <option value={"highToLow"}>Giá cao đến thấp</option>
+              <option value={"lowToHigh"}>Giá thấp đến cao</option>
+              <option value={"newToOld"}>Đăng gần đây</option>
+              <option value={"oldToNew"}>Đăng sớm nhất</option>
             </Select>
           </Grid>
 
-          <Grid item xs={2}>
+          {isProductPage && <><Grid item xs={2}>
             Tên người duyệt:
           </Grid>
           <Grid item xs={3}>
@@ -115,10 +118,11 @@ const Filter: FC<FilterProps> = memo(
               <option value={"true"}>AI</option>
               <option value={"false"}>Cộng tác viên</option>
             </Select>
-          </Grid>
+          </Grid></>}
+          
 
           <Grid item xs={2} paddingBottom={1}>
-            Thời gian duyệt:
+            {isProductPage ? "Thời gian duyệt: " : "Thời gian gửi: "}
           </Grid>
           <Grid item xs={0.5}>
             Từ
@@ -236,18 +240,6 @@ const Filter: FC<FilterProps> = memo(
             />
           </Grid>
           <Grid item xs={4} />
-
-          <Grid item xs={2}>
-            Sắp xếp theo:
-          </Grid>
-          <Grid item xs={3}>
-            <Select id="order" {...register("order")}>
-              <option value={"highToLow"}>Giá cao đến thấp</option>
-              <option value={"lowToHigh"}>Giá thấp đến cao</option>
-              <option value={"newToOld"}>Đăng gần đây</option>
-              <option value={"oldToNew"}>Đăng sớm nhất</option>
-            </Select>
-          </Grid>
         </Grid>
         <div className="flex justify-end gap-4 w-full">
           <Button

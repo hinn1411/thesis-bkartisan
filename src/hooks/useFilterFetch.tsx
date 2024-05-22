@@ -10,8 +10,9 @@ function useFilterFetch<Type>(
 ) {
   const options =
     JSON.parse(sessionStorage.getItem(filterName) || "null") || defaultValues;
-  
-  
+
+  const [page, setPage] = useState(queryKey[1]);
+
   const { register, handleSubmit, getValues } = useForm<Type>({
     defaultValues: options,
   });
@@ -19,9 +20,9 @@ function useFilterFetch<Type>(
   const [filterOpts, setFilterOpts] = useState(options);
 
   const { data, isPending, error } = useQuery({
-    queryKey: [queryKey[0], queryKey[1], filterOpts],
+    queryKey: [queryKey[0], page, filterOpts],
     queryFn: async () => {
-      return await api(queryKey[1], 20, filterOpts);
+      return await api(page, 10, filterOpts);
     },
     refetchOnWindowFocus: false,
   });
@@ -37,7 +38,9 @@ function useFilterFetch<Type>(
     isPending,
     data,
     error,
-    getValues
+    getValues,
+    page,
+    setPage,
   };
 }
 
