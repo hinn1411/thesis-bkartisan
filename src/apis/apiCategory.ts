@@ -55,7 +55,7 @@ const apiCategorys = {
       });
       console.log(`category children`, data);
 
-      return data.map(({ categoryId, name, image, level }) => ({
+      return data.map(({ categoryId, name, image, level }: any) => ({
         id: categoryId,
         name,
         image,

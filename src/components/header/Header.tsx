@@ -279,7 +279,7 @@ const Header: FC = memo(() => {
                 >
                   <img
                     src={user.avatar}
-                    className="h-[30px] w-[30px] rounded-full border-solid border-2 border-orange-600"
+                    className="object-cover h-[30px] w-[30px] rounded-full border-solid border-2 border-orange-600"
                   ></img>
                   <CaretDownOutlined />
                 </div>
@@ -292,13 +292,16 @@ const Header: FC = memo(() => {
                     onClick={() => setIsUserDropdownOpened(false)}
                     className="py-2 text-sm text-gray-700 dark:text-gray-200 mx-auto"
                   >
-                    <a className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <p className="font-semibold">{user.name}</p>
-                    </a>
                     <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <FileSearchOutlined />
-                      <p>Lịch sử mua hàng</p>
+                      <p className="font-semibold">{user.name}</p>
                     </li>
+                    <Link to="/order">
+                      <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <FileSearchOutlined />
+                        <p>Lịch sử mua hàng</p>
+                      </li>
+                    </Link>
+
                     <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                       <CommentOutlined />
                       <p>Tin nhắn</p>

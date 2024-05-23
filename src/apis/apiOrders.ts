@@ -21,18 +21,15 @@ const apiOrders = {
   getBuyerOrder: async () => {
     try {
       const { data } = await axiosClient.get('/orders');
-      data.orderItems = data.orderItems.map((item: any) => ({
-        productImage: item.coverImage,
-        productName: item.name,
-        finalPrice: floor(item.price * (1 - item.discount / 100)),
-        quantity: item.quantity,
-      }));
-      data.discountInfo = {
-        totalDiscount: data.discounts.reduce(
-          (acc, cur) => acc + cur.discountPrice,
-          0
-        ),
-      };
+      data.orders = data.orders.map((order: any) => {
+        order.items = order.items.map((item: any) => ({
+          productImage: item.coverImage,
+          productName: item.name,
+          finalPrice: floor(item.price * (1 - item.discount / 100)),
+          quantity: item.quantity,
+        }));
+        return order;
+      });
       console.log(data);
       return data;
     } catch (err) {

@@ -10,8 +10,8 @@ const Search: FC = memo(() => {
   console.log(products);
 
   return (
-    <main className="min-h-screen">
-      <h1 className="text-start text-sm font-medium">Tìm thấy sản phẩm</h1>
+    <main className="min-h-screen mx-4 md:mx-20 space-y-4 my-4">
+      <h1 className="text-start text-xl font-sans font-medium">Tìm thấy {products.length} sản phẩm</h1>
       <ProductList data={products} isLoading={isFetching} />
       {/* {isFetching ? (
         <p>Loading</p>

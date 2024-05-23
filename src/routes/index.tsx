@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 
 // Layouts
-import UserLayout from "../layouts/UserLayout";
-import AdminLayout from "../layouts/AdminLayout";
-import SellerLayout from "../layouts/SellerLayout";
-import AuthLayout from "src/layouts/AuthLayout";
+import UserLayout from '../layouts/UserLayout';
+import AdminLayout from '../layouts/AdminLayout';
+import SellerLayout from '../layouts/SellerLayout';
+import PaymentLayout from 'src/layouts/PaymentLayout';
+import AuthLayout from 'src/layouts/AuthLayout';
 
 // Common pages
 import ErrorPage from "../components/common/errors/Error";
@@ -16,36 +17,42 @@ import EnterEmailPage from "../pages/Buyer/enter-email/EnterEmail";
 import SendPasswordPage from "../pages/Buyer/send-password/SendPassword";
 
 // Buyer pages
-import HomePage from "../pages/Buyer/home/Home";
-import SearchPage from "../pages/Buyer/search/Search";
-import ProductDetailPage from "../pages/Buyer/products/ProductDetail";
-import FavouriteProductPage from "../pages/Buyer/favourite/FavouriteProduct";
-import CartPage from "../pages/Buyer/cart/Cart";
+import HomePage from '../pages/Buyer/home/Home';
+import SearchPage from '../pages/Buyer/search/Search';
+// - Product pages
+import ProductDetailPage from '../pages/Buyer/products/ProductDetail';
+// - Favorite pages
+import FavouriteProductPage from '../pages/Buyer/favourite/FavouriteProduct';
+// - Cart pages
+import CartPage from '../pages/Buyer/cart/Cart';
 // Payments
 import CheckoutPage from "src/pages/Buyer/checkout/Checkout";
 import CheckoutFailPage from "src/pages/Buyer/checkout/CheckoutFail";
 import CheckoutSuccessPage from "src/pages/Buyer/checkout/CheckoutSuccess";
 import CategoryPage from "../pages/Buyer/Category/Category";
 // -- Gifts
-import ChooseBoxPage from "../pages/Buyer/gift/Gift";
+import ChooseBoxPage from '../pages/Buyer/gift/Gift';
+// Order pages
+import OrderPage from 'src/pages/Buyer/order/Order';
 
 // Seller pages
-import ViewProduct from "../pages/Seller/ManageProducts/ViewProduct";
-import DetailProduct from "../pages/Seller/ManageProducts/DetailProduct";
-import CreateProducts from "../pages/Seller/ManageProducts/CreateProducts";
-import Dashboard from "../pages/Seller/Dashboard/Dashboard";
-import ViewOrders from "../pages/Seller/ManageOrders/ViewOrders";
-import DetailOrders from "../pages/Seller/ManageOrders/DetailOrder";
-import ViewDiscounts from "../pages/Seller/ManageDiscounts/ViewDiscounts";
-import ChangeDiscount from "../pages/Seller/ManageDiscounts/ChangeDiscount";
-import CreateDiscount from "../pages/Seller/ManageDiscounts/CreateDiscount";
-import ViewGift from "../pages/Seller/ManageGift/ViewGift";
-import ChangeGift from "../pages/Seller/ManageGift/ChangeGift";
-import CreateGift from "../pages/Seller/ManageGift/CreateGift";
-import SellerMessagePage from "src/pages/Seller/Message/SellerMessagePage";
-import ViewReport from "../pages/Seller/Report/ViewReport";
-import ViewTransport from "../pages/Seller/ManageTransport/ViewTransport";
-import SellerRegistrationPage from "../pages/Seller/registration/SellerRegistration";
+import ViewProduct from '../pages/Seller/ManageProducts/ViewProduct';
+import DetailProduct from '../pages/Seller/ManageProducts/DetailProduct';
+import CreateProducts from '../pages/Seller/ManageProducts/CreateProducts';
+import Dashboard from '../pages/Seller/Dashboard/Dashboard';
+import ViewOrders from '../pages/Seller/ManageOrders/ViewOrders';
+import DetailOrders from '../pages/Seller/ManageOrders/DetailOrder';
+import ViewDiscounts from '../pages/Seller/ManageDiscounts/ViewDiscounts';
+import ChangeDiscount from '../pages/Seller/ManageDiscounts/ChangeDiscount';
+import CreateDiscount from '../pages/Seller/ManageDiscounts/CreateDiscount';
+import ViewGift from '../pages/Seller/ManageGift/ViewGift';
+import ChangeGift from '../pages/Seller/ManageGift/ChangeGift';
+import CreateGift from '../pages/Seller/ManageGift/CreateGift';
+import SellerMessagePage from 'src/pages/Seller/Message/SellerMessagePage';
+import ViewReport from '../pages/Seller/Report/ViewReport';
+import ViewTransport from '../pages/Seller/ManageTransport/ViewTransport';
+import SellerRegistrationPage from '../pages/Seller/registration/SellerRegistration';
+import ShopPage from '../pages/Seller/Shop/Shop';
 
 // Admin pages
 import DashboardAdmin from "../pages/Admin/Dashboard/DashboardAdmin";
@@ -65,8 +72,7 @@ import OrderDetail from "../pages/Admin/Order/OrderDetail";
 import ChangeInfo from "../pages/Admin/Collab/ChangeInfo";
 
 // Trang tin nhắn
-import ViewMessage from "src/pages/Message/ViewMessage";
-import PaymentLayout from "src/layouts/PaymentLayout";
+import ViewMessage from 'src/pages/Message/ViewMessage';
 
 const router = createBrowserRouter([
   {
@@ -75,14 +81,16 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "search", element: <SearchPage /> },
-      { path: "cart", element: <CartPage /> },
-      { path: "products/:productId", element: <ProductDetailPage /> },
-      { path: "favorite", element: <FavouriteProductPage /> },
-      { path: "seller_registration", element: <SellerRegistrationPage /> },
-      { path: "category", element: <CategoryPage /> },
+      { path: 'search', element: <SearchPage /> },
+      { path: 'cart', element: <CartPage /> },
+      { path: 'order', element: <OrderPage /> },
+      { path: 'products/:productId', element: <ProductDetailPage /> },
+      { path: 'favorite', element: <FavouriteProductPage /> },
+      { path: 'seller_registration', element: <SellerRegistrationPage /> },
+      { path: 'category', element: <CategoryPage /> },
+      { path: 'shop', element: <ShopPage /> },
       {
-        path: "message",
+        path: 'message',
         element: <AuthLayout />,
         children: [
           {

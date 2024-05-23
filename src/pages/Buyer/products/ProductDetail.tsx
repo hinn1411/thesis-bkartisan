@@ -227,7 +227,7 @@ const ProductDetail: FC = memo(() => {
                   onClick={addToFavoriteList}
                   className="bg-white flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer border"
                 >
-                  <HeartFilled style={{ color: "#DC2626" }} />
+                  <HeartFilled style={{ color: '#DC2626' }} />
                   <p>Yêu thích</p>
                 </Button>
               </div>
@@ -242,13 +242,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Chi tiết sản phẩm</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[0] ? "rotate-180" : ""
+                    expandedStates[0] ? 'rotate-180' : ''
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[0] ? "max-h-96" : "max-h-0"
+                  expandedStates[0] ? 'max-h-96' : 'max-h-0'
                 }`}
               >
                 <p className="my-3">Chất liệu: Gỗ</p>
@@ -265,13 +265,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Vận chuyển và chính sách đổi trả</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[1] ? "rotate-180" : ""
+                    expandedStates[1] ? 'rotate-180' : ''
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[1] ? "max-h-96" : "max-h-0"
+                  expandedStates[1] ? 'max-h-96' : 'max-h-0'
                 }`}
               >
                 <p className="my-3">
@@ -292,13 +292,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Câu hỏi thường gặp</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[2] ? "rotate-180" : ""
+                    expandedStates[2] ? 'rotate-180' : ''
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[2] ? "max-h-96" : "max-h-0"
+                  expandedStates[2] ? 'max-h-96' : 'max-h-0'
                 }`}
               >
                 <p className="my-3">
@@ -319,13 +319,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Gặp gỡ người bán</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[3] ? "rotate-180" : ""
+                    expandedStates[3] ? 'rotate-180' : ''
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[3] ? "max-h-96" : "max-h-0"
+                  expandedStates[3] ? 'max-h-96' : 'max-h-0'
                 }`}
               >
                 <div className="my-3 flex items-start space-x-4">
@@ -339,7 +339,7 @@ const ProductDetail: FC = memo(() => {
                   <div>
                     <p className="text-base">{data?.sellerName}</p>
                     <p className="text-sm">
-                      Chủ sở hữu của{" "}
+                      Chủ sở hữu của{' '}
                       <a className="underline text-sm" href="#">
                         {data?.seller}
                       </a>
@@ -389,54 +389,53 @@ const ProductDetail: FC = memo(() => {
                 </div>
                 <p>Báo cáo bài đăng</p>
               </div>
-            )}
+            ) : <div className="flex justify-center"><FlowbiteBtn color="failure">Xóa sản phẩm</FlowbiteBtn></div>}
           </section>
         )}
 
         {/* Comment and rating */}
-        {!isReviewPage && (
-          <div className="space-y-2">
-            <div className="flex items-center">
-              <p>Đánh giá sản phẩm | </p>
-              <Rating
-                name="simple-controlled"
-                value={currentStar}
-                onChange={(_, newValue) => {
-                  setCurrentStar(newValue as number);
-                }}
-              />
-              <p className="text-xs font-medium">(325)</p>
-            </div>
+        <div className="space-y-2">
+          <div className="flex items-center">
+            <p>Đánh giá sản phẩm | </p>
+            <Rating
+              name="simple-controlled"
+              value={currentStar}
+              onChange={(_, newValue) => {
+                setCurrentStar(newValue as number);
+              }}
+            />
+            <p className="text-xs font-medium">(325)</p>
+          </div>
 
-            {/* Comment box */}
-            <div className="max-w flex flex-col">
-              <Textarea
-                className="resize-none"
-                id="comment"
-                placeholder="Nhập bình luận"
-                rows={4}
-                value={currentComment}
-                onChange={(e) => setCurrentComment(e.target.value)}
-              />
-              <button
-                onClick={handleAddComment}
-                type="button"
-                className="bg-green-500 mt-3 w-1/6 p-1 rounded-md text-white self-end"
-              >
-                Gửi
-              </button>
-            </div>
-            {/* List comment */}
-            <CommentList isLoading={isFetching} data={data} />
-            <div id="ListComment" className=" flex flex-col items-center mb-10">
-              <Comment
-                star={5}
-                content="Lorem ipsum dolor sit amet consectetur. Odio integer pellentesque justo eget volutpat nisl cursus quis pretium."
-                userName="sweetcake12"
-                userImage="https://baoduongmaynenkhi.vn/wp-content/uploads/2022/03/Bieu-cam-Noi-vay-ma-nghe-duoc-a-cua-meo-Tom.jpg"
-                date="25 Tháng 10, 2023"
-              ></Comment>
-              {/* <Comment
+          {/* Comment box */}
+          <div className="max-w flex flex-col">
+            <Textarea
+              className="resize-none"
+              id="comment"
+              placeholder="Nhập bình luận"
+              rows={4}
+              value={currentComment}
+              onChange={(e) => setCurrentComment(e.target.value)}
+            />
+            <button
+              onClick={handleAddComment}
+              type="button"
+              className="bg-green-500 mt-3 w-1/6 p-1 rounded-md text-white self-end"
+            >
+              Gửi
+            </button>
+          </div>
+          {/* List comment */}
+          <CommentList isLoading={isFetching} data={data} />
+          <div id="ListComment" className=" flex flex-col items-center mb-10">
+            <Comment
+              star={5}
+              content="Lorem ipsum dolor sit amet consectetur. Odio integer pellentesque justo eget volutpat nisl cursus quis pretium."
+              userName="sweetcake12"
+              userImage="https://baoduongmaynenkhi.vn/wp-content/uploads/2022/03/Bieu-cam-Noi-vay-ma-nghe-duoc-a-cua-meo-Tom.jpg"
+              date="25 Tháng 10, 2023"
+            ></Comment>
+            {/* <Comment
               star={5}
               content="Lorem ipsum dolor sit amet consectetur. Odio integer pellentesque justo eget volutpat nisl cursus quis pretium."
               userName="sweetcake12"
@@ -451,10 +450,9 @@ const ProductDetail: FC = memo(() => {
               date="25 Tháng 10, 2023"
             ></Comment> */}
 
-              <Pagination currentPage={1} goToPage={() => {}} />
-            </div>
+            <Pagination currentPage={1} goToPage={() => {}} />
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

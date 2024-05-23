@@ -254,7 +254,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
 
       {
         mutation.isSuccess && (
-          <SuccessAdd onDismiss={handleMutationSuccess}></SuccessAdd>
+          <SuccessAdd message='Thêm sản phẩm thành công!' url='/seller/manage_products' onDismiss={handleMutationSuccess}></SuccessAdd>
         )
       }
       {
