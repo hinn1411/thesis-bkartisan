@@ -45,6 +45,11 @@ const OrderReport: FC<OrderReportProps> = memo(({report}) => {
         </Grid>
         <Grid item xs={12} />
         <Grid item xs={12} className="font-medium pb-2">Hình ảnh video đi kèm: </Grid>
+        <Grid item xs={2}>
+            <Button fullSized color="info" className="h-9 justify-self-end">
+              Xác nhận đã xử lý
+            </Button>
+          </Grid>
       </Grid>
     </Box>
   );

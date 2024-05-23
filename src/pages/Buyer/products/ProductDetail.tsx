@@ -32,8 +32,11 @@ import { useComment } from "./hooks/useComment";
 import { urlMatch } from "@utils/urlMatch";
 import ReturnIcon from "@components/admin/ReturnIcon";
 import { Button as FlowbiteBtn } from "flowbite-react";
+import ResponseModal from "@components/admin/modal/ResponseModal";
 
 const ProductDetail: FC = memo(() => {
+  const [openResponseModal, setOpenResponseModal] = useState(false);
+
   const { productId } = useParams();
   if (!productId) {
     window.location.href = "/";
@@ -41,6 +44,7 @@ const ProductDetail: FC = memo(() => {
 
   const location = useLocation();
   const isAdminPage = urlMatch("products", location.pathname);
+  const isReviewPage = urlMatch("reviewproducts", location.pathname);
 
   const { data, isFetching } = useProductDetail(productId as string);
   const { addToCart } = useCart();
@@ -92,6 +96,14 @@ const ProductDetail: FC = memo(() => {
   };
   return (
     <div className="mx-4 md:mx-20">
+      {isAdminPage && (
+        <ResponseModal
+          type="delete-product"
+          id={productId}
+          setOpenModal={setOpenResponseModal}
+          openModal={openResponseModal}
+        />
+      )}
       <ReportProductModal
         isOpen={isOpenedReportProduct}
         setIsOpen={setIsOpenedReportProduct}
@@ -198,7 +210,7 @@ const ProductDetail: FC = memo(() => {
 
               <Rating name="read-only" value={5} readOnly />
             </div>
-            {!isAdminPage && (
+            {!isAdminPage && !isReviewPage && (
               <div className="max-w-full flex flex-col my-5 space-y-3">
                 <button
                   onClick={handleAddItem}
@@ -215,7 +227,7 @@ const ProductDetail: FC = memo(() => {
                   onClick={addToFavoriteList}
                   className="bg-white flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer border"
                 >
-                  <HeartFilled style={{ color: '#DC2626' }} />
+                  <HeartFilled style={{ color: "#DC2626" }} />
                   <p>Yêu thích</p>
                 </Button>
               </div>
@@ -230,13 +242,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Chi tiết sản phẩm</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[0] ? 'rotate-180' : ''
+                    expandedStates[0] ? "rotate-180" : ""
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[0] ? 'max-h-96' : 'max-h-0'
+                  expandedStates[0] ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <p className="my-3">Chất liệu: Gỗ</p>
@@ -253,13 +265,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Vận chuyển và chính sách đổi trả</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[1] ? 'rotate-180' : ''
+                    expandedStates[1] ? "rotate-180" : ""
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[1] ? 'max-h-96' : 'max-h-0'
+                  expandedStates[1] ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <p className="my-3">
@@ -280,13 +292,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Câu hỏi thường gặp</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[2] ? 'rotate-180' : ''
+                    expandedStates[2] ? "rotate-180" : ""
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[2] ? 'max-h-96' : 'max-h-0'
+                  expandedStates[2] ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <p className="my-3">
@@ -307,13 +319,13 @@ const ProductDetail: FC = memo(() => {
                 <p className="font-medium">Gặp gỡ người bán</p>
                 <DownOutlined
                   className={`transform ${
-                    expandedStates[3] ? 'rotate-180' : ''
+                    expandedStates[3] ? "rotate-180" : ""
                   }`}
                 ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
-                  expandedStates[3] ? 'max-h-96' : 'max-h-0'
+                  expandedStates[3] ? "max-h-96" : "max-h-0"
                 }`}
               >
                 <div className="my-3 flex items-start space-x-4">
@@ -327,7 +339,7 @@ const ProductDetail: FC = memo(() => {
                   <div>
                     <p className="text-base">{data?.sellerName}</p>
                     <p className="text-sm">
-                      Chủ sở hữu của{' '}
+                      Chủ sở hữu của{" "}
                       <a className="underline text-sm" href="#">
                         {data?.seller}
                       </a>
@@ -343,7 +355,31 @@ const ProductDetail: FC = memo(() => {
                 </div>
               </div>
             </div>
-            {!isAdminPage ? (
+            {isAdminPage ? (
+              <div className="flex justify-center">
+                <FlowbiteBtn
+                  color="failure"
+                  onClick={() => setOpenResponseModal(true)}
+                >
+                  Xóa sản phẩm
+                </FlowbiteBtn>
+              </div>
+            ) : isReviewPage ? (
+              <div className="flex justify-center space-x-6 w-full">
+                <FlowbiteBtn
+                  color="success"
+                  onClick={() => setOpenResponseModal(true)}
+                >
+                  Duyệt bài đăng
+                </FlowbiteBtn>
+                <FlowbiteBtn
+                  color="gray"
+                  onClick={() => setOpenResponseModal(true)}
+                >
+                  Từ chối
+                </FlowbiteBtn>
+              </div>
+            ) : (
               <div
                 onClick={() => setIsOpenedReportProduct(true)}
                 className="flex items-center text-sm underline space-x-1 cursor-pointer"
@@ -353,50 +389,45 @@ const ProductDetail: FC = memo(() => {
                 </div>
                 <p>Báo cáo bài đăng</p>
               </div>
-            ) : (
-              <div className="flex justify-center">
-                <FlowbiteBtn color="failure">Xóa sản phẩm</FlowbiteBtn>
-              </div>
             )}
           </section>
         )}
+        {!isReviewPage && (
+          <div className="space-y-4 my-4">
+            <div className="flex items-center">
+              <p>Đánh giá sản phẩm | </p>
+              <Rating
+                name="simple-controlled"
+                value={currentStar}
+                onChange={(_, newValue) => {
+                  setCurrentStar(newValue as number);
+                }}
+              />
+              <p className="text-xs font-medium">(1)</p>
+            </div>
 
-        {/* Comment and rating */}
-        <div className="space-y-4 my-4">
-          <div className="flex items-center">
-            <p>Đánh giá sản phẩm | </p>
-            <Rating
-              name="simple-controlled"
-              value={currentStar}
-              onChange={(_, newValue) => {
-                setCurrentStar(newValue as number);
-              }}
-            />
-            <p className="text-xs font-medium">(1)</p>
-          </div>
-
-          {/* Comment box */}
-          <div className="max-w flex flex-col">
-            <Textarea
-              className="resize-none"
-              id="comment"
-              placeholder="Nhập bình luận"
-              rows={4}
-              value={currentComment}
-              onChange={(e) => setCurrentComment(e.target.value)}
-            />
-            <button
-              onClick={handleAddComment}
-              type="button"
-              className="bg-green-500 mt-3 w-1/6 p-1 rounded-md text-white self-end"
-            >
-              Gửi
-            </button>
-          </div>
-          {/* List comment */}
-          <CommentList isLoading={isFetching} data={data} />
-          <Pagination currentPage={1} goToPage={() => {}} />
-          {/* <div id="ListComment" className=" flex flex-col items-center mb-10"> */}
+            {/* Comment box */}
+            <div className="max-w flex flex-col">
+              <Textarea
+                className="resize-none"
+                id="comment"
+                placeholder="Nhập bình luận"
+                rows={4}
+                value={currentComment}
+                onChange={(e) => setCurrentComment(e.target.value)}
+              />
+              <button
+                onClick={handleAddComment}
+                type="button"
+                className="bg-green-500 mt-3 w-1/6 p-1 rounded-md text-white self-end"
+              >
+                Gửi
+              </button>
+            </div>
+            {/* List comment */}
+            <CommentList isLoading={isFetching} data={data} />
+            <Pagination currentPage={1} goToPage={() => {}} />
+            {/* <div id="ListComment" className=" flex flex-col items-center mb-10"> */}
             {/* <Comment
               star={5}
               content="Lorem ipsum dolor sit amet consectetur. Odio integer pellentesque justo eget volutpat nisl cursus quis pretium."
@@ -419,7 +450,8 @@ const ProductDetail: FC = memo(() => {
               date="25 Tháng 10, 2023"
             ></Comment> */}
           {/* </div> */}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

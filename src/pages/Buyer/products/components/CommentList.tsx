@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import Comment from './Comment';
 import Spinner from '@components/common/ui/Spinner';
+import { formatDate } from '@utils/formatDate';
 
 export interface CommentListProps {
   isLoading: boolean;
@@ -26,7 +27,7 @@ const CommentList: FC<CommentListProps> = memo(
               content={item.data.content}
               userName={item.data.writer}
               userImage={item.data.avatar}
-              date={item.data.createdAt}
+              date={formatDate("hh:MM dd/mm/yyyy",new Date(item.data.createdAt))}
               replies={item.replies}
               numberOfDownVotes={item.data.numberOfDownvotes}
               numberOfUpvotes={item.data.numberOfUpvotes}

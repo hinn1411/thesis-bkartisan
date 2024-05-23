@@ -104,18 +104,6 @@ const CollabDetail: FC = memo(() => {
                   <Box className="font-medium pb-2">Ngày tạo tài khoản</Box>
                   <TextField value={formatDate("dd/mm/yyyy", new Date(data.createdAt))} />
                 </Grid>
-                <Grid item xs={6}>
-                  <Box className="font-medium pb-2">
-                    Lần duyệt bài đăng mới nhất
-                  </Box>
-                  <TextField value="20/10/2002" />
-                </Grid>
-                <Grid item xs={6}>
-                  <Box className="font-medium pb-2">
-                    Lần xử lí report mới nhất
-                  </Box>
-                  <TextField value="20/10/2002" />
-                </Grid>
               </Grid>
             </Box>
             <Box

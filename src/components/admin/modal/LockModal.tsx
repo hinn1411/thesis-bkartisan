@@ -5,7 +5,6 @@ import {
   Select,
   Spinner,
   Textarea,
-  TextInput,
 } from "flowbite-react";
 import { FC, memo } from "react";
 import apiUsers from "../../../apis/apiUsers";
@@ -25,7 +24,7 @@ type FormData = {
 
 const LockModal: FC<LockModalProps> = memo(
   ({ openModal, setOpenModal, id }) => {
-    const { register, handleSubmit, mutate, isPending } =
+    const { register, handleSubmit, mutate, isPending, errors } =
       useFormResponse<FormData>(
         ["userDetails", id],
         setOpenModal,
@@ -60,11 +59,9 @@ const LockModal: FC<LockModalProps> = memo(
                 Email phản hồi:
               </Grid>
               <Grid item xs={8}>
-                <TextInput
-                  type="text"
-                  placeholder="Điền email vào đây"
-                  {...register("email")}
-                />
+                <Select id="email" {...register("email")}>
+                  <option value={"bkartisan@gmail.com"}>bkartisan@gmail.com</option>
+                </Select>
               </Grid>
               <Grid item xs={4}>
                 Lí do khóa tài khoản:
@@ -75,7 +72,14 @@ const LockModal: FC<LockModalProps> = memo(
                   placeholder="Điền phản hồi vào đây"
                   required
                   rows={4}
-                  {...register("response")}
+                  {...register("response", { required: true })}
+                  helperText={
+                    errors.response && (
+                      <span className="text-red-500">
+                        Vui lòng nhập phản hồi về việc khóa tài khoản.
+                      </span>
+                    )
+                  }
                 />
               </Grid>
             </Grid>

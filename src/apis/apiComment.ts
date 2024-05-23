@@ -18,6 +18,16 @@ const apiComment = {
       throw err;
     }
   },
+  deleteComment: async () => {
+    try {
+      // const { data } = await axiosClient.delete('/comments', newComment);
+      // console.log(data);
+      // return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
 };
 
 export default apiComment;

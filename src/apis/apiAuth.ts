@@ -2,11 +2,14 @@ import { authClient } from './axiosClient';
 
 const apiAuth = {
   login: async ({ username, password }: any) => {
-    console.log(`username = ${username}, password = ${password}`);
+    //console.log(`username = ${username}, password = ${password}`);
     try {
       const res = await authClient.post('/login', { username, password });
       return res;
     } catch (err: any) {
+      if (err.response?.data?.lockResponse) {
+        throw err;
+      }
       throw new Error('Tên tài khoản hoặc mật khẩu không đúng');
     }
   },

@@ -47,6 +47,9 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
     if (type === "handled-product" || type === "handled-report") {
       navigate(`/admin/products/${values[values.length - 1]}`);
     }
+    else if (type === "user") {
+      navigate(`/admin/users/${values[values.length - 1]}`);
+    }
     else {
       navigate(`${values[values.length - 1]}`);
     }
@@ -128,6 +131,15 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
             <Grid item xs={layout[index]} key={index}>
               <div className="truncate mr-8">
                 {formatDate("hh:MM dd/mm/yyyy", new Date(values[index])) ||
+                  "Chưa xác định"}
+              </div>
+            </Grid>
+          );
+        } else if (index == 4 && type == "order") {
+          return (
+            <Grid item xs={layout[index]} key={index}>
+              <div className="truncate mr-8">
+                {formatDate("dd/mm/yyyy", new Date(values[index])) ||
                   "Chưa xác định"}
               </div>
             </Grid>
