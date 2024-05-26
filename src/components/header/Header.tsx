@@ -192,8 +192,11 @@ const Header: FC = memo(() => {
             >
               <div className="flex justify-center items-center">
                 <MenuOutlined
-                    size={24}
-                    className="hover:scale-110 duration-300 hover:cursor-pointer" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                />
+                  size={24}
+                  className="hover:scale-110 duration-300 hover:cursor-pointer"
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                />
               </div>
               <div className="flex items-center justify-center hover:cursor-pointer">
                 {/* <LoginOutlined /> */}
@@ -255,7 +258,11 @@ const Header: FC = memo(() => {
               }
               className="flex justify-center items-center"
             >
-              <SearchOutlined className="hover:scale-110 duration-300" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+              <SearchOutlined
+                className="hover:scale-110 duration-300"
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              />
             </button>
           </form>
         )}
@@ -280,7 +287,10 @@ const Header: FC = memo(() => {
                     src={user.avatar}
                     className="object-cover h-[30px] w-[30px] rounded-full border-solid border-2 border-orange-600"
                   ></img>
-                  <CaretDownOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                  <CaretDownOutlined
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 </div>
                 <div
                   className={`${
@@ -296,31 +306,54 @@ const Header: FC = memo(() => {
                     </li>
                     <Link to="/order">
                       <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <FileSearchOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                        <FileSearchOutlined
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        />
                         <p>Quản lý đơn hàng</p>
+                      </li>
+                    </Link>
+                    <Link to="/message">
+                      <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <CommentOutlined
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        />
+                        <p>Tin nhắn</p>
                       </li>
                     </Link>
 
                     <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <CommentOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-                      <p>Tin nhắn</p>
-                    </li>
-                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <BellOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                      <BellOutlined
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                      />
                       <p>Thông báo</p>
                     </li>
                     <Link to="/favorite">
                       <li className="flex items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <HeartOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                        <HeartOutlined
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        />
                         <div>Danh sách yêu thích</div>
                       </li>
                     </Link>
+                    <Link to='/profile'>
+                      <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <UserOutlined
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        />
+                        <p>Trang cá nhân</p>
+                      </li>
+                    </Link>
+
                     <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <UserOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-                      <p>Trang cá nhân</p>
-                    </li>
-                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <InfoCircleOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                      <InfoCircleOutlined
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                      />
                       <p>Hướng dẫn sử dụng</p>
                     </li>
                     <li
@@ -345,8 +378,11 @@ const Header: FC = memo(() => {
               <Link to="/favorite">
                 <div className="flex items-center justify-center">
                   <HeartOutlined
-                      size={24}
-                      className="hover:scale-110 duration-300 hover:cursor-pointer" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  />
+                    size={24}
+                    className="hover:scale-110 duration-300 hover:cursor-pointer"
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 </div>
               </Link>
 
@@ -357,16 +393,23 @@ const Header: FC = memo(() => {
                     {numberOfItems}
                   </div>
 
-                  <ShoppingOutlined className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                  <ShoppingOutlined
+                    className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 </div>
               </Link>
 
               <Link to="/seller_registration">
                 <div className="flex items-center justify-center">
                   <ShopOutlined
-                      size={24}
-                      className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
-                      onClick={() => { } } onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                  />
+                    size={24}
+                    className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
+                    onClick={() => {}}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 </div>
               </Link>
 
@@ -377,7 +420,10 @@ const Header: FC = memo(() => {
                   className="language-trigger flex items-center justify-center space-x-1 hover:cursor-pointer"
                 >
                   <img src={currentFlag} className="w-6 h-4" />
-                  <CaretDownOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                  <CaretDownOutlined
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 </div>
                 <div
                   className={`${

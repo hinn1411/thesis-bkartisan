@@ -73,6 +73,17 @@ const apiOrders = {
       throw err;
     }
   },
+  changeOrderState: async ({ orderId }: { orderId: string }) => {
+    try {
+      const { data } = await axiosClient.post("/orders/state", {
+        orderId: orderId,
+      });
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
   getOrders: async (searchTerm: string, page: number, offset: number) => {
     try {
       const { data } = await axiosClient.get(`/orders`, {
@@ -106,14 +117,26 @@ const apiOrders = {
   },
 
   getOrdersList: async (searchTerm: string, page: number, offset: number) => {
-    
-    const data = [[
-      1, "Chúng Đức Quang", "Lầu Hội", "Chờ xác nhận", "2024-05-20T04:16:02.160Z", 1
-    ], [
-      2, "Chúng Đức Quang", "Lầu Hội", "Đã thành công", "2024-05-20T04:16:02.160Z", 2
-    ]]
+    const data = [
+      [
+        1,
+        "Chúng Đức Quang",
+        "Lầu Hội",
+        "Chờ xác nhận",
+        "2024-05-20T04:16:02.160Z",
+        1,
+      ],
+      [
+        2,
+        "Chúng Đức Quang",
+        "Lầu Hội",
+        "Đã thành công",
+        "2024-05-20T04:16:02.160Z",
+        2,
+      ],
+    ];
 
-    return data
+    return data;
   },
 };
 
