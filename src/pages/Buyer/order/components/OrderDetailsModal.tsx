@@ -1,13 +1,18 @@
-import { Fragment, useRef, FC, memo, Dispatch } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useRef, FC, memo, Dispatch } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { OrderItemProps } from "./OrderItem";
+import Item, { ItemProps } from "./Item";
+import { formatCurrency } from "@utils/formatCurrency";
+import { CURRENCIES } from "@contants/currencies";
 
 export type OrderDetailsModalProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<boolean>;
+  data: OrderItemProps;
 };
 
 const OrderDetailsModal: FC<OrderDetailsModalProps> = memo(
-  ({ isOpen, setIsOpen }) => {
+  ({ isOpen, setIsOpen, data }) => {
     const cancelButtonRef = useRef(null);
 
     return (
@@ -51,72 +56,93 @@ const OrderDetailsModal: FC<OrderDetailsModalProps> = memo(
                         >
                           Thông tin đơn hàng
                         </Dialog.Title>
-                        <Dialog.Description className="space-y-2 mt-2">
+                        <Dialog.Description className="space-y-3 mt-2">
                           <div className="flex justify-between text-sm opacity-90 ">
-                            <p>Phương thức thanh toán: VNPay</p>
-                            <p>Ngày đặt hàng: 20:13 - 17/12/2023</p>
+                            <p>
+                              Phương thức thanh toán:{" "}
+                              <span className="uppercase">
+                                {data.paymentMethod}
+                              </span>{" "}
+                            </p>
+                            <p>
+                              Ngày đặt hàng: <span>{data.createAt}</span>
+                            </p>
                           </div>
                           {/* Address */}
                           <div className="pb-4 border-b-2 border-b-gray-300">
                             <h1 className="text-lg font-sans font-semibold">
                               Thông tin nhận hàng
                             </h1>
-                            <p>
+                            <p className="text-sm">
                               <span className="font-semibold">Người nhận</span>:
                               Giang Tuấn Hiền
                             </p>
-                            <p>
+                            <p className="text-sm">
                               <span className="font-semibold">Địa chỉ</span>: Ký
                               túc xá khu A: Đường Tạ Quang Bửu, Khu phố 6,
                               Phường Linh Trung, Thành phố Thủ Đức, Thành phố Hồ
                               Chí Minh.
                             </p>
-                            <p>
+                            <p className="text-sm">
                               <span className="font-semibold">Điện thoại</span>:
                               0345 755 751
                             </p>
                           </div>
                           {/* Items */}
                           <div>
-                            <p className="font-sans text-lg font-semibold">
+                            <p className="font-sans text-lg font-semibold my-3">
                               Sản phẩm
                             </p>
+
                             <ul className="space-y-4 pb-6 border-b-2 border-b-gray-300">
-                              <li className="flex space-x-4">
-                                <div>
-                                  <img
-                                    className="object-fit h-[65px] w-[65px] rounded-[7.5px]"
-                                    src="https://i.etsystatic.com/41110180/c/1428/1135/250/409/il/dda275/5202883218/il_340x270.5202883218_b9y8.jpg"
-                                  />
-                                </div>
-                                <div className="flex-1">
-                                  <div className="flex justify-between ">
-                                    <p className="text-[14px] font-medium">
-                                      Christmas suncatcher stained glass...
-                                    </p>
-                                    <p className="text-orange-600 font-semibold">
-                                      123,000đ
-                                    </p>
-                                  </div>
-                                  <p className="text-orange-600 text-[14px] font-semibold">
-                                    123,000đ
-                                  </p>
-                                  <p className="text-[13px] font-medium">x1</p>
-                                </div>
-                              </li>
+                              {data.items.map(
+                                (item: ItemProps, index: number) => (
+                                  <Item key={index} {...item} />
+                                )
+                              )}
                             </ul>
                           </div>
                           {/* Bill */}
-                          <div className="max-w-md flex flex-col items-end text-sm">
-                            <p className="space-x-12">
-                              <span>Tổng đơn hàng:</span> <span>123,000đ</span>
+                          <div className="flex flex-col items-end text-sm">
+                            <p>
+                              <span>Tổng đơn hàng:</span>{" "}
+                              <span className="text-orange-600">
+                                {formatCurrency(
+                                  data.totalPrice,
+                                  CURRENCIES.VIETNAMDONG
+                                )}
+                              </span>
                             </p>
-                            <p className='space-x-12'>
-                              <span>Giảm giá:</span> <span>0đ</span>
+                            <p>
+                              <span>Giảm giá:</span>{" "}
+                              <span className="text-orange-600">
+                                {formatCurrency(
+                                  data.discountPrice,
+                                  CURRENCIES.VIETNAMDONG
+                                )}
+                              </span>
                             </p>
-                            <p>Tổng phụ: 123,000đ</p>
-                            <p>Phí vận chuyển: 20,000đ</p>
-                            <p>Tổng tiền: 143,000đ</p>
+                            {/* <p>Tổng phụ: 123,000đ</p> */}
+                            <p>
+                              Phí vận chuyển:{" "}
+                              <span className="text-orange-600">
+                                {formatCurrency(
+                                  data.shipPrice,
+                                  CURRENCIES.VIETNAMDONG
+                                )}
+                              </span>
+                            </p>
+                            <p>
+                              Tổng tiền:{" "}
+                              <span className="text-orange-600">
+                                {formatCurrency(
+                                  data.totalPrice -
+                                    data.discountPrice +
+                                    data.shipPrice,
+                                  CURRENCIES.VIETNAMDONG
+                                )}
+                              </span>
+                            </p>
                           </div>
                         </Dialog.Description>
                       </div>
