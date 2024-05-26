@@ -2,12 +2,12 @@ import { Fragment, useRef, FC, memo, Dispatch } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
-export type ConfirmModalProps = {
+export type CancelModalProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<boolean>;
 };
 
-const ConfirmModal: FC<ConfirmModalProps> = memo(({ isOpen, setIsOpen }) => {
+const CancelModal: FC<CancelModalProps> = memo(({ isOpen, setIsOpen }) => {
   const cancelButtonRef = useRef(null);
 
   return (
@@ -91,4 +91,4 @@ const ConfirmModal: FC<ConfirmModalProps> = memo(({ isOpen, setIsOpen }) => {
   );
 });
 
-export default ConfirmModal;
+export default CancelModal;

@@ -1,12 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 
 // Layouts
-import UserLayout from '../layouts/UserLayout';
-import AdminLayout from '../layouts/AdminLayout';
-import SellerLayout from '../layouts/SellerLayout';
-import PaymentLayout from 'src/layouts/PaymentLayout';
-import AuthLayout from 'src/layouts/AuthLayout';
-
+import UserLayout from "../layouts/UserLayout";
+import AdminLayout from "../layouts/AdminLayout";
+import SellerLayout from "../layouts/SellerLayout";
+import PaymentLayout from "src/layouts/PaymentLayout";
+import AuthLayout from "src/layouts/AuthLayout";
 
 // Common pages
 import ErrorPage from "../components/common/errors/Error";
@@ -31,6 +30,7 @@ import CheckoutPage from "src/pages/Buyer/checkout/Checkout";
 import CheckoutFailPage from "src/pages/Buyer/checkout/CheckoutFail";
 import CheckoutSuccessPage from "src/pages/Buyer/checkout/CheckoutSuccess";
 import CategoryPage from "../pages/Buyer/Category/Category";
+import ProfilePage from "src/pages/Buyer/profile/Profile";
 // -- Gifts
 import ChooseBoxPage from "../pages/Buyer/gift/Gift";
 // Order pages
@@ -90,16 +90,16 @@ const router = createBrowserRouter([
       { path: "seller_registration", element: <SellerRegistrationPage /> },
       { path: "category", element: <CategoryPage /> },
       { path: "shop", element: <ShopPage /> },
-      { path: 'search', element: <SearchPage /> },
-      { path: 'cart', element: <CartPage /> },
-      { path: 'order', element: <OrderPage /> },
-      { path: 'products/:productId', element: <ProductDetailPage /> },
-      { path: 'favorite', element: <FavouriteProductPage /> },
-      { path: 'seller_registration', element: <SellerRegistrationPage /> },
-      { path: 'category', element: <CategoryPage /> },
-      { path: 'shop', element: <ShopPage /> },
+      { path: "search", element: <SearchPage /> },
+      { path: "cart", element: <CartPage /> },
+      { path: "order", element: <OrderPage /> },
+      { path: "products/:productId", element: <ProductDetailPage /> },
+      { path: "favorite", element: <FavouriteProductPage /> },
+      { path: "category", element: <CategoryPage /> },
+      { path: "shop", element: <ShopPage /> },
+      { path: "profile", element: <ProfilePage /> },
       {
-        path: 'message',
+        path: "message",
         element: <AuthLayout />,
         children: [
           {

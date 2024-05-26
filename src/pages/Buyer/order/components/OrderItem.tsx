@@ -9,6 +9,10 @@ import CancelOrderModal from "../../checkout/components/CancelOrderModal.tsx";
 import { useOrderDetails } from "../hooks/useOrderDetails.tsx";
 import OrderDetailsModal from "./OrderDetailsModal.tsx";
 import Item from "./Item.tsx";
+import ReturnModal from "./ReturnModal.tsx";
+import { useChangeOrderState } from "../hooks/useChangeOrderState.tsx";
+import ConfirmModal from "./ConfirmModal.tsx";
+import { useNavigate } from "react-router-dom";
 
 export interface ItemProps {
   coverImage: string;
@@ -27,6 +31,9 @@ export interface OrderItemProps {
   discountPrice: number;
   createAt: string;
   paymentMethod: string;
+  seller: string;
+  sellerName: string;
+  sellerAvatar: string;
 }
 
 const OrderItem: FC<OrderItemProps> = memo(
@@ -39,12 +46,18 @@ const OrderItem: FC<OrderItemProps> = memo(
     discountPrice,
     createAt,
     paymentMethod,
+    sellerAvatar,
+    sellerName,
+    seller,
   }) => {
+    const navigate = useNavigate();
     const { handleSingleOrderCheckout } = usePayment();
     const { cancelOrder, isOpenCancelOrderModal, setIsOpenCancelOrderModal } =
       useCancelOrder();
     const { isOpenOrderDetailModal, setIsOpenOrderDetailModal } =
       useOrderDetails();
+    const { isChangeStateModalOpen, setIsChangeStateModalOpen, changeState } =
+      useChangeOrderState();
     const handleCheckout = () => {
       handleSingleOrderCheckout({
         orderId,
@@ -54,6 +67,25 @@ const OrderItem: FC<OrderItemProps> = memo(
     const handleCancelOrder = () => {
       cancelOrder({
         orderId: orderId,
+      });
+    };
+    const handleReturnOrder = () => {
+      changeState({
+        orderId: orderId,
+      });
+    };
+    const handleConfirmOrder = () => {
+      changeState({
+        orderId: orderId,
+      });
+    };
+    const handleChatWithSeller = () => {
+      navigate("/message", {
+        state: {
+          username: seller,
+          name: sellerName,
+          avatar: sellerAvatar,
+        },
       });
     };
     return (
@@ -132,14 +164,34 @@ const OrderItem: FC<OrderItemProps> = memo(
               </>
             )}
             {[ORDER_STATES.SHIPPING].includes(status as ORDER_STATES) && (
-              <Button className="text-[13px] font-sans text-center border-2 border-green-600 bg-green-600 text-white  py-[10px] px-[27px] rounded-[6px]">
-                Xác nhận đơn hàng
-              </Button>
+              <>
+                <ConfirmModal
+                  isOpen={isChangeStateModalOpen}
+                  setIsOpen={setIsChangeStateModalOpen}
+                  onConfirm={handleConfirmOrder}
+                />
+                <Button
+                  onClick={() => setIsChangeStateModalOpen(true)}
+                  className="text-[13px] font-sans text-center border-2 border-green-600 bg-green-600 text-white  py-[10px] px-[27px] rounded-[6px]"
+                >
+                  Xác nhận đơn hàng
+                </Button>
+              </>
             )}
             {[ORDER_STATES.DONE].includes(status as ORDER_STATES) && (
-              <Button className="text-[13px] font-sans text-center border-2 border-[#DC2626]  py-[10px] px-[45px] rounded-[6px]">
-                Trả hàng
-              </Button>
+              <>
+                <ReturnModal
+                  isOpen={isChangeStateModalOpen}
+                  setIsOpen={setIsChangeStateModalOpen}
+                  onReturn={handleReturnOrder}
+                />
+                <Button
+                  onClick={() => setIsChangeStateModalOpen(true)}
+                  className="text-[13px] font-sans text-center border-2 border-[#DC2626]  py-[10px] px-[45px] rounded-[6px]"
+                >
+                  Trả hàng
+                </Button>
+              </>
             )}
             {[ORDER_STATES.DENY_RETURN].includes(status as ORDER_STATES) && (
               <Button className="text-[13px] font-sans text-center border-2 border-orange-600 bg-orange-600 text-white  py-[10px] px-[32px] rounded-[6px]">
@@ -158,6 +210,9 @@ const OrderItem: FC<OrderItemProps> = memo(
                 discountPrice,
                 createAt,
                 paymentMethod,
+                sellerAvatar,
+                sellerName,
+                seller,
               }}
             />
             <Button
@@ -169,7 +224,10 @@ const OrderItem: FC<OrderItemProps> = memo(
             {![ORDER_STATES.CONFIRMING, ORDER_STATES.CANCELED].includes(
               status as ORDER_STATES
             ) && (
-              <Button className="text-[13px] font-sans text-center border-2 border-[#D1D5DB] py-[10px] px-[15px] rounded-[6px]">
+              <Button
+                onClick={handleChatWithSeller}
+                className="text-[13px] font-sans text-center border-2 border-[#D1D5DB] py-[10px] px-[15px] rounded-[6px]"
+              >
                 Nhắn tin với người bán
               </Button>
             )}
