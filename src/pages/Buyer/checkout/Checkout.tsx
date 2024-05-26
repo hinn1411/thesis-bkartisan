@@ -1,22 +1,23 @@
-import { Checkbox, Label } from 'flowbite-react';
-import { FC, memo } from 'react';
-import { useFetchOrder } from './hooks/useFetchOrder';
-import Spinner from '@components/common/ui/Spinner';
-import Button from '@components/common/button/Button';
-import { formatCurrency } from '@utils/formatCurrency';
-import { CURRENCIES } from '@contants/currencies';
-import { usePayment } from './hooks/usePayment';
-import TextInput from '@components/common/input/TextInput';
-import { useForm } from 'react-hook-form';
-import z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { shippingAddressSchema } from './shippingAddressSchema';
-import OrderTable from './components/OrderTable';
+import { Checkbox, Label } from "flowbite-react";
+import { FC, memo } from "react";
+import { useFetchCheckoutOrder } from "./hooks/useFetchCheckoutOrder";
+import Spinner from "@components/common/ui/Spinner";
+import Button from "@components/common/button/Button";
+import { usePayment } from "./hooks/usePayment";
+import TextInput from "@components/common/input/TextInput";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { shippingAddressSchema } from "./shippingAddressSchema";
+import OrderTable, { OrderTableProps } from "./components/OrderTable";
+import BuyLaterModal from "./components/BuyLaterModal";
+import { useSaveOrder } from "./hooks/useSaveOrder";
 
 export interface CheckoutProps {}
 type ShippingAddress = z.infer<typeof shippingAddressSchema>;
 const Checkout: FC<CheckoutProps> = memo(() => {
-  const { data, isFetching } = useFetchOrder();
+  const { isOpenBuyLaterModal, setIsOpenBuyLaterModal } = useSaveOrder();
+  const { data, isFetching } = useFetchCheckoutOrder();
   const { goToPaymentGateway } = usePayment();
   const {
     register,
@@ -100,7 +101,7 @@ const Checkout: FC<CheckoutProps> = memo(() => {
       <section className="space-y-4">
         <h2 className="text-xl font-medium">Thông tin đơn hàng</h2>
 
-        {data.orders.map((order, index: number) => (
+        {data.orders.map((order: OrderTableProps, index: number) => (
           <OrderTable key={index} {...order} />
         ))}
         {/* <Table>
@@ -143,8 +144,15 @@ const Checkout: FC<CheckoutProps> = memo(() => {
             </Table.Row>
           </Table.Body>
         </Table> */}
+        <BuyLaterModal
+          isOpen={isOpenBuyLaterModal}
+          setIsOpen={setIsOpenBuyLaterModal}
+        />
         <div className="flex flex-col md:flex-row justify-end space-x-0 md:space-x-4 space-y-4 md:space-y-0">
-          <Button className="flex justify-center items-center py-3 space-x-2 font-sans font-bold text-orange-600 rounded-md px-6 bg-white shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border border-orange-600">
+          <Button
+            onClick={() => setIsOpenBuyLaterModal((prev) => !prev)}
+            className="flex justify-center items-center py-3 space-x-2 font-sans font-bold text-orange-600 rounded-md px-6 bg-white shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border border-orange-600"
+          >
             Mua sau
           </Button>
           <Button
