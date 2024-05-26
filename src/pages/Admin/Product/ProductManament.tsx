@@ -8,6 +8,7 @@ import ErrorMessage from "../../../components/admin/ErrorMessage";
 import ListItem from "../../../components/admin/ListItem";
 import apiProducts from "../../../apis/apiProducts";
 import { useQuery } from "@tanstack/react-query";
+import Pagination from "@components/common/pagination/Pagination";
 
 const ProductManagement: FC = memo(() => {
   const [openFilter, setFilter] = useState(false);
@@ -21,7 +22,6 @@ const ProductManagement: FC = memo(() => {
     endDate: null,
     startPrice: "",
     endPrice: "",
-    catagory: "",
     approveByAI: "false",
     order: "newToOld",
   };
@@ -35,7 +35,7 @@ const ProductManagement: FC = memo(() => {
   const { data, isPending, error } = useQuery({
     queryKey: ["products", page, filterOpts],
     queryFn: async () => {
-      return await apiProducts.getProductsList(page, 20, filterOpts);
+      return await apiProducts.getProductsList(page, 10, filterOpts);
     },
     refetchOnWindowFocus: false,
   });
@@ -93,6 +93,7 @@ const ProductManagement: FC = memo(() => {
               <ListItem key={index} type="product" values={element} />
             ))
           )}
+          <Pagination currentPage={page} goToPage={setPage} />
         </>
       ) : (
         <Filter

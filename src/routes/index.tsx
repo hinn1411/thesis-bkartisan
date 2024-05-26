@@ -1,10 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 
 // Layouts
-import UserLayout from "../layouts/UserLayout";
-import AdminLayout from "../layouts/AdminLayout";
-import SellerLayout from "../layouts/SellerLayout";
-import PaymentLayout from "src/layouts/PaymentLayout";
+import UserLayout from '../layouts/UserLayout';
+import AdminLayout from '../layouts/AdminLayout';
+import SellerLayout from '../layouts/SellerLayout';
+import PaymentLayout from 'src/layouts/PaymentLayout';
+import AuthLayout from 'src/layouts/AuthLayout';
+
 
 // Common pages
 import ErrorPage from "../components/common/errors/Error";
@@ -88,8 +90,27 @@ const router = createBrowserRouter([
       { path: "seller_registration", element: <SellerRegistrationPage /> },
       { path: "category", element: <CategoryPage /> },
       { path: "shop", element: <ShopPage /> },
+      { path: 'search', element: <SearchPage /> },
+      { path: 'cart', element: <CartPage /> },
+      { path: 'order', element: <OrderPage /> },
+      { path: 'products/:productId', element: <ProductDetailPage /> },
+      { path: 'favorite', element: <FavouriteProductPage /> },
+      { path: 'seller_registration', element: <SellerRegistrationPage /> },
+      { path: 'category', element: <CategoryPage /> },
+      { path: 'shop', element: <ShopPage /> },
+      {
+        path: 'message',
+        element: <AuthLayout />,
+        children: [
+          {
+            index: true,
+            element: <ViewMessage />,
+          },
+        ],
+      },
     ],
   },
+  { path: "/error", element: <ErrorPage /> },
   {
     path: "/checkout",
     element: <PaymentLayout />,
@@ -149,6 +170,7 @@ const router = createBrowserRouter([
       { path: "products", element: <ProductManagement /> },
       { path: "products/:productId", element: <ProductDetailPage /> },
       { path: "reviewproducts", element: <ReviewProduct /> },
+      { path: "reviewproducts/:productId", element: <ProductDetailPage /> },
       { path: "orders", element: <OrderManagement /> },
       { path: "orders/:id", element: <OrderDetail /> },
       { path: "message", element: <ViewMessage /> },

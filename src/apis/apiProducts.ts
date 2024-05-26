@@ -1,5 +1,5 @@
-import { formatDate } from '../utils/formatDate';
-import { axiosClient } from './axiosClient';
+import { formatDate } from "../utils/formatDate";
+import { axiosClient } from "./axiosClient";
 // import { ProductProps } from '../pages/Seller/ManageProducts/Hooks/useProductMutation';
 export interface IProducts {
   productId: number;
@@ -88,7 +88,7 @@ const apiProducts = {
   },
   searchProducts: async (searchObject) => {
     try {
-      const { data } = await axiosClient.get('/products/search', {
+      const { data } = await axiosClient.get("/products/search", {
         params: searchObject,
       });
       return data.map(
@@ -120,7 +120,7 @@ const apiProducts = {
   },
   createProduct: async (productData: FormData) => {
     try {
-      const response = await axiosClient.post('/products', productData);
+      const response = await axiosClient.post("/products", productData);
 
       return response.data;
     } catch (err) {
@@ -131,7 +131,7 @@ const apiProducts = {
 
   deleteProduct: async (productIds: number[]) => {
     try {
-      const response = await axiosClient.delete('/products', {
+      const response = await axiosClient.delete("/products", {
         params: { productIds: productIds },
       });
 
@@ -145,21 +145,68 @@ const apiProducts = {
   getProductsList: async (page: number, offset: number, filterOpts: any) => {
     if (filterOpts.endDate != null) {
       filterOpts.endDate = formatDate(
-        'yyyy-mm-dd',
+        "yyyy-mm-dd",
         new Date(filterOpts.endDate)
       );
     }
     if (filterOpts.startDate != null) {
       filterOpts.startDate = formatDate(
-        'yyyy-mm-dd',
+        "yyyy-mm-dd",
         new Date(filterOpts.startDate)
       );
     }
     const { data } = await axiosClient.get(`/products-list`, {
       params: {
+        page,
+        offset,
         ...filterOpts,
       },
     });
+    return data;
+  },
+  getReviewProductsList: async (
+    page: number,
+    offset: number,
+    filterOpts: any
+  ) => {
+    if (filterOpts.endDate != null) {
+      filterOpts.endDate = formatDate(
+        "yyyy-mm-dd",
+        new Date(filterOpts.endDate)
+      );
+    }
+    if (filterOpts.startDate != null) {
+      filterOpts.startDate = formatDate(
+        "yyyy-mm-dd",
+        new Date(filterOpts.startDate)
+      );
+    }
+    // const { data } = await axiosClient.get(`/review-products-list`, {
+    //   params: {
+    //     page,
+    //     offset,
+    //     ...filterOpts,
+    //   },
+    // });
+    const data = [
+      [
+        "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg",
+        "Ghế làm bằng gỗ",
+        "Lầu Hội",
+        "Đang duyệt",
+        "2024-05-20T04:16:02.160Z",
+        1,
+      ],
+      [
+        "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg",
+        "Búp bê giấy",
+        "Lầu Hội",
+        "Từ chối",
+        "2024-05-20T04:16:02.160Z",
+        1,
+      ],
+    ];
+
     return data;
   },
 };

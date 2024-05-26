@@ -8,7 +8,11 @@ function useFormResponse<Type>(
   api: Fucntion
 ) {
   const queryClient = useQueryClient();
-  const { register, handleSubmit } = useForm<Type>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Type>();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (values) => {
@@ -31,6 +35,7 @@ function useFormResponse<Type>(
     handleSubmit,
     mutate,
     isPending,
+    errors
   };
 }
 

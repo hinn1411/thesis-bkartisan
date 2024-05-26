@@ -1,4 +1,4 @@
-import { FC, Fragment, memo, useState } from "react";
+import { FC, Fragment, memo } from "react";
 import { Grid } from "@mui/material";
 import ListItem from "../../../components/admin/ListItem";
 import apiUsers from "../../../apis/apiUsers";
@@ -16,58 +16,11 @@ type FormData = {
 };
 
 const UserManagement: FC = memo(() => {
-  // const options = JSON.parse(
-  //   sessionStorage.getItem("usermanagement-filter") || "null"
-  // ) || { byDate: "newToOld", byStatus: "all", name: "" };
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm<FormData>({
-  //   defaultValues: options,
-  // });
-
-  // const [filterOpts, setFilterOpts] = useState(options);
-
-  // const { data, isFetching, isSuccess, isPending, error } = useQuery({
-  //   queryKey: ["users", page, filterOpts],
-  //   queryFn: async () => {
-  //     return await apiUsers.getUsersList(page, 20, filterOpts);
-  //   },
-  //   refetchOnWindowFocus: false,
-  // });
-
-  // const onSubmit = (data: FormData) => {
-  //   sessionStorage.setItem("usermanagement-filter", JSON.stringify(data));
-  //   setFilterOpts(data);
-  // };
-
-  // const arr = [
-  //   ["Bình luận", "Lầu Hội", "Chúng Đức Quang", "Chưa đọc", "10:00AM 20/10/2002"],
-  //   ["Sản phẩm", "Lầu Hội", "Chúng Đức Quang", "Chưa xử lí", "10:00AM 20/10/2002"],
-  //   ["Mua bán", "Lầu Hội", "Chúng Đức Quang", "Đã xử lí", "10:00AM 20/10/2002"],
-  // ];
-
-  // const arr = [
-  //   ["1", "Lầu Hội", "Chúng Đức Quang", "Chờ xác nhận", "20/10/2002"],
-  //   ["2", "Lầu Hội", "Chúng Đức Quang", "Đã thành công", "20/10/2002"],
-  //   ["3", "Lầu Hội", "Chúng Đức Quang", "Đã hủy", "20/10/2002"],
-  // ];
-
-  // const arr = [
-  //   ["Bình luận", "Lầu Hội", "Chúng Đức Quang", "10:00AM 20/10/2002"],
-  //   ["Sản phẩm", "Lầu Hội", "Chúng Đức Quang", "10:00AM 20/10/2002"],
-  //   ["Mua bán", "Lầu Hội", "Chúng Đức Quang", "10:00AM 20/10/2002"],
-  // ];
-
-  const [page, setPage] = useState(1);
-
   const filterName = "usermanagement-filter";
   const defaultFieldValues = { byDate: "newToOld", byStatus: "all", name: "" };
-  const queryKey = ["users", page];
+  const queryKey = ["users", 1];
 
-  const { register, data, isPending, onSubmit, error } = useFilterFetch<FormData>(
+  const { register, data, isPending, onSubmit, error, page, setPage } = useFilterFetch<FormData>(
     filterName,
     defaultFieldValues,
     queryKey,
@@ -160,32 +113,7 @@ const UserManagement: FC = memo(() => {
         })
       )}
 
-      {/* <Pagination currentPage={page} goToPage={setPage} /> */}
-
-      {/**Report */}
-
-      {/* <Grid container className={"text-slate-600 text-lg font-medium p-2 py-5"}>
-        <Grid item xs={1}>
-          Loại
-        </Grid>
-        <Grid item xs={3}>
-          Người bị report
-        </Grid>
-        <Grid item xs={3}>
-          Người gửi
-        </Grid>
-        <Grid item xs={1.5}>
-          Trạng thái
-        </Grid>
-        <Grid item xs={2.5}>
-          Thời gian gửi
-        </Grid>
-      </Grid>
-      <hr className="border" />
-
-      {arr.map((element, index) => {
-        return <ListItem key={index} type="report-or-order" values={element} />;
-      })} */}
+      <Pagination currentPage={page} goToPage={setPage} />
 
       {/**Order */}
 

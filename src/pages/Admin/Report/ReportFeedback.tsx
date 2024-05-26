@@ -16,7 +16,7 @@ const ReportFeedback: FC<ReportFeedbackProps> = memo(({report}) => {
       <Grid container p={1} rowGap={3} paddingBottom={2} >
         <Grid item xs={1.5} className="font-medium pb-2">Quản trị viên xử lí: </Grid>
         <Grid item xs={3} marginRight={"5rem"}>
-          <TextField value={report.handler} />
+          <TextField value={report.handlerName} />
         </Grid>
         <Grid item xs={1} className="font-medium pb-2">Ngày xử lí: </Grid>
         <Grid item xs={3.5}>

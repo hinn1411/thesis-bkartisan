@@ -27,5 +27,6 @@ export const useLogin = () => {
     isPending,
     isError,
     errorMessage: error?.message,
+    error,
   };
 };

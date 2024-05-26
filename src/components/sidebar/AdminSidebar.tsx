@@ -20,8 +20,7 @@ const AdminSidebar: FC<SidebarProp> = memo(
   ({ isSidebarOpen, role, username }) => {
     const location = useLocation();
 
-    const {newMessage, setNewMessage} = useNotifyMessage(username);
-
+    const { newMessage, setNewMessage } = useNotifyMessage(username);
 
     return (
       <div>
@@ -165,27 +164,29 @@ const AdminSidebar: FC<SidebarProp> = memo(
                   </span>
                 </Link>
               </li>
-              <li className="Don hang">
-                <Link
-                  to="orders"
-                  className={`flex  items-center p-2 text-gray-500 rounded-lg  group ${
-                    urlMatch("orders", location.pathname)
-                      ? `bg-orange-500 text-white`
-                      : `hover:bg-orange-100 hover:text-gray-900`
-                  } group`}
-                >
-                  <BsCart3
-                    className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${
+              {role === "admin" && (
+                <li className="Don hang">
+                  <Link
+                    to="orders"
+                    className={`flex  items-center p-2 text-gray-500 rounded-lg  group ${
                       urlMatch("orders", location.pathname)
-                        ? ` text-white`
-                        : `group-hover:text-gray-900 `
-                    } `}
-                  ></BsCart3>
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Đơn hàng
-                  </span>
-                </Link>
-              </li>
+                        ? `bg-orange-500 text-white`
+                        : `hover:bg-orange-100 hover:text-gray-900`
+                    } group`}
+                  >
+                    <BsCart3
+                      className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${
+                        urlMatch("orders", location.pathname)
+                          ? ` text-white`
+                          : `group-hover:text-gray-900 `
+                      } `}
+                    ></BsCart3>
+                    <span className="flex-1 ms-3 whitespace-nowrap">
+                      Đơn hàng
+                    </span>
+                  </Link>
+                </li>
+              )}
               <li className="Tin nhan">
                 <Link
                   to="message"
