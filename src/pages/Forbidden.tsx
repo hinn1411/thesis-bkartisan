@@ -1,4 +1,4 @@
-import { RiFolderForbidFill } from "react-icons/ri";
+import { RiFolderForbidFill } from 'react-icons/ri';
 
 const Forbidden = () => {
   return (
@@ -7,7 +7,7 @@ const Forbidden = () => {
         <div className="text-4xl font-bold text-orange-400">ERROR</div>
         <div className="text-2xl text-orange-400">Bạn không có quyền truy cập trang này!</div>
     </div>
-  )
-}
+  );
+};
 
-export default Forbidden
+export default Forbidden;

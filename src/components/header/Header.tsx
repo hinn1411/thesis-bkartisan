@@ -1,4 +1,4 @@
-import React, { memo, FC, ChangeEvent, useContext } from 'react';
+import React, { memo, FC, ChangeEvent, useContext } from "react";
 // Icons
 import {
   HeartOutlined,
@@ -13,30 +13,30 @@ import {
   UserOutlined,
   InfoCircleOutlined,
   CaretDownOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 // Languages
-import vnFlag from '../../assets/images/header/vn-flag.png';
-import enFlag from '../../assets/images/header/enFlag.webp';
-import { LANGUAGES } from '../../constants/languages';
-import { Link, useNavigate } from 'react-router-dom';
+import vnFlag from "../../assets/images/header/vn-flag.png";
+import enFlag from "../../assets/images/header/enFlag.webp";
+import { LANGUAGES } from "../../constants/languages";
+import { Link, useNavigate } from "react-router-dom";
 // Apis
-import apiAuth from '../../apis/apiAuth';
+import apiAuth from "../../apis/apiAuth";
 // Styles
-import './Header.module.css';
+import "./Header.module.css";
 //  Hooks
-import { useUserProfile } from '../../hooks/useUserProfile';
-import { useCategory } from '../../hooks/useCategory';
-import { useState, useEffect, useRef } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useUserProfile } from "../../hooks/useUserProfile";
+import { useCategory } from "../../hooks/useCategory";
+import { useState, useEffect, useRef } from "react";
+import { useTranslation, Trans } from "react-i18next";
 // Skeletons
-import AvatarSkeleton from '../common/skeleton/Avatar';
-import TextSkeleton, { TextListSkeleton } from '../common/skeleton/Text';
-import LogoSkeleton from '../common/skeleton/Logo';
+import AvatarSkeleton from "../common/skeleton/Avatar";
+import TextSkeleton, { TextListSkeleton } from "../common/skeleton/Text";
+import LogoSkeleton from "../common/skeleton/Logo";
 import {
   CategoryCardProps,
   CategoryText,
-} from '@components/common/category/index';
-import { CartContext, CartContextType } from 'src/store/CartContext';
+} from "@components/common/category/index";
+import { CartContext, CartContextType } from "src/store/CartContext";
 const Header: FC = memo(() => {
   // Navigation
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const Header: FC = memo(() => {
   const userRef = useRef<HTMLDivElement>(null);
 
   // Data
-  const [searchKey, setSearchKey] = useState<string>('');
+  const [searchKey, setSearchKey] = useState<string>("");
   const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile();
   const { categories, isPending: isLoadingCategories } = useCategory();
   const { numberOfItems } = useContext(CartContext) as CartContextType;
@@ -70,9 +70,9 @@ const Header: FC = memo(() => {
         setIsUserDropdownOpened(false);
       }
     };
-    document.addEventListener('mousedown', userSelectionHandler);
+    document.addEventListener("mousedown", userSelectionHandler);
     return () =>
-      document.removeEventListener('mousedown', userSelectionHandler);
+      document.removeEventListener("mousedown", userSelectionHandler);
   });
   useEffect(() => {
     const categorySelectionHandler = (e: MouseEvent) => {
@@ -81,9 +81,9 @@ const Header: FC = memo(() => {
         // console.log(categoryRef.current);
       }
     };
-    document.addEventListener('mousedown', categorySelectionHandler);
+    document.addEventListener("mousedown", categorySelectionHandler);
     return () =>
-      document.removeEventListener('mousedown', categorySelectionHandler);
+      document.removeEventListener("mousedown", categorySelectionHandler);
   });
 
   useEffect(() => {
@@ -93,9 +93,9 @@ const Header: FC = memo(() => {
         // console.log(languageRef.current);
       }
     };
-    document.addEventListener('mousedown', languageSelectionHandler);
+    document.addEventListener("mousedown", languageSelectionHandler);
     return () =>
-      document.removeEventListener('mousedown', languageSelectionHandler);
+      document.removeEventListener("mousedown", languageSelectionHandler);
   });
 
   const changeCurrentLanguage = (newFlag: string, newLanguage: string) => {
@@ -194,6 +194,8 @@ const Header: FC = memo(() => {
                 <MenuOutlined
                   size={24}
                   className="hover:scale-110 duration-300 hover:cursor-pointer"
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
                 />
               </div>
               <div className="flex items-center justify-center hover:cursor-pointer">
@@ -208,7 +210,7 @@ const Header: FC = memo(() => {
             ) : (
               <div
                 className={`${
-                  isCategoryDropdownOpened ? 'block' : 'hidden'
+                  isCategoryDropdownOpened ? "block" : "hidden"
                 }  z-10 absolute right-[50%] translate-x-[50%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48`}
               >
                 <ul
@@ -245,7 +247,7 @@ const Header: FC = memo(() => {
                 setSearchKey(e.target.value)
               }
               type="text"
-              placeholder={t('header.search')}
+              placeholder={t("header.search")}
               className="w-full focus:outline-none border-none placeholder:font-thin border-transparent focus:border-transparent focus:ring-0 "
             />
             <button
@@ -256,7 +258,11 @@ const Header: FC = memo(() => {
               }
               className="flex justify-center items-center"
             >
-              <SearchOutlined className="hover:scale-110 duration-300" />
+              <SearchOutlined
+                className="hover:scale-110 duration-300"
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              />
             </button>
           </form>
         )}
@@ -281,11 +287,14 @@ const Header: FC = memo(() => {
                     src={user.avatar}
                     className="object-cover h-[30px] w-[30px] rounded-full border-solid border-2 border-orange-600"
                   ></img>
-                  <CaretDownOutlined />
+                  <CaretDownOutlined
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 </div>
                 <div
                   className={`${
-                    isUserDropdownOpened ? 'block' : 'hidden'
+                    isUserDropdownOpened ? "block" : "hidden"
                   } z-10 absolute  right-[50%] translate-x-[50%] border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-48 mx-auto`}
                 >
                   <ul
@@ -297,31 +306,54 @@ const Header: FC = memo(() => {
                     </li>
                     <Link to="/order">
                       <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <FileSearchOutlined />
-                        <p>Lịch sử mua hàng</p>
+                        <FileSearchOutlined
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        />
+                        <p>Quản lý đơn hàng</p>
+                      </li>
+                    </Link>
+                    <Link to="/message">
+                      <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <CommentOutlined
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        />
+                        <p>Tin nhắn</p>
                       </li>
                     </Link>
 
                     <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <CommentOutlined />
-                      <p>Tin nhắn</p>
-                    </li>
-                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <BellOutlined />
+                      <BellOutlined
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                      />
                       <p>Thông báo</p>
                     </li>
                     <Link to="/favorite">
                       <li className="flex items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <HeartOutlined />
+                        <HeartOutlined
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        />
                         <div>Danh sách yêu thích</div>
                       </li>
                     </Link>
+                    <Link to='/profile'>
+                      <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <UserOutlined
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}
+                        />
+                        <p>Trang cá nhân</p>
+                      </li>
+                    </Link>
+
                     <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <UserOutlined />
-                      <p>Trang cá nhân</p>
-                    </li>
-                    <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <InfoCircleOutlined />
+                      <InfoCircleOutlined
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}
+                      />
                       <p>Hướng dẫn sử dụng</p>
                     </li>
                     <li
@@ -335,7 +367,7 @@ const Header: FC = memo(() => {
               </div>
             ) : (
               <span className="font-medium">
-                <Link to="/login">{t('header.login')}</Link>
+                <Link to="/login">{t("header.login")}</Link>
               </span>
             )}
           </div>
@@ -348,6 +380,8 @@ const Header: FC = memo(() => {
                   <HeartOutlined
                     size={24}
                     className="hover:scale-110 duration-300 hover:cursor-pointer"
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
                   />
                 </div>
               </Link>
@@ -359,7 +393,11 @@ const Header: FC = memo(() => {
                     {numberOfItems}
                   </div>
 
-                  <ShoppingOutlined className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer" />
+                  <ShoppingOutlined
+                    className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 </div>
               </Link>
 
@@ -369,6 +407,8 @@ const Header: FC = memo(() => {
                     size={24}
                     className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
                     onClick={() => {}}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
                   />
                 </div>
               </Link>
@@ -380,11 +420,14 @@ const Header: FC = memo(() => {
                   className="language-trigger flex items-center justify-center space-x-1 hover:cursor-pointer"
                 >
                   <img src={currentFlag} className="w-6 h-4" />
-                  <CaretDownOutlined />
+                  <CaretDownOutlined
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 </div>
                 <div
                   className={`${
-                    isLanguageDropdownOpened ? 'block' : 'hidden'
+                    isLanguageDropdownOpened ? "block" : "hidden"
                   }  z-10 absolute right-[50%] translate-x-[50%]  border mt-2  bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-36 mx-auto `}
                 >
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">

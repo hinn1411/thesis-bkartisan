@@ -1,5 +1,5 @@
-import { floor } from 'lodash';
-import { axiosClient } from './axiosClient';
+import { floor } from "lodash";
+import { axiosClient } from "./axiosClient";
 // import { ProductProps } from '../pages/Seller/ManageProducts/Hooks/useProductMutation';
 export interface IOrders {
   orderId: number;
@@ -18,11 +18,11 @@ export interface IOrderProduct {
   name: string;
 }
 const apiOrders = {
-  getBuyerOrder: async () => {
+  getCheckoutOrder: async () => {
     try {
-      const { data } = await axiosClient.get('/orders');
-      data.orders = data.orders.map((order: any) => {
-        order.items = order.items.map((item: any) => ({
+      const { data } = await axiosClient.get("/orders");
+      data.orders = data.orders.map((order) => {
+        order.items = order.items.map((item) => ({
           productImage: item.coverImage,
           productName: item.name,
           finalPrice: floor(item.price * (1 - item.discount / 100)),
@@ -31,6 +31,53 @@ const apiOrders = {
         return order;
       });
       console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  getBuyerOrders: async (status: string) => {
+    console.log(`status = ${status}`);
+    const queryObject: any = {};
+    if (status) {
+      queryObject["status"] = status;
+    }
+    try {
+      const { data } = await axiosClient.get("/orders/buyer", {
+        params: queryObject,
+      });
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  saveOrder: async () => {
+    try {
+      const { data } = await axiosClient.post("/orders/save");
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  cancelOrder: async ({ orderId }: { orderId: string }) => {
+    try {
+      const { data } = await axiosClient.post("/payments/refund", {
+        orderId: orderId,
+      });
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  changeOrderState: async ({ orderId }: { orderId: string }) => {
+    try {
+      const { data } = await axiosClient.post("/orders/state", {
+        orderId: orderId,
+      });
       return data;
     } catch (err) {
       console.log(err);
@@ -78,7 +125,7 @@ const apiOrders = {
       },
     });
 
-    return data
+    return data;
   },
 };
 

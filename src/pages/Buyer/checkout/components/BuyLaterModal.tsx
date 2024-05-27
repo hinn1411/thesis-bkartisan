@@ -1,15 +1,16 @@
-import { Fragment, useRef, FC, memo, Dispatch } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { Fragment, useRef, FC, memo, Dispatch } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useSaveOrder } from "../hooks/useSaveOrder";
 
-export type CancelModalProps = {
+export type BuyLaterModalProps = {
   isOpen: boolean;
   setIsOpen: Dispatch<boolean>;
 };
 
-const CancelModal: FC<CancelModalProps> = memo(({ isOpen, setIsOpen }) => {
+const BuyLaterModal: FC<BuyLaterModalProps> = memo(({ isOpen, setIsOpen }) => {
   const cancelButtonRef = useRef(null);
-
+  const { saveOrder } = useSaveOrder();
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog
@@ -44,9 +45,9 @@ const CancelModal: FC<CancelModalProps> = memo(({ isOpen, setIsOpen }) => {
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
                       <ExclamationTriangleIcon
-                        className="h-6 w-6 text-red-600"
+                        className="h-6 w-6 text-green-600"
                         aria-hidden="true"
                       />
                     </div>
@@ -55,11 +56,11 @@ const CancelModal: FC<CancelModalProps> = memo(({ isOpen, setIsOpen }) => {
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        Hủy đơn
+                        Thông báo
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Bạn có muốn hủy đơn hàng này không?
+                          Bạn có muốn lưu đơn hàng này không?
                         </p>
                       </div>
                     </div>
@@ -67,9 +68,9 @@ const CancelModal: FC<CancelModalProps> = memo(({ isOpen, setIsOpen }) => {
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
+                    onClick={() => saveOrder()}
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600 sm:ml-3 sm:w-auto"
-                    onClick={() => setIsOpen(false)}
+                    className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700 sm:ml-3 sm:w-auto"
                   >
                     Đồng ý
                   </button>
@@ -91,4 +92,4 @@ const CancelModal: FC<CancelModalProps> = memo(({ isOpen, setIsOpen }) => {
   );
 });
 
-export default CancelModal;
+export default BuyLaterModal;
