@@ -44,7 +44,6 @@ const ProductDetail: FC = memo(() => {
 
   const location = useLocation();
   const isAdminPage = urlMatch("products", location.pathname);
-  const isReviewPage = urlMatch("reviewproducts", location.pathname);
 
   const { data, isFetching } = useProductDetail(productId as string);
   const { addToCart } = useCart();
@@ -210,7 +209,7 @@ const ProductDetail: FC = memo(() => {
 
               <Rating name="read-only" value={5} readOnly />
             </div>
-            {!isAdminPage && !isReviewPage && (
+            {!isAdminPage && (
               <div className="max-w-full flex flex-col my-5 space-y-3">
                 <button
                   onClick={handleAddItem}
@@ -355,87 +354,62 @@ const ProductDetail: FC = memo(() => {
                 </div>
               </div>
             </div>
-            {isAdminPage ? (
-              <div className="flex justify-center">
-                <FlowbiteBtn
-                  color="failure"
-                  onClick={() => setOpenResponseModal(true)}
-                >
-                  Xóa sản phẩm
-                </FlowbiteBtn>
+
+            <div
+              onClick={() => setIsOpenedReportProduct(true)}
+              className="flex items-center text-sm underline space-x-1 cursor-pointer"
+            >
+              <div className="bg-red-200 p-1 rounded-full">
+                <BsExclamationCircle className="text-red-600" />
               </div>
-            ) : isReviewPage ? (
-              <div className="flex justify-center space-x-6 w-full">
-                <FlowbiteBtn
-                  color="success"
-                  onClick={() => setOpenResponseModal(true)}
-                >
-                  Duyệt bài đăng
-                </FlowbiteBtn>
-                <FlowbiteBtn
-                  color="gray"
-                  onClick={() => setOpenResponseModal(true)}
-                >
-                  Từ chối
-                </FlowbiteBtn>
-              </div>
-            ) : (
-              <div
-                onClick={() => setIsOpenedReportProduct(true)}
-                className="flex items-center text-sm underline space-x-1 cursor-pointer"
-              >
-                <div className="bg-red-200 p-1 rounded-full">
-                  <BsExclamationCircle className="text-red-600" />
-                </div>
-                <p>Báo cáo bài đăng</p>
-              </div>
-            )}
+              <p>Báo cáo bài đăng</p>
+            </div>
           </section>
         )}
-        {!isReviewPage && (
-          <div className="space-y-4 my-4">
-            <div className="flex items-center">
-              <p>Đánh giá sản phẩm | </p>
-              <Rating
-                name="simple-controlled"
-                value={currentStar}
-                onChange={(_, newValue) => {
-                  setCurrentStar(newValue as number);
-                }}
-              />
-              <p className="text-xs font-medium">(1)</p>
-            </div>
 
-            {/* Comment box */}
-            <div className="max-w flex flex-col">
-              <Textarea
-                className="resize-none"
-                id="comment"
-                placeholder="Nhập bình luận"
-                rows={4}
-                value={currentComment}
-                onChange={(e) => setCurrentComment(e.target.value)}
-              />
-              <button
-                onClick={handleAddComment}
-                type="button"
-                className="bg-green-500 mt-3 w-1/6 p-1 rounded-md text-white self-end"
-              >
-                Gửi
-              </button>
-            </div>
-            {/* List comment */}
-            <CommentList isLoading={isFetching} data={data} />
-            <Pagination currentPage={1} goToPage={() => {}} />
-            {/* <div id="ListComment" className=" flex flex-col items-center mb-10"> */}
-            {/* <Comment
+        <div className="space-y-4 my-4">
+          <div className="flex items-center">
+            <p>Đánh giá sản phẩm | </p>
+            <Rating
+              name="simple-controlled"
+              value={currentStar}
+              onChange={(_, newValue) => {
+                setCurrentStar(newValue as number);
+              }}
+            />
+            <p className="text-xs font-medium">(1)</p>
+          </div>
+
+          {/* Comment box */}
+          <div className="max-w flex flex-col">
+            <Textarea
+              className="resize-none"
+              id="comment"
+              placeholder="Nhập bình luận"
+              rows={4}
+              value={currentComment}
+              onChange={(e) => setCurrentComment(e.target.value)}
+            />
+            <button
+              onClick={handleAddComment}
+              type="button"
+              className="bg-green-500 mt-3 w-1/6 p-1 rounded-md text-white self-end"
+            >
+              Gửi
+            </button>
+          </div>
+          {/* List comment */}
+          <CommentList isLoading={isFetching} data={data} />
+          <Pagination currentPage={1} goToPage={() => {}} />
+          {/* <div id="ListComment" className=" flex flex-col items-center mb-10"> */}
+          {/* <Comment
               star={5}
               content="Lorem ipsum dolor sit amet consectetur. Odio integer pellentesque justo eget volutpat nisl cursus quis pretium."
               userName="sweetcake12"
               userImage="https://baoduongmaynenkhi.vn/wp-content/uploads/2022/03/Bieu-cam-Noi-vay-ma-nghe-duoc-a-cua-meo-Tom.jpg"
               date="25 Tháng 10, 2023"
             ></Comment> */}
-            {/* <Comment
+          {/* <Comment
               star={5}
               content="Lorem ipsum dolor sit amet consectetur. Odio integer pellentesque justo eget volutpat nisl cursus quis pretium."
               userName="sweetcake12"
@@ -450,8 +424,7 @@ const ProductDetail: FC = memo(() => {
               date="25 Tháng 10, 2023"
             ></Comment> */}
           {/* </div> */}
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

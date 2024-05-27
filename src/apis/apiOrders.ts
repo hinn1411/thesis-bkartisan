@@ -116,25 +116,14 @@ const apiOrders = {
     }
   },
 
-  getOrdersList: async (searchTerm: string, page: number, offset: number) => {
-    const data = [
-      [
-        1,
-        "Chúng Đức Quang",
-        "Lầu Hội",
-        "Chờ xác nhận",
-        "2024-05-20T04:16:02.160Z",
-        1,
-      ],
-      [
-        2,
-        "Chúng Đức Quang",
-        "Lầu Hội",
-        "Đã thành công",
-        "2024-05-20T04:16:02.160Z",
-        2,
-      ],
-    ];
+  getOrdersList: async (page: number, offset: number, filterOpts: any) => {
+    const { data } = await axiosClient.get(`/orders/admin`, {
+      params: {
+        page: page,
+        offset: offset,
+        ...filterOpts
+      },
+    });
 
     return data;
   },
