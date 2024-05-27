@@ -37,7 +37,12 @@ const Filter: FC<FilterProps> = memo(
     } = useForm<FormData>({ defaultValues: filterOpts });
 
     const onSubmit = handleSubmit((data) => {
-      sessionStorage.setItem("productmanagement-filter", JSON.stringify(data));
+      if (isProductPage) {
+        sessionStorage.setItem("productmanagement-filter", JSON.stringify(data));
+      }
+      else {
+        sessionStorage.setItem("reviewproductmanagement-filter", JSON.stringify(data));
+      }
       setFilterOpts(data);
       setOpen(false);
     });

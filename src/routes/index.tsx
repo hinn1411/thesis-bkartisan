@@ -73,6 +73,7 @@ import ChangeInfo from "../pages/Admin/Collab/ChangeInfo";
 
 // Trang tin nhắn
 import ViewMessage from 'src/pages/Message/ViewMessage';
+import ReviewProductDetail from "src/pages/Admin/ReviewProduct/ReviewProductDetail";
 
 const router = createBrowserRouter([
   {
@@ -161,7 +162,7 @@ const router = createBrowserRouter([
       { path: "products", element: <ProductManagement /> },
       { path: "products/:productId", element: <ProductDetailPage /> },
       { path: "reviewproducts", element: <ReviewProduct /> },
-      { path: "reviewproducts/:productId", element: <ProductDetailPage /> },
+      { path: "reviewproducts/:productId", element: <ReviewProductDetail /> },
       { path: "orders", element: <OrderManagement /> },
       { path: "orders/:id", element: <OrderDetail /> },
       { path: "message", element: <ViewMessage /> },
