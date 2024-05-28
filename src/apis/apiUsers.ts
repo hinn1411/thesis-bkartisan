@@ -1,4 +1,4 @@
-import { authClient, axiosClient } from './axiosClient';
+import { authClient, axiosClient } from "./axiosClient";
 
 const apiUsers = {
   getUsersList: async (page: number, offset: number, filterOpts: any) => {
@@ -65,6 +65,61 @@ const apiUsers = {
     } catch (err) {
       console.log(err);
       throw err;
+    }
+  },
+  updateAccount: async (accountData: FormData) => {
+    try {
+      const { data } = await axiosClient.patch("/profile/account", accountData);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  updatePassword: async (passwordData: {
+    password: string;
+    newPassword: string;
+  }) => {
+    try {
+      const { data } = await axiosClient.patch(
+        "/profile/password",
+        passwordData
+      );
+      return data;
+    } catch (err: any) {
+      console.log(err);
+
+      throw new Error(err.response.data.msg);
+    }
+  },
+  updateEmail: async (emailData: { password: string; email: string }) => {
+    try {
+      const { data } = await axiosClient.patch("/profile/email", emailData);
+      return data;
+    } catch (err: any) {
+      console.log(err);
+      throw new Error(err.response.data.msg);
+    }
+  },
+  updateAddress: async (addressData: { nation: string; address: string }) => {
+    try {
+      const { data } = await axiosClient.patch("/profile/address", addressData);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  becomeSeller: async (sellerInfo) => {
+    try {
+      const { data } = await axiosClient.patch(
+        "/seller/become_seller",
+        sellerInfo
+      );
+      return data;
+    } catch (err: any) {
+      console.log(err);
+      throw new Error(err.response.data.msg);
     }
   },
 };

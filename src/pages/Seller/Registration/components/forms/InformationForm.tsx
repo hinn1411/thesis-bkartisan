@@ -1,167 +1,108 @@
-import { FC, memo } from 'react';
-import TextInput from '../../../../../components/common/input/TextInput';
-import SelectInput from '../../../../../components/common/input/SelectInput';
-import { FormComponentProps } from './types';
-import { steps } from '../../data';
-import Button from '../../../../../components/common/button/Button';
-import { useAddress } from '../../hooks/useAddress';
-import Spinner from '../../../../../components/common/ui/Spinner';
-const InformationForm: FC<FormComponentProps> = memo(
-  ({ errors, register, next, watch, getValues }) => {
-    const {
-      cities,
-      districts,
-      wards,
-      currentCity,
-      currentDistrict,
-      currentWard,
-      setCity,
-      setDistrict,
-      setWard,
-      isFetching,
-      error,
-    } = useAddress();
-    // const { data: cities, isFetching, error } = useCity();
-    // const [currentCity, setCurrentCity] = useState();
-    // const currentCity = watch('city');
-    // console.log(`current city = ${currentCity}`);
-    // const { data: districts } = useDistrict(currentCity);
-    // console.log(`city`, cities);
-    // console.log(`districts = `, districts);
+import { Dispatch, FC, memo } from "react";
+import TextInput from "../../../../../components/common/input/TextInput";
+import { steps } from "../../data";
+import Button from "../../../../../components/common/button/Button";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { Inputs } from "../../SellerRegistration";
+import { useFetchCountries } from "@hooks/useFetchCountries";
 
-    if (isFetching) {
-      return <Spinner />;
-    }
-    if (error) {
-      alert('Co loi xuat hien');
-    }
+export interface InformationFormProps {
+  register: UseFormRegister<Inputs>;
+  errors: FieldErrors<Inputs>;
+  goNext: Dispatch<number>;
+}
+
+const InformationForm: FC<InformationFormProps> = memo(
+  ({ errors, register, goNext }) => {
+    const { countries } = useFetchCountries();
     return (
-      <main className="sm:w-full md:w-[35%] mx-auto space-y-2 mt-4 ">
+      <main className="sm:w-full md:max-w-md mx-auto space-y-2 mt-4 ">
         <div>
           <div>
-            <label>Số điện thoại MoMo</label>
+            <label className="text-sm">Họ và tên</label>
           </div>
           <TextInput
+            className="w-full text-sm py-3 px-4 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light placeholder:text-sm hover:outline hover:outline-black hover:outline-1"
             type="text"
-            placeholder={'Nhập tên shop của bạn...'}
-            label={steps[1].fields[0]}
-            register={register}
-            errors={errors}
-            validatedObject={{}}
-          />
-        </div>
-        <div>
-          <div>
-            <label>Họ và tên đệm</label>
-          </div>
-          <TextInput
-            type="text"
-            placeholder={'Nhập họ và tên đệm...'}
-            label={steps[1].fields[1]}
-            register={register}
-            errors={errors}
-            validatedObject={{}}
-          />
-        </div>
-        <div>
-          <div>
-            <label>Tên</label>
-          </div>
-          <TextInput
-            type="text"
-            placeholder={'Nhập tên của bạn...'}
-            label={steps[1].fields[2]}
-            register={register}
-            errors={errors}
-            validatedObject={{}}
-          />
-        </div>
-        <div>
-          <div>
-            <label>Số điện thoại cá nhân</label>
-          </div>
-          <TextInput
-            type="text"
-            placeholder={'Nhập số điện thoại...'}
-            label={steps[1].fields[3]}
-            register={register}
-            errors={errors}
-            validatedObject={{}}
-          />
-        </div>
-        <div>
-          <div>
-            <label>Địa chỉ email</label>
-          </div>
-          <TextInput
-            type="text"
-            placeholder={'Nhập email...'}
-            label={steps[1].fields[4]}
+            placeholder={"Nhập họ và tên"}
+            label={steps[1].name as string}
             register={register}
             errors={errors}
             validatedObject={{}}
           />
         </div>
 
+        <div>
+          <div>
+            <label className="text-sm">Số điện thoại</label>
+          </div>
+          <TextInput
+            className="w-full text-sm py-3 px-4 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light placeholder:text-sm hover:outline hover:outline-black hover:outline-1"
+            type="text"
+            placeholder={"Nhập số điện thoại..."}
+            label={steps[1].numPhone as string}
+            register={register}
+            errors={errors}
+            validatedObject={{}}
+          />
+        </div>
+        <div>
+          <div>
+            <label className="text-sm">Địa chỉ email</label>
+          </div>
+          <TextInput
+            className="w-full text-sm py-3 px-4 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light placeholder:text-sm hover:outline hover:outline-black hover:outline-1"
+            type="text"
+            placeholder={"Nhập email..."}
+            label={steps[1].email as string}
+            register={register}
+            errors={errors}
+            validatedObject={{}}
+          />
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="nation" className="block text-sm">
+            Chọn quốc gia
+          </label>
+          <select
+            id="nation"
+            {...register("nation")}
+            className=" border border-gray-300 text-gray-900 text-sm rounded-md  block w-full py-3 px-4 "
+          >
+            <option value="" selected>
+              Chọn quốc gia
+            </option>
+            {countries &&
+              countries.map((country: string, index: number) => (
+                <option key={index} value={country}>
+                  {country}
+                </option>
+              ))}
+            {/* <option value="FR">France</option>
+                <option value="DE">Germany</option> */}
+          </select>
+          {errors.nation && (
+            <p className="text-sm text-red-500">{errors.nation.message}</p>
+          )}
+        </div>
         <div className="">
           <div>
-            <label>Địa chỉ liên lạc</label>
+            <label className="text-sm">Địa chỉ liên lạc</label>
           </div>
-          <div>
-            <div className="sm:flex rounded-lg shadow-sm">
-              <SelectInput
-                currentOption={currentCity}
-                setOption={setCity}
-                data={cities}
-                label={steps[1].fields[5]}
-                register={register}
-                errors={errors}
-                placeholder="Tỉnh/Thành phố"
-                className="py-4 px-4 inline-flex items-center min-w-fit w-full border border-gray-200  text-sm  -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:w-auto sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg relative focus:z-10  focus:border-blue-500 focus:ring-blue-500"
-              />
-              <SelectInput
-                currentOption={currentDistrict}
-                setOption={setDistrict}
-                data={districts}
-                label={steps[1].fields[6]}
-                register={register}
-                errors={errors}
-                placeholder="Quận/Huyện"
-                className="py-4 px-4 pe-11 block w-full border-gray-200  -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-              />
-              <SelectInput
-                currentOption={currentWard}
-                setOption={setWard}
-                data={wards}
-                label={steps[1].fields[7]}
-                register={register}
-                errors={errors}
-                placeholder="Phường/Xã"
-                className="py-4 px-4 pe-11 block w-full border-gray-200  -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 "
-              />
-            </div>
-
-            <div>
-              {(errors[steps[1].fields[5]] ||
-                errors[steps[1].fields[6]] ||
-                errors[steps[1].fields[7]]) && (
-                <p className="text-red-600 text-sm">
-                  Vui lòng chọn địa chỉ liên lạc
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="mt-4">
-            <TextInput
-              type="text"
-              placeholder={'Nhập số nhà và tên đường...'}
-              label={steps[1].fields[8]}
-              register={register}
-              errors={errors}
-              validatedObject={{}}
-            />
-          </div>
+          <div></div>
         </div>
+        <div className="mt-4">
+          <TextInput
+            className="w-full text-sm py-3 px-4 border border-gray-300 rounded-md placeholder:font-sans placeholder:font-light placeholder:text-sm hover:outline hover:outline-black hover:outline-1"
+            type="text"
+            placeholder={"Nhập địa chỉ"}
+            label={steps[1].address as string}
+            register={register}
+            errors={errors}
+            validatedObject={{}}
+          />
+        </div>
+        {/* </div> */}
         {/* <div className="w-2/3">
           <div>
             <label>Số nhà</label>
@@ -171,8 +112,8 @@ const InformationForm: FC<FormComponentProps> = memo(
         </div> */}
         <div>
           <Button
-            className="w-full md:w-auto md:mx-auto flex justify-center items-center p-3 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border"
-            onClick={next}
+            onClick={goNext}
+            className="w-full md:w-auto md:mx-auto flex justify-center items-center py-3 text-sm font-sans font-normal text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border"
           >
             Tiếp tục
           </Button>
