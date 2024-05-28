@@ -99,13 +99,14 @@ const ViewTransport: FC<YourComponentProps> = memo(() => {
         <form className="max-w-3xl mx-auto">
           {tempTransports.map((transport: ITransport, index: number) => (
             <div key={transport.transportId} className="mb-16">
-              <p onClick={() => handleDelete(transport.transportId)} className="text-red-500 cursor-pointer hover:bg-gray-200 p-1 w-36 rounded-md ">Xóa vận chuyển</p>
+              <p onClick={() => handleDelete(transport.transportId)} className={`text-red-500 cursor-pointer hover:bg-gray-200 p-1 w-36 rounded-md ${transport.location === "Another"? `hidden` : ``} `}>Xóa vận chuyển</p>
               <div className="flex mb-4 justify-between">
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Chọn nước vận chuyển
                   </label>
-                  <select
+                  {transport.location != "Another" && (
+                    <select
                     id="location"
                     className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 pr-7"
                     value={transport.location}
@@ -116,12 +117,23 @@ const ViewTransport: FC<YourComponentProps> = memo(() => {
                     <option value="Campuchia">Campuchia</option>
                     <option value="China">China</option>
                   </select>
+                  )}
+                  {transport.location === "Another" && (
+                      <input
+                      type="text"
+                      id="location"
+                      className="shadow-sm bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                      value={transport.location}
+                      disabled
+                      required
+                    />
+                  )}
                 </div>
 
                 <div className="flex">
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Chọn khoảng thời gian vận chuyển
+                      Thời gian dự kiến nhận hàng
                     </label>
                     <select
                       id="deliveryTime"
