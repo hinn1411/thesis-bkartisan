@@ -2,18 +2,38 @@ import {
   GiftOutlined,
   MessageOutlined,
   SearchOutlined,
-} from '@ant-design/icons';
-import Button from '@components/common/button/Button';
-import Pagination from '@components/common/pagination/Pagination';
-import ProductList from '@components/common/product/ProductList';
-import { Rating } from '@mui/material';
-import { FC, memo, useState } from 'react';
-import { useProductPagination } from 'src/pages/Buyer/home/hooks/useProductPagination';
+} from "@ant-design/icons";
+import Button from "@components/common/button/Button";
+import Pagination from "@components/common/pagination/Pagination";
+import ProductList from "@components/common/product/ProductList";
+import { useUserProfile } from "@hooks/useUserProfile";
+import { Rating } from "@mui/material";
+import { FC, memo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useProductPagination } from "src/pages/Buyer/home/hooks/useProductPagination";
 
 const Shop: FC = memo(() => {
+  const navigate = useNavigate();
+  const { user } = useUserProfile();
+  console.log(user);
+
   const { data: products, page, setPage, isFetching } = useProductPagination();
   const [currentItemType, setCurrentItemType] = useState(0);
-  const itemTypes = ['Sản phẩm', 'Hộp quà', 'Thiệp lời chúc'];
+  const itemTypes = [
+    "Sản phẩm",
+    "Hộp quà",
+    "Thiệp lời chúc",
+    "Chính sách vận chuyển",
+  ];
+  const handleChatWithSeller = () => {
+    navigate("/message", {
+      state: {
+        username: user.username,
+        name: user.name,
+        avatar: user.avatar,
+      },
+    });
+  };
   return (
     <div className="min-h-screen mx-4 md:mx-32 my-6 space-y-6">
       {/* Seller information */}
@@ -21,21 +41,24 @@ const Shop: FC = memo(() => {
         {/* Image */}
         <img
           alt=""
-          src="https://i1.sndcdn.com/artworks-yzNuGkvkb8zQNVyU-BFXBgA-t500x500.jpg"
+          src={user?.avatar}
           className="object-cover h-[100px] w-[100px] rounded-[7.5px]"
         />
         {/* Details */}
         <div className="flex flex-col justify-between">
           {/* Shop name */}
-          <p className="font-sans text-xl font-semibold">nguyen van a</p>
+          <p className="font-sans text-xl font-semibold">{user?.shopName}</p>
           {/* Rating container */}
           <div className="flex items-center space-x-1">
-            <Rating value={5} size="small" color="black" />
+            <Rating readOnly value={5} size="small" color="black" />
             <span className="text-xs font-medium">({4.5})</span>
           </div>
           {/* Buttons container */}
           <div className="flex items-center space-x-3">
-            <Button className="flex items-center space-x-1 shadow-lg py-[9px] px-[32px] bg-white border-2 border-black rounded-full">
+            <Button
+              onClick={handleChatWithSeller}
+              className="flex items-center space-x-1 shadow-lg py-[9px] px-[32px] bg-white border-2 border-black rounded-full"
+            >
               <MessageOutlined
                 onPointerEnterCapture={undefined}
                 onPointerLeaveCapture={undefined}
@@ -54,7 +77,7 @@ const Shop: FC = memo(() => {
       </section>
 
       {/* Product container */}
-      <section className='space-y-6'>
+      <section className="space-y-6">
         {/* Filter container */}
         <div className="flex items-center space-x-12">
           <ul className="flex flex-wrap text-start">

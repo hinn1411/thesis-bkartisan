@@ -1,12 +1,12 @@
-import { FC, memo } from 'react';
-import styles from './Stepper.module.css';
-import { CheckOutlined } from '@ant-design/icons';
-import { steps } from '../data';
+import { Dispatch, FC, memo } from "react";
+import styles from "./Stepper.module.css";
+import { CheckOutlined } from "@ant-design/icons";
+import { steps } from "../data.ts";
 interface StepperProps {
   currentState: number;
-  setCurrent: any;
+  setCurrent: Dispatch<number>;
   isCompleted: boolean;
-  setIsCompleted: any;
+  setIsCompleted: Dispatch<boolean>;
 }
 
 const Stepper: FC<StepperProps> = memo(
@@ -24,7 +24,11 @@ const Stepper: FC<StepperProps> = memo(
             >
               <div onClick={() => setCurrent(i)} className={styles.step}>
                 {i < currentState || isCompleted ? (
-                  <CheckOutlined size={24} />
+                  <CheckOutlined
+                    size={24}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
+                  />
                 ) : (
                   i + 1
                 )}
@@ -33,7 +37,7 @@ const Stepper: FC<StepperProps> = memo(
                 onClick={() => setCurrent(i)}
                 className="text-gray-500 mt-2 hover:cursor-pointer"
               >
-                {step.name}
+                {step.stepName}
               </p>
             </div>
           ))}

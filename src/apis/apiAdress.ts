@@ -1,9 +1,9 @@
-import { axiosClient } from './axiosClient';
+import { axiosClient } from "./axiosClient";
 
 const apiAddress = {
   getCity: async () => {
     try {
-      const { data } = await axiosClient.get('/city');
+      const { data } = await axiosClient.get("/city");
       return data.map(({ cityId, cityName }: any) => ({
         id: cityId,
         name: cityName,
@@ -38,6 +38,15 @@ const apiAddress = {
         id: wardId,
         name: wardName,
       }));
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  getCountries: async () => {
+    try {
+      const { data } = await axiosClient.get("/countries");
+      return data;
     } catch (err) {
       console.log(err);
       throw err;
