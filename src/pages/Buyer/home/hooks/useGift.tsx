@@ -5,6 +5,7 @@ export const useGift = () => {
   const { data: gifts, isPending } = useQuery({
     queryKey: ['gifts'],
     queryFn: apiCategorys.getGifts,
+    refetchOnWindowFocus: false
   });
   return {
     gifts,
