@@ -3,8 +3,8 @@ import { Button, Modal, Select, Spinner, Textarea } from "flowbite-react";
 import { FC, memo } from "react";
 import useFormResponse from "../../../hooks/useFormReponse";
 import { comment, product } from "@contants/response";
-import apiComment from "@apis/apiComment";
 import apiProducts from "@apis/apiProducts";
+import apiReports from "@apis/apiReports";
 
 interface ResponseModalProps {
   openModal: boolean;
@@ -24,16 +24,18 @@ const ResponseModal: FC<ResponseModalProps> = memo(
     let api;
     let queryKey;
 
+    // review product nó gửi vào productId là url param nên đã là string sẵn rồi.
+    // 2 thằng kia do query lấy từ url nên là string nhưng mà truyền vào prop lại là number nên cần toString lại.
     switch (type) {
       case "delete-product":
         options = product;
-        api = apiProducts.deleteProduct;
-        queryKey = ["product", { id }];
+        api = apiReports.handleReport;
+        queryKey = ["reportDetails", id.toString()];
         break;
       case "delete-comment":
         options = comment;
-        api = apiComment.deleteComment;
-        queryKey = ["comment", { id }];
+        api = apiReports.handleReport;
+        queryKey = ["reportDetails", id.toString()];
         break;
       default:
         options = product;
@@ -54,6 +56,9 @@ const ResponseModal: FC<ResponseModalProps> = memo(
       values.id = id;
       if (type === "reject-product") {
         values.accepted = false;
+      }
+      else {
+        values.accepted = true;
       }
       values.response = data;
       mutate(values);

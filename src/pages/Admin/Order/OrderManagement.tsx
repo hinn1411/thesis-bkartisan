@@ -29,7 +29,7 @@ const orderState = [
 
 const OrderManagement: FC = memo(() => {
   const filterName = "ordermanagement-filter";
-  const defaultFieldValues = { byDate: "newToOld", byStatus: "all", orderId: ""};
+  const defaultFieldValues = { byDate: "newToOld", byStatus: "Toàn bộ", orderId: ""};
   const queryKey = ["users", 1];
 
   const { register, data, isPending, onSubmit, error, page, setPage } =

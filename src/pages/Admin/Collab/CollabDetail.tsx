@@ -162,7 +162,7 @@ const CollabDetail: FC = memo(() => {
                     alignItems={"center"}
                     className="w-full text-white bg-green-400 hover:bg-green-500 font-medium rounded-lg text-sm py-2.5"
                     onClick={() =>
-                      navigate("products", { state: { name: "Lầu Hội" } })
+                      navigate("/admin/products", { state: { collab: data.username } })
                     }
                   >
                     <Box px={2}>
@@ -179,6 +179,9 @@ const CollabDetail: FC = memo(() => {
                     display={"flex"}
                     alignItems={"center"}
                     className="w-full text-white bg-orange-500 hover:bg-orange-600 font-medium rounded-lg text-sm py-2.5"
+                    onClick={() =>
+                      navigate("/admin/reports", { state: { collab: data.username } })
+                    }
                   >
                     <Box px={2}>
                       <HiOutlineExclamationCircle size={"1.5rem"} />

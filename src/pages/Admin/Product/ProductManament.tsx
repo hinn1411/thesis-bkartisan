@@ -9,6 +9,7 @@ import ListItem from "../../../components/admin/ListItem";
 import apiProducts from "../../../apis/apiProducts";
 import { useQuery } from "@tanstack/react-query";
 import Pagination from "@components/common/pagination/Pagination";
+import { useLocation } from "react-router-dom";
 
 const ProductManagement: FC = memo(() => {
   const [openFilter, setFilter] = useState(false);
@@ -25,6 +26,9 @@ const ProductManagement: FC = memo(() => {
     approveByAI: "false",
     order: "newToOld",
   };
+
+  const state = useLocation().state;
+  if (state) defaultValues.collab = state.collab;
 
   const options =
     JSON.parse(sessionStorage.getItem("productmanagement-filter") || "null") ||

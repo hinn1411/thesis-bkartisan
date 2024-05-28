@@ -20,13 +20,14 @@ interface MessageFieldProps {
 
 const MessageField: FC<MessageFieldProps> = memo(
   ({ receiver, chatrooms, newMessage, setNewMessage, setReceiver }) => {
-    const messages = document.getElementById('messages');
+    const inputRef = useRef(null);
+    const messagesRef = useRef(null);
 
     const scrollToBottom = () => {
-      if (messages) {
-        messages.scrollTop = messages.scrollHeight;
+      if (messagesRef.current != null) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
       }
-    }
+    };
 
     const [user] = useOutletContext();
 
@@ -36,8 +37,6 @@ const MessageField: FC<MessageFieldProps> = memo(
           receiver.chatroomId = chatroom.chatroomId;
       });
     }
-
-    const inputRef = useRef(null);
 
     const { mutate, isPending: isSending } = useMutation({
       mutationFn: async (values) => {
@@ -90,24 +89,38 @@ const MessageField: FC<MessageFieldProps> = memo(
     const dummy = useRef(null);
 
     const foo = () => {
-      if (messages) {
-        console.log(messages.scrollTop, messages.clientHeight, messages.scrollHeight);
+      console.log(messagesRef.current);
+      if (messagesRef.current) {
+        console.log(
+          messagesRef.current.scrollTop,
+          messagesRef.current.clientHeight,
+          messagesRef.current.scrollHeight
+        );
       }
-    }
-    
+    };
+
     useEffect(() => {
-      if (messages) {
-        const shouldScroll = (messages.scrollTop + messages.clientHeight) + 20 >= messages.scrollHeight;
-        // dummy.current?.scrollIntoView({ behavior: "smooth" });
-        if (shouldScroll) {
+      if (messagesRef.current) {
+        if (incomingMsg.length === 0) {
           scrollToBottom();
+        } else {
+          const shouldScroll =
+            messagesRef.current.scrollTop + messages.clientHeight + 387 >=
+            messagesRef.current.scrollHeight;
+          // dummy.current?.scrollIntoView(r{ behavior: "smooth" });
+          if (shouldScroll) {
+            scrollToBottom();
+          }
         }
       }
-    }, [initialMsg, incomingMsg, messages]);
-
+    }, [initialMsg, incomingMsg]);
 
     useEffect(() => {
-      if (newMessage && (receiver.username === newMessage.sender || user.username === newMessage.sender)) {
+      if (
+        newMessage &&
+        (receiver.username === newMessage.sender ||
+          user.username === newMessage.sender)
+      ) {
         setIncomingMsg((prev) => [...prev, newMessage]);
       }
     }, [newMessage]);
@@ -118,7 +131,7 @@ const MessageField: FC<MessageFieldProps> = memo(
         if (receiver.chatroomId) {
           apiChat.read(receiver.chatroomId);
         }
-      }
+      };
     }, [receiver]);
 
     useEffect(() => {
@@ -171,7 +184,12 @@ const MessageField: FC<MessageFieldProps> = memo(
         </div>
 
         {/**Nội dung tin nhắn */}
-        <div onScroll={foo} id="messages" className="relative my-3 overflow-y-auto no-scrollbar max-h-[72vh] min-h-[72vh] flex flex-col space-y-2">
+        <div
+          onScroll={foo}
+          id="messages"
+          ref={messagesRef}
+          className="relative my-3 overflow-y-auto no-scrollbar max-h-[72vh] min-h-[72vh] flex flex-col space-y-2"
+        >
           {receiver.chatroomId && (
             <>
               {initialMsg.map((message) => (
