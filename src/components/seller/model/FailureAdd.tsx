@@ -2,7 +2,11 @@ import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
 import { HiX } from "react-icons/hi";
 
-export function FailureAdd() {
+interface FailureAddProps {
+  message: string;
+}
+
+export function FailureAdd({message }: FailureAddProps) {
     const [openModal, setOpenModal] = useState(true);
 
     return (
@@ -15,7 +19,7 @@ export function FailureAdd() {
                     <HiX className="mx-auto mb-4 h-14 w-14 bg-green text-gray-400 dark:text-gray-200" />
                 </div>
                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Thêm sản phẩm thất bại, vui lòng thử lại!
+                  {message}
                 </h3>
                 <div className="flex justify-center gap-4">
 

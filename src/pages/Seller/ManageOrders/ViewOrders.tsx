@@ -11,26 +11,11 @@ const ViewOrders: FC = memo(() => {
   const { data: orders, page, setPage, isSuccess, isFetching } = useManageOrderPagination('');
   // const { data } = useQueryOrderDetail(1);
   // console.log(data)
-
-
-  const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = event.target.checked;
-
-    // Lặp qua các checkbox khác và cập nhật trạng thái của chúng
-    const checkboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:not(#check_all)');
-    checkboxes.forEach((checkbox: HTMLInputElement) => {
-      checkbox.checked = isChecked;
-    });
-  };
   
   const navigate = useNavigate();
 
   const handleRowClick = (orderId: number) => {
     navigate(`/seller/manage_orders/${orderId}`);
-  };
-
-  const handleCheckboxClick = (event: React.MouseEvent<HTMLTableDataCellElement>) => {
-    event.stopPropagation(); // Ngăn chặn sự kiện click trên input lan truyền đến hàng
   };
 
   const formatDate = (inputDate: string) => {
@@ -70,19 +55,19 @@ const ViewOrders: FC = memo(() => {
               <option value="9">Gói quà</option>
             </select>
           </div>
-          <div>
+          {/* <div>
             <select className='p-0 hover:drop-shadow-lg border border-gray-300 px-3 rounded-xl text-gray-500  hover:bg-gray-200' id="status">
               <option selected>Đổi trạng thái</option>
               <option value="1">Chờ lấy hàng</option>
               <option value="2">Đang giao hàng</option>
             </select>
-          </div>
+          </div> */}
         </div>
         <table className="table-fixed w-full px-8 mt-5 border">
           <thead className='border-b'>
             <tr>
-              <th className=" py-2 w-1/12 ..."><input id='check_all' className='rounded-sm focus:ring-3 focus:ring-orange-300' type="checkbox" onChange={handleSelectAll}/></th>
-              <th className="w-1/8 ...">Mã đơn hàng</th>
+              {/* <th className=" py-2 w-1/12 ..."><input id='check_all' className='rounded-sm focus:ring-3 focus:ring-orange-300 hidden' type="checkbox"/></th> */}
+              <th className="py-2 w-1/8 ...">Mã đơn hàng</th>
               <th className="w-1/8 ...">Tên khách hàng</th>
               <th className="w-1/8 ...">Trạng thái</th>
               <th className="w-1/8 ...">Tổng tiền</th>
@@ -93,18 +78,21 @@ const ViewOrders: FC = memo(() => {
           <tbody>
           {isFetching && (
               <TableLoading></TableLoading>
-            )
-
-            }
+            )}
+            {isSuccess && !isFetching && orders.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="text-center py-4">Không có đơn hàng</td>
+                </tr>
+          )}
            {isSuccess && !isFetching && (
               <>
                 {orders.map((order: IOrders) => (
                   <tr key={order.orderId} onClick={() => handleRowClick(order.orderId)} className='text-center border-b hover:bg-gray-200'>
-                    <td onClick={handleCheckboxClick}><input id='check_1' className='rounded-sm bg-white focus:ring-2 focus:ring-orange-300' type="checkbox" /></td>
+                    {/* <td ><input id='check_1' className='hidden rounded-sm bg-white focus:ring-2 focus:ring-orange-300' type="checkbox" /></td> */}
                     <td>{order.orderId}</td>
                     <td>{order.buyer}</td>
                     <td className='py-1'><p className='p-2 rounded-full bg-blue-100 border'>{order.status}</p></td>
-                    <td>{order.totalPrice}</td>
+                    <td>{order.total}</td>
                     <td>{formatDate(order.createAt.toLocaleString())}</td>
                     <td>{order.isGift ? 'Có' : 'Không'}</td>
                   </tr>

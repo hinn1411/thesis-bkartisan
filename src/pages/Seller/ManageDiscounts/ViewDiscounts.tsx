@@ -188,6 +188,11 @@ const ViewDiscounts: FC = memo(() => {
           </thead>
           <tbody>
             {isFetching && <TableLoading />}
+            {isSuccess && !isFetching && discounts.length === 0 && (
+                <tr>
+                  <td colSpan={8} className="text-center py-4">Không có mã giảm giá</td>
+                </tr>
+            )}
             {isSuccess && !isFetching && discounts.map((discount: IDiscount) => (
               
               <tr key={discount.id} className='text-center border-b hover:bg-gray-200'>

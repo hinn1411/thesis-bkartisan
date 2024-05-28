@@ -14,7 +14,7 @@ export const useManageOrderPagination = (searchTerm: string) => {
   const { data, isFetching, isSuccess, error } = useQuery({
     queryKey: ['orders', page, searchTerm],
     queryFn: async () => {
-      return await apiOrders.getOrders(searchTerm, page, OFFSET);
+      return await apiOrders.getSellerOrders(page, OFFSET);
     },
   });
 
