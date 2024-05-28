@@ -10,11 +10,18 @@ import { formatCurrency } from "@utils/formatCurrency";
 import { CURRENCIES } from "@contants/currencies";
 import { DownOutlined } from "@ant-design/icons";
 import ReportFeedback from "./ReportFeedback";
+import { useOutletContext } from "react-router-dom";
+import ResponseModal from "@components/admin/modal/ResponseModal";
+import { useRejectReport } from "./hooks/useRejectReport";
+
 interface ProductReportProps {
   report: any;
 }
 
 const ProductReport: FC<ProductReportProps> = memo(({ report }) => {
+  const [user] = useOutletContext();
+  const [openResponseModal, setOpenResponseModal] = useState(false);
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [expandedStates, setExpandedStates] = useState([
     false,
@@ -29,8 +36,16 @@ const ProductReport: FC<ProductReportProps> = memo(({ report }) => {
     setExpandedStates(newExpandedStates);
   };
 
+  const { mutate, isPending } = useRejectReport(report.reportId);
+
   return (
     <Box paddingBottom={4}>
+      <ResponseModal
+        type="delete-product"
+        id={report.reportId}
+        setOpenModal={setOpenResponseModal}
+        openModal={openResponseModal}
+      />
       <Box display={"flex"} justifyContent="space-between">
         <h1 className="text-3xl font-bold py-3">Thông tin report sản phẩm</h1>
         <ReturnIcon />
@@ -63,9 +78,7 @@ const ProductReport: FC<ProductReportProps> = memo(({ report }) => {
           />
         </Grid>
         <Grid item xs={3.5}>
-          <Box className="font-medium pb-2">
-            Người xử lý report
-          </Box>
+          <Box className="font-medium pb-2">Người xử lý report</Box>
           <TextField value={report.handlerName} />
         </Grid>
       </Grid>
@@ -93,21 +106,20 @@ const ProductReport: FC<ProductReportProps> = memo(({ report }) => {
           </div>
           <section className=" md:ml-10 my-2">
             <p className="text-red-700 mb-3">Hàng hiếm</p>
-              <h1 className="text-2xl font-semibold">{report?.name}</h1>
+            <h1 className="text-2xl font-semibold">{report?.name}</h1>
 
             <div className="flex items-center mb-3">
-              
-                <p className="text-green-600 mr-1 text-xl">
-                  {formatCurrency(
-                    report?.currentCost as number,
-                    CURRENCIES.VIETNAMDONG
-                  )}
-                </p>
+              <p className="text-green-600 mr-1 text-xl">
+                {formatCurrency(
+                  report?.currentCost as number,
+                  CURRENCIES.VIETNAMDONG
+                )}
+              </p>
 
               {report?.isOnSale > 0 && (
                 <p className="text-neutral-400 line-through text-sm">
-                  {formatCurrency(report?.originalCost, CURRENCIES.VIETNAMDONG)}(
-                  {report?.discount}%)
+                  {formatCurrency(report?.originalCost, CURRENCIES.VIETNAMDONG)}
+                  ({report?.discount}%)
                 </p>
               )}
             </div>
@@ -243,21 +255,38 @@ const ProductReport: FC<ProductReportProps> = memo(({ report }) => {
       </Box>
       {report.status == "Đã xử lý" ? (
         <ReportFeedback report={report} />
-      ) : (
+      ) : user.role !== "admin" ? (
         <Grid container columnGap={1}>
           <Grid item xs={2} />
           <Grid item xs={6.5} />
           <Grid item xs={1.5}>
-            <Button fullSized color="gray" className="h-9 justify-self-end">
+            <Button
+              fullSized
+              color="gray"
+              className="h-9 justify-self-end"
+              isProcessing={isPending}
+              disabled={isPending}
+              onClick={() =>
+                mutate({ reportId: report.reportId, accepted: false })
+              }
+            >
               Hủy yêu cầu
             </Button>
           </Grid>
           <Grid item xs={1.5}>
-            <Button fullSized color="failure" className="h-9 justify-self-end">
+            <Button
+              disabled={isPending}
+              fullSized
+              color="failure"
+              className="h-9 justify-self-end"
+              onClick={() => setOpenResponseModal(true)}
+            >
               Xóa sản phẩm
             </Button>
           </Grid>
         </Grid>
+      ) : (
+        <></>
       )}
     </Box>
   );

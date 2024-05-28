@@ -6,6 +6,7 @@ import { formatDate } from "../../utils/formatDate";
 interface ListProps {
   type:
     | "user"
+    | "collab"
     | "product"
     | "report"
     | "handled-report"
@@ -26,7 +27,7 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
 
   let layout: number[];
   switch (type) {
-    case "user":
+    case "user" || "collab":
       layout = USER_LAYOUT;
       break;
     case "product" || "handled-product":
@@ -47,9 +48,9 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
     if (type === "handled-product" || type === "handled-report") {
       navigate(`/admin/products/${values[values.length - 1]}`);
     }
-    else if (type === "user") {
-      navigate(`/admin/users/${values[values.length - 1]}`);
-    }
+    // else if (type === "user") {
+    //   navigate(`/admin/users/${values[values.length - 1]}`);
+    // }
     else {
       navigate(`${values[values.length - 1]}`);
     }
@@ -104,7 +105,7 @@ const ListItem: FC<ListProps> = memo(({ type, values, className }) => {
               </div>
             </Grid>
           );
-        } else if (index == 2 && type === "user") {
+        } else if (index == 2 && (type === "user")) {
           return (
             <Grid item xs={layout[index]} key={index}>
               {values[index] === "M"

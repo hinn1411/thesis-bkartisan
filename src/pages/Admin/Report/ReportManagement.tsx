@@ -1,4 +1,4 @@
-import { FC, Fragment, memo, useRef, useState } from "react";
+import { FC, Fragment, memo } from "react";
 import { Grid } from "@mui/material";
 import ListItem from "../../../components/admin/ListItem";
 import apiReports from "../../../apis/apiReports";
@@ -7,7 +7,7 @@ import { Select, TextInput, Button } from "flowbite-react";
 import LoadingMessage from "../../../components/admin/LoadingMessage";
 import ErrorMessage from "../../../components/admin/ErrorMessage";
 import useFilterFetch from "../../../hooks/useFilterFetch";
-import { useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 
 type FormData = {
   byDate: "newToOld" | "oldToNew";
@@ -15,6 +15,7 @@ type FormData = {
   byType: "Toàn bộ" | "Bình luận" | "Sản phẩm" | "Mua bán";
   searchTerm: string;
   mode: "Của bản thân" | "Của các cộng tác viên khác";
+  collab: string;
 };
 
 const ReportManagement: FC = memo(() => {
@@ -27,7 +28,15 @@ const ReportManagement: FC = memo(() => {
     searchTerm: "",
     byType: "Toàn bộ",
     mode: "Của bản thân",
+    collab: "",
   };
+
+  const state = useLocation().state;
+  if (state) {
+    defaultFieldValues.collab = state.collab;
+    defaultFieldValues.mode = "Của các cộng tác viên khác";
+  }
+
   const queryKey = ["reports", 1];
 
   const {
@@ -39,6 +48,7 @@ const ReportManagement: FC = memo(() => {
     getValues,
     page,
     setPage,
+    formErrors,
   } = useFilterFetch<FormData>(
     filterName,
     defaultFieldValues,
@@ -129,7 +139,20 @@ const ReportManagement: FC = memo(() => {
               <TextInput
                 type="text"
                 placeholder="Nhập tên cộng tác viên xử lí"
-                {...register("searchTerm")}
+                {...register("collab", {
+                  validate: (value) => {
+                    if (value !== "" && getValues("mode") !== "Của bản thân")
+                      return false;
+                    return true;
+                  },
+                })}
+                helperText={
+                  formErrors.collab && (
+                    <span className="text-red-500">
+                      Vui lòng chọn lọc theo cộng tác viên khác.
+                    </span>
+                  )
+                }
               />
             </Grid>
           </>

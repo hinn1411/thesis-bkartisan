@@ -13,7 +13,7 @@ function useFilterFetch<Type>(
 
   const [page, setPage] = useState(queryKey[1]);
 
-  const { register, handleSubmit, getValues } = useForm<Type>({
+  const { register, handleSubmit, getValues, formState: { errors } } = useForm<Type>({
     defaultValues: options,
   });
 
@@ -41,6 +41,7 @@ function useFilterFetch<Type>(
     getValues,
     page,
     setPage,
+    formErrors: errors,
   };
 }
 

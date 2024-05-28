@@ -75,8 +75,6 @@ const ReviewProductDetail: FC = memo(() => {
     return <ErrorMessage msg={error.message} />;
   }
 
-  console.log("Data", data);
-
   return (
     <div className="mx-4 md:mx-20">
       <ResponseModal

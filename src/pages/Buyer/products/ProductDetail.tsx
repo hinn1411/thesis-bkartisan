@@ -33,6 +33,7 @@ import { urlMatch } from "@utils/urlMatch";
 import ReturnIcon from "@components/admin/ReturnIcon";
 import { Button as FlowbiteBtn } from "flowbite-react";
 import ResponseModal from "@components/admin/modal/ResponseModal";
+import { useUserProfile } from "@hooks/useUserProfile";
 
 const ProductDetail: FC = memo(() => {
   const [openResponseModal, setOpenResponseModal] = useState(false);
@@ -45,6 +46,7 @@ const ProductDetail: FC = memo(() => {
   const location = useLocation();
   const isAdminPage = urlMatch("products", location.pathname);
 
+  const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile(); 
   const { data, isFetching } = useProductDetail(productId as string);
   const { addToCart } = useCart();
   const { mutate } = useModifyFavorite();
@@ -106,6 +108,8 @@ const ProductDetail: FC = memo(() => {
       <ReportProductModal
         isOpen={isOpenedReportProduct}
         setIsOpen={setIsOpenedReportProduct}
+        user={user}
+        product={data}
       />
       {/* Links navigation */}
       {isAdminPage ? (
