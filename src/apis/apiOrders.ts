@@ -103,12 +103,10 @@ const apiOrders = {
     }
   },
 
-  getOrderDetail: async (orderId: number) => {
+  getOrderAdminDetail: async (orderId: string) => {
     try {
-      const { data } = await axiosClient.get(`/orders/${orderId}`);
-      console.log(`data`, data);
+      const { data } = await axiosClient.get(`/orders/admin/${orderId}`);
 
-      // console.log(res);
       return data;
     } catch (err) {
       console.log(err);
