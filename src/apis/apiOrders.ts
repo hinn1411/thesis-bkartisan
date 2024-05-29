@@ -118,12 +118,19 @@ const apiOrders = {
     }
   },
 
+  getOrderAdminDetail: async (orderId: string) => {
+    try {
+      const { data } = await axiosClient.get(`/orders/admin/${orderId}`);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
   getSellerOrderDetail: async (orderId: string) => {
     try {
       const { data } = await axiosClient.get(`/orders/seller/${orderId}`);
-      console.log(`data`, data);
 
-      // console.log(res);
       return data;
     } catch (err) {
       console.log(err);
