@@ -1,14 +1,15 @@
-import { ChangeEvent, FC, memo, useContext, useEffect } from 'react';
-import momoImage from '@images/cart/momo.png';
-import { useCart } from './hooks/useFetchCart';
-import ItemList from './components/ItemList';
-import { DiscountProps, useDiscount } from './hooks/useDiscount';
-import { formatCurrency } from '@utils/formatCurrency';
-import { CURRENCIES } from '@contants/currencies';
-import { useHandleDiscount } from './hooks/useHandleDiscount';
-import { CartContext, CartContextType } from 'src/store/CartContext';
-import { Link } from 'react-router-dom';
+import { ChangeEvent, FC, memo, useContext, useEffect } from "react";
+import { useCart } from "./hooks/useFetchCart";
+import ItemList from "./components/ItemList";
+import { DiscountProps, useDiscount } from "./hooks/useDiscount";
+import { formatCurrency } from "@utils/formatCurrency";
+import { CURRENCIES } from "@contants/currencies";
+import { useHandleDiscount } from "./hooks/useHandleDiscount";
+import { CartContext, CartContextType } from "src/store/CartContext";
+import { Link } from "react-router-dom";
+import { useUserProfile } from "@hooks/useUserProfile";
 const Cart: FC = memo(() => {
+  const { user } = useUserProfile();
   const { numberOfItems, originalPrice, discountPrice } = useContext(
     CartContext
   ) as CartContextType;
@@ -18,7 +19,9 @@ const Cart: FC = memo(() => {
 
   useEffect(() => {
     window.onbeforeunload = () => {
-      clearDiscount();
+      if (user) {
+        clearDiscount();
+      }
     };
     return () => {
       window.onbeforeunload = null;
@@ -56,7 +59,7 @@ const Cart: FC = memo(() => {
         <ItemList
           className="w-full md:w-[50%] flex flex-col space-y-3"
           isLoading={isFetching}
-          data={cart}
+          data={cart || []}
         />
         {/* Payment container */}
         <div className="w-full md:w-[30%] text-start">
@@ -96,7 +99,7 @@ const Cart: FC = memo(() => {
                 <img
                   src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png"
                   alt="Momo icon"
-                  className='object-cover w-16 p-1 rounded-[7.5px]'
+                  className="object-cover w-16 p-1 rounded-[7.5px]"
                 />
               </label>
             </div>

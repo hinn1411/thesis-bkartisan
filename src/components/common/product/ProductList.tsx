@@ -1,6 +1,6 @@
-import { FC, memo } from 'react';
-import ProductCard, { ProductCardProps } from './ProductCard';
-import ProductSkeleton, { ProductSkeletonList } from './ProductSkeleton';
+import { FC, memo } from "react";
+import ProductCard, { ProductCardProps } from "./ProductCard";
+import { ProductSkeletonList } from "./ProductSkeleton";
 
 export interface ProductListProps {
   data: ProductCardProps[];
