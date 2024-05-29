@@ -1,9 +1,10 @@
 import { Grid } from "@mui/material";
 import { Button, Modal, Select, Spinner, Textarea } from "flowbite-react";
 import { FC, memo } from "react";
-import apiUsers from "../../../apis/apiUsers";
 import useFormResponse from "../../../hooks/useFormReponse";
 import { comment, product } from "@contants/response";
+import apiProducts from "@apis/apiProducts";
+import apiReports from "@apis/apiReports";
 
 interface ResponseModalProps {
   openModal: boolean;
@@ -19,23 +20,47 @@ type FormData = {
 
 const ResponseModal: FC<ResponseModalProps> = memo(
   ({ openModal, setOpenModal, type, id }) => {
-    const options = (type === "delete-product" || type === "reject-product") ? product : comment;
+    let options;
+    let api;
+    let queryKey;
 
-    const foo = () => [];
+    // review product nó gửi vào productId là url param nên đã là string sẵn rồi.
+    // 2 thằng kia do query lấy từ url nên là string nhưng mà truyền vào prop lại là number nên cần toString lại.
+    switch (type) {
+      case "delete-product":
+        options = product;
+        api = apiReports.handleReport;
+        queryKey = ["reportDetails", id.toString()];
+        break;
+      case "delete-comment":
+        options = comment;
+        api = apiReports.handleReport;
+        queryKey = ["reportDetails", id.toString()];
+        break;
+      default:
+        options = product;
+        api = apiProducts.reviewProduct;
+        queryKey = ['review-product', id];
+        break;
+    }
 
     const { register, handleSubmit, mutate, isPending, errors } =
       useFormResponse<FormData>(
-        [type, id],
+        queryKey,
         setOpenModal,
-        //apiUsers.lockUser
-        foo
+        api
       );
 
     const onSubmit = (data) => {
-      const values = {
-        id,
-        response: data,
-      };
+      const values = {};
+      values.id = id;
+      if (type === "reject-product") {
+        values.accepted = false;
+      }
+      else {
+        values.accepted = true;
+      }
+      values.response = data;
       mutate(values);
     };
 
@@ -54,13 +79,15 @@ const ResponseModal: FC<ResponseModalProps> = memo(
               </Grid>
               <Grid item xs={8}>
                 <Select id="reason" {...register("reason")}>
-                  {
-                    options.map((val) => <option key={val} value={val}>{val}</option>)
-                  }
+                  {options.map((val) => (
+                    <option key={val} value={val}>
+                      {val}
+                    </option>
+                  ))}
                 </Select>
               </Grid>
               <Grid item xs={4}>
-                Miêu tả thêm và đề xuất: 
+                Miêu tả thêm và đề xuất:
               </Grid>
               <Grid item xs={8}>
                 <Textarea

@@ -25,7 +25,7 @@ const ReviewProduct: FC = memo(() => {
   };
 
   const options =
-    JSON.parse(sessionStorage.getItem("productmanagement-filter") || "null") ||
+    JSON.parse(sessionStorage.getItem("reviewproductmanagement-filter") || "null") ||
     defaultValues;
 
   const [filterOpts, setFilterOpts] = useState(options);

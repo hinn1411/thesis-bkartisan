@@ -30,11 +30,20 @@ const apiReports = {
     reason: string;
     additionalInfo: string;
     type: "Sản phẩm" | "Bình luận" | "Mua bán";
-    refId: number;
+    refId?: number;
   }) => {
     const { data } = await axiosClient.post(`/reports`, report);
     return data;
   },
+
+  handleReport: async (reportId: string, accepted: boolean, response?: any) => {
+    const { data } = await axiosClient.patch(`/reports/${reportId}`, {
+      accepted,
+      response
+    });
+    return data;
+  }
+
 };
 
 export default apiReports;

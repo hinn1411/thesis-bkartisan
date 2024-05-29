@@ -31,6 +31,7 @@ const CommentList: FC<CommentListProps> = memo(
               replies={item.replies}
               numberOfDownVotes={item.data.numberOfDownvotes}
               numberOfUpvotes={item.data.numberOfUpvotes}
+              writerName={item.data.writerName}
             />
           </li>
         ))}

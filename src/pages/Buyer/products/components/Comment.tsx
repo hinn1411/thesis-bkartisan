@@ -7,6 +7,7 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 import ReportCommentModal from './ReportCommentModal';
+import { useUserProfile } from '@hooks/useUserProfile';
 
 export interface CommentProps {
   commentId: number;
@@ -18,6 +19,7 @@ export interface CommentProps {
   replies: any;
   numberOfUpvotes: number;
   numberOfDownVotes: number;
+  writerName: number;
 }
 
 const Comment: FC<CommentProps> = memo(
@@ -31,8 +33,17 @@ const Comment: FC<CommentProps> = memo(
     numberOfDownVotes,
     replies,
     commentId,
+    writerName,
   }) => {
     console.log(`star = ${star}`);
+
+    const comment = {
+      writer: userName,
+      writerName,
+      commentId,
+    }
+    const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile(); 
+
 
     const [isToggleReply, setIsToggleReply] = useState(false);
     const [isToggleReportModal, setIsToggleReportModal] = useState(false);
@@ -43,6 +54,8 @@ const Comment: FC<CommentProps> = memo(
         <ReportCommentModal
           isOpen={isToggleReportModal}
           setIsOpen={setIsToggleReportModal}
+          user={user}
+          comment={comment}
         />
 
         <div className="max-w border-b border-gray-300 pb-3">

@@ -11,6 +11,15 @@ export interface IProducts {
   numberOfRating: number;
   discount: number;
 }
+export interface IProductsOfSeller {
+  productId: number;
+  price: number;
+  name: string;
+  seller: string;
+  coverImage: string;
+  quantity: number;
+  status: string;
+}
 const apiProducts = {
   getProducts: async (
     searchTerm: string,
@@ -57,6 +66,32 @@ const apiProducts = {
       throw err;
     }
   },
+  getProductsOfSeller: async (
+    searchTerm: string,
+    page: number,
+    offset: number,
+    status: string,
+    isSoldOut: boolean | null,
+  ) => {
+    try {
+      const { data } = await axiosClient.get(`/seller/products`, {
+        params: {
+          searchTerm: searchTerm,
+          page: page,
+          offset: offset,
+          status: status,
+          isSoldOut: isSoldOut
+        },
+      });
+      console.log(`data`, data);
+
+      // console.log(res);
+      return data.products;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
   getProductDetails: async (productId: string | undefined) => {
     try {
       const { data } = await axiosClient.get(`/products/${productId}`);
@@ -80,6 +115,7 @@ const apiProducts = {
         numOfRating: data.numberOfRating,
         comments: data.comments,
         description: data.description,
+        status: data.status,
       };
     } catch (err) {
       console.log(err);
@@ -164,6 +200,7 @@ const apiProducts = {
     });
     return data;
   },
+
   getReviewProductsList: async (
     page: number,
     offset: number,
@@ -181,31 +218,45 @@ const apiProducts = {
         new Date(filterOpts.startDate)
       );
     }
-    // const { data } = await axiosClient.get(`/review-products-list`, {
-    //   params: {
-    //     page,
-    //     offset,
-    //     ...filterOpts,
-    //   },
-    // });
-    const data = [
-      [
-        "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg",
-        "Ghế làm bằng gỗ",
-        "Lầu Hội",
-        "Đang duyệt",
-        "2024-05-20T04:16:02.160Z",
-        1,
-      ],
-      [
-        "https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg",
-        "Búp bê giấy",
-        "Lầu Hội",
-        "Từ chối",
-        "2024-05-20T04:16:02.160Z",
-        1,
-      ],
-    ];
+    const { data } = await axiosClient.get(`/review-products-list`, {
+      params: {
+        page,
+        offset,
+        ...filterOpts,
+      },
+    });
+
+    return data;
+  },
+  
+  getReviewProductDetails: async (productId: string | undefined) => {
+    const { data } = await axiosClient.get(`/review-products/${productId}`);
+
+    return {
+      id: productId,
+      name: data.name,
+      assets: data.assets,
+      introduction: data.introduction,
+      description: data.description,
+      seller: data.seller,
+      sellerName: data.sellerName,
+      sellerImage: data.avatar,
+      currentCost: data.price * (1 - data.discount / 100),
+      discount: data.discount,
+      isOnSale: data.isOnSale,
+      originalCost: data.price,
+      star: data.numberOfStar,
+      numOfRating: data.numberOfRating,
+      status: data.status,
+      reviewResponse: data.reviewResponse,
+    };
+  },
+  reviewProduct: async (id, accepted, response) => {
+    const body = {
+      accepted,
+    };
+    if (response) body.response = response;
+    const { data } = await axiosClient.patch(`/review-products/${id}`, body);
 
     return data;
   },

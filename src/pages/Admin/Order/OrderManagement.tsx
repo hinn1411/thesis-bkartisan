@@ -1,25 +1,35 @@
-import { FC, Fragment, memo, useState } from "react";
+import { FC, Fragment, memo } from "react";
 import { Grid } from "@mui/material";
 import ListItem from "../../../components/admin/ListItem";
-import apiUsers from "../../../apis/apiUsers";
 import Pagination from "../../../components/common/pagination/Pagination";
 import { Select, TextInput, Button } from "flowbite-react";
 import LoadingMessage from "../../../components/admin/LoadingMessage";
 import ErrorMessage from "../../../components/admin/ErrorMessage";
-import { checkLockStatus } from "../../../utils/checkLockStatus";
 import useFilterFetch from "../../../hooks/useFilterFetch";
-import apiReports from "@apis/apiReports";
 import apiOrders from "@apis/apiOrders";
 
 type FormData = {
   byDate: "newToOld" | "oldToNew";
   byStatus: "all" | "normal" | "lock";
-  name: string;
+  orderId: string;
 };
 
+const orderState = [
+  "Toàn bộ",
+  "Chờ xác nhận", // init khi người dùng tạo đơn hàng
+  "Đang xử lý", // người mua  đã thanh toán
+  "Chờ lấy hàng", // người bán đã xác nhận
+  "Đang vận chuyển", // người bán đã xác nhận
+  "Đã giao", // người mua đã xác nhận
+  "Yêu cầu trả hàng", // người mua yêu cầu
+  "Từ chối trả hàng", // người bán chấp nhận
+  "Đã trả hàng", // Người bán xác nhận, admin xác nhận hoàn tiền
+  "Đã hủy", // Đang ở bước đang xử lý, người mua hủy thì hoàn tiền
+]
+
 const OrderManagement: FC = memo(() => {
-  const filterName = "usermanagement-filter";
-  const defaultFieldValues = { byDate: "newToOld", byStatus: "all", name: "" };
+  const filterName = "ordermanagement-filter";
+  const defaultFieldValues = { byDate: "newToOld", byStatus: "Toàn bộ", orderId: ""};
   const queryKey = ["users", 1];
 
   const { register, data, isPending, onSubmit, error, page, setPage } =
@@ -49,9 +59,9 @@ const OrderManagement: FC = memo(() => {
 
         <Grid item xs={2}>
           <Select id="byStatus" {...register("byStatus")}>
-            <option value={"all"}>Toàn bộ</option>
-            <option value={"normal"}>Bình thường</option>
-            <option value={"lock"}>Tạm khóa</option>
+            {
+              orderState.map((element) => <option value={element}>{element}</option>)
+            }
           </Select>
         </Grid>
 
@@ -59,7 +69,7 @@ const OrderManagement: FC = memo(() => {
           <TextInput
             type="text"
             placeholder="Nhập mã đơn hàng"
-            {...register("name")}
+            {...register("orderId")}
           />
         </Grid>
         <Grid item xs={1}>
@@ -82,16 +92,16 @@ const OrderManagement: FC = memo(() => {
           Mã đơn hàng
         </Grid>
         <Grid item xs={2.5}>
-          Người bị report
+          Người mua
         </Grid>
         <Grid item xs={2.5}>
-          Người gửi
+          Người bán
         </Grid>
         <Grid item xs={2}>
           Trạng thái
         </Grid>
         <Grid item xs={2}>
-          Thời gian tạo
+          Ngày tạo
         </Grid>
       </Grid>
       <hr className="border" />

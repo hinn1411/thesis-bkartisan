@@ -65,15 +65,14 @@ import ReviewProduct from "../pages/Admin/ReviewProduct/ReviewProduct";
 import OrderManagement from "../pages/Admin/Order/OrderManagement";
 import UserDetail from "../pages/Admin/User/UserDetail";
 import CollabDetail from "../pages/Admin/Collab/CollabDetail";
-import HandledReports from "../pages/Admin/Collab/HandledReports";
-import HandledProducts from "../pages/Admin/Collab/HandledProducts";
 import AddCollab from "../pages/Admin/Collab/AddCollab";
 import ReportDetail from "../pages/Admin/Report/ReportDetail";
 import OrderDetail from "../pages/Admin/Order/OrderDetail";
 import ChangeInfo from "../pages/Admin/Collab/ChangeInfo";
+import ReviewProductDetail from "src/pages/Admin/ReviewProduct/ReviewProductDetail";
 
 // Trang tin nhắn
-import ViewMessage from "src/pages/Message/ViewMessage";
+import ViewMessage from 'src/pages/Message/ViewMessage';
 
 const router = createBrowserRouter([
   {
@@ -161,8 +160,6 @@ const router = createBrowserRouter([
       { path: "users/:id", element: <UserDetail /> },
       { path: "collabs", element: <CollabManagement /> },
       { path: "collabs/:id", element: <CollabDetail /> },
-      { path: "collabs/:id/reports", element: <HandledReports /> },
-      { path: "collabs/:id/products", element: <HandledProducts /> },
       { path: "collabs/:id/change", element: <ChangeInfo /> },
       { path: "collabs/create", element: <AddCollab /> },
       { path: "reports", element: <ReportManagement /> },
@@ -170,7 +167,7 @@ const router = createBrowserRouter([
       { path: "products", element: <ProductManagement /> },
       { path: "products/:productId", element: <ProductDetailPage /> },
       { path: "reviewproducts", element: <ReviewProduct /> },
-      { path: "reviewproducts/:productId", element: <ProductDetailPage /> },
+      { path: "reviewproducts/:productId", element: <ReviewProductDetail /> },
       { path: "orders", element: <OrderManagement /> },
       { path: "orders/:id", element: <OrderDetail /> },
       { path: "message", element: <ViewMessage /> },

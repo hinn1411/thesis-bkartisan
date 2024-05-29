@@ -5,12 +5,12 @@ import apiOrders from '../../../../apis/apiOrders';
 
 
 
-export const useQueryOrderDetail = (orderId: number) => {
-    const { data, isFetching, isSuccess, error } = useQuery({
-        queryKey: ['orderDetail', orderId],
+export const useQuerySellerOrderDetail = (orderId: string) => {
+    const { data, isFetching, isSuccess, error, refetch } = useQuery({
+        queryKey: ['sellerOrderDetail', orderId],
 
         queryFn: async () => {
-          return await apiOrders.getOrderDetail(orderId);
+          return await apiOrders.getSellerOrderDetail(orderId);
         },
       });
       return {
@@ -18,5 +18,6 @@ export const useQueryOrderDetail = (orderId: number) => {
         isFetching,
         isSuccess,
         error,
+        refetch
       };
 };

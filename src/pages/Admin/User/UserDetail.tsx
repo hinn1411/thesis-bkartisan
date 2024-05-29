@@ -10,7 +10,7 @@ import LockModal from "../../../components/admin/modal/LockModal";
 import UnlockModal from "../../../components/admin/modal/UnlockModal";
 import TextField from "../../../components/admin/TextField";
 import { useQuery } from "@tanstack/react-query";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import apiUsers from "../../../apis/apiUsers";
 import ErrorMessage from "../../../components/admin/ErrorMessage";
 import LoadingMessage from "../../../components/admin/LoadingMessage";
@@ -18,6 +18,7 @@ import { checkLockStatus } from "../../../utils/checkLockStatus";
 import { formatDate } from "../../../utils/formatDate";
 
 const UserDetail: FC = memo(() => {
+  const navigate = useNavigate();
   const [user] = useOutletContext();
   const isAdmin = user.role === "admin";
   const [openDeleteModal, setDeleteModal] = useState(false);
@@ -182,6 +183,9 @@ const UserDetail: FC = memo(() => {
                     display={"flex"}
                     alignItems={"center"}
                     className="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm py-2.5"
+                    onClick={() =>
+                      navigate("/admin/message", { state: { username: data.username, name: data.name, avatar: data.avatar } })
+                    }
                   >
                     <Box px={2}>
                       <MdOutlineChat size={"1.5rem"} fill="#ffffff" />
