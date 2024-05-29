@@ -37,6 +37,7 @@ import {
   CategoryText,
 } from "@components/common/category/index";
 import { CartContext, CartContextType } from "src/store/CartContext";
+import { USERS } from "@contants/users";
 const Header: FC = memo(() => {
   // Navigation
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ const Header: FC = memo(() => {
   // Data
   const [searchKey, setSearchKey] = useState<string>("");
   const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile();
+  console.log(user);
   const { categories, isPending: isLoadingCategories } = useCategory();
   const { numberOfItems } = useContext(CartContext) as CartContextType;
   // console.log(`user = `, user);
@@ -339,7 +341,7 @@ const Header: FC = memo(() => {
                         <div>Danh sách yêu thích</div>
                       </li>
                     </Link>
-                    <Link to='/profile'>
+                    <Link to="/profile">
                       <li className="flex justify-start items-center space-x-1 w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                         <UserOutlined
                           onPointerEnterCapture={undefined}
@@ -401,17 +403,27 @@ const Header: FC = memo(() => {
                 </div>
               </Link>
 
-              <Link to="/seller_registration">
-                <div className="flex items-center justify-center">
-                  <ShopOutlined
-                    size={24}
-                    className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
-                    onClick={() => {}}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
-                  />
-                </div>
-              </Link>
+              <div
+                onClick={() => {
+                  if (!user) {
+                    return navigate(`/error`);
+                  }
+                  if (user.role === USERS.SELLER) {
+                    return navigate(`/shop/${user.username}`);
+                  } else if (user.role === USERS.BUYER) {
+                    return navigate("/seller_registration");
+                  }
+                }}
+                className="flex items-center justify-center"
+              >
+                <ShopOutlined
+                  size={24}
+                  className="hover:scale-110 duration-300 pointer-cursor hover:cursor-pointer"
+                  onClick={() => {}}
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
+                />
+              </div>
 
               {/* Language container */}
               <div className="language-container relative" ref={languageRef}>

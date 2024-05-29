@@ -122,6 +122,40 @@ const apiUsers = {
       throw new Error(err.response.data.msg);
     }
   },
+  getShopInformation: async (seller: string) => {
+    try {
+      const { data } = await axiosClient.get(`/seller/${seller}`);
+      data.products = data.products.map((item) => ({
+        id: item.productId,
+        srcImage: item.coverImage,
+        name: item.name,
+        seller: item.seller,
+        star: item.numberOfStar,
+        numOfRating: item.numberOfRating,
+        currentCost: item.price * (1 - item.discount / 100),
+        originalCost: item.price,
+        percentageOfDiscount: item.discount
+      }));
+      /*
+  id: number;
+  srcImage: string;
+  name: string;
+  star: number;
+  seller: string;
+  numOfRating: number;
+  currentCost: number;
+  originalCost: number;
+  percentageOfDiscount: number;
+  isNew?: boolean;
+  isBuyingGiftProcess?: boolean;
+  productType?: string;
+      */
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
 };
 
 export default apiUsers;

@@ -1,33 +1,91 @@
-import { memo, FC, useState, Fragment } from 'react';
-import Stepper from './components/Stepper';
-import { GiftOutlined } from '@ant-design/icons';
-import { boxData, giftData, envelopeData } from './data.js';
-
-import ProductCard from '../../../components/common/product/ProductCard.js';
-import GiftDetailModal from './components/GiftDetailModal.js';
-import SuccessfulModal from './components/SuccessfulModal.js';
-import { useProductPagination } from '../home/hooks/useProductPagination.js';
-import ProductList from '@components/common/product/ProductList.js';
-import Pagination from '@components/common/pagination/Pagination.js';
+import { memo, FC, useState, Fragment } from "react";
+import Stepper from "./components/Stepper";
+import { GiftOutlined } from "@ant-design/icons";
+import GiftDetailModal from "./components/GiftDetailModal.js";
+import SuccessfulModal from "./components/SuccessfulModal.js";
+import { useProductPagination } from "../home/hooks/useProductPagination.js";
+import ProductList from "@components/common/product/ProductList.js";
+import Pagination from "@components/common/pagination/Pagination.js";
+import { useParams } from "react-router-dom";
+import useFetchShopInformation from "src/pages/Seller/Shop/hooks/useFetchShopInformation.js";
+import GiftList from "./components/GiftList.js";
+import { ToastOptions, toast } from "react-toastify";
+import { Message } from "@components/common/toast/Message.js";
+import { SuccessIcon } from "@components/common/toast/SuccessIcon.js";
+import { options } from "@components/common/toast/options.js";
+import Spinner from "@components/common/ui/Spinner.js";
 /* 
   Remember adding loading indicator for item list
 */
 const Gift: FC = memo(() => {
-  console.log(`giftdata ne`);
-
-  console.log(boxData);
+  const { seller } = useParams();
+  const { shop, isLoading } = useFetchShopInformation(seller as string);
+  console.log(shop);
 
   const [current, setCurrent] = useState(1);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isOpenedGiftDetailModal, setIsOpenedGiftDetailModal] = useState(false);
   const [isDone, setIsDone] = useState(false);
-  const { data: products, page, setPage, isFetching } = useProductPagination();
+  // const { data: products, page, setPage, isFetching } = useProductPagination();
+  const [giftItems, setGiftItems] = useState({});
+  const [giftCard, setGiftCard] = useState([]);
+  const [giftBox, setGiftBox] = useState([]);
+
+  const addItems = (newItem) => {
+    setGiftItems((items) => {
+      if (!items[newItem.giftId]) {
+        return {
+          ...items,
+          [newItem.giftId]: {
+            ...newItem,
+            quantity: 1,
+          },
+        };
+      } else {
+        return {
+          ...items,
+          [newItem.giftId]: {
+            ...newItem,
+            quantity: items[newItem.giftId].quantity + 1,
+          },
+        };
+      }
+    });
+    console.log(`giftItems`);
+
+    console.log(giftItems);
+    notify("Thêm thành công");
+  };
+  const addBox = (newBox) => {
+    setGiftBox((items) => [newBox]);
+    console.log(`giftBox`);
+    console.log(giftBox);
+    notify("Cập nhật thành công");
+  };
+  const addCard = (newCard) => {
+    setGiftCard((items) => [newCard]);
+    notify("Cập nhật thành công");
+  };
+  const notify = (msg: string) => {
+    toast(<Message>{msg}!</Message>, {
+      icon: <SuccessIcon />,
+      ...(options as ToastOptions),
+    });
+  };
+  if(isLoading) {
+    <Spinner />
+  }
   return (
     <div className="min-h-screen px-20 my-5 space-y-5">
       <GiftDetailModal
         isOpen={isOpenedGiftDetailModal}
         setIsOpen={setIsOpenedGiftDetailModal}
         setIsDone={setIsDone}
+        box={giftBox}
+        card={giftCard}
+        items={giftItems}
+        setItems={setGiftItems}
+        transports={shop?.transports}
       />
       <SuccessfulModal isOpen={isDone} setIsOpen={setIsDone} />
       <div className="space-y-1">
@@ -56,46 +114,37 @@ const Gift: FC = memo(() => {
       {/* Choose gift box */}
       {current == 1 && (
         <Fragment>
-          <ProductList isLoading={isFetching} data={products} />
-          <Pagination currentPage={page} goToPage={setPage} />
+          <GiftList
+            data={shop?.products.map((item) => ({
+              giftId: item.id,
+              coverImage: item.srcImage,
+              price: item.currentCost,
+              name: item.name,
+            }))}
+            isLoading={isLoading}
+            addItem={addItems}
+          />
+          {/* <Pagination currentPage={1} goToPage={() => {}} /> */}
         </Fragment>
-
-        // <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        //   {boxData.map((box, idx) => (
-        //     <ProductCard
-        //       key={idx}
-        //       {...box}
-        //       isBuyingGiftProcess={true}
-        //       productType="hộp quà"
-        //     />
-        //   ))}
-        // </div>
       )}
       {/* Choose gift */}
       {current == 2 && (
-        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {giftData.map((gift, idx) => (
-            <ProductCard
-              key={idx}
-              {...gift}
-              isBuyingGiftProcess={true}
-              productType="quà"
-            />
-          ))}
-        </div>
+        <Fragment>
+          <GiftList
+            data={shop?.gifts.filter((item) => item.type === "box")}
+            isLoading={isLoading}
+            addItem={addBox}
+          />
+          {/* <Pagination currentPage={1} goToPage={() => {}} /> */}
+        </Fragment>
       )}
       {/* Choose envelope */}
       {current == 3 && (
-        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-          {envelopeData.map((envelope, idx) => (
-            <ProductCard
-              key={idx}
-              {...envelope}
-              isBuyingGiftProcess={true}
-              productType="thiệp chúc"
-            />
-          ))}
-        </div>
+        <GiftList
+          data={shop?.gifts.filter((item) => item.type === "card")}
+          isLoading={isLoading}
+          addItem={addCard}
+        />
       )}
       <div className="flex space-x-3 justify-center">
         {current > 1 && (
@@ -119,7 +168,7 @@ const Gift: FC = memo(() => {
           }}
           className="w-full md:w-auto flex justify-center items-center py-3 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150"
         >
-          {current == 3 ? 'Hoàn thành' : 'Tiếp tục'}
+          {current == 3 ? "Hoàn thành" : "Tiếp tục"}
         </button>
       </div>
     </div>
