@@ -124,7 +124,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/gift",
+    path: "/gift/:seller",
     element: <UserLayout />,
     errorElement: <ErrorPage />,
     children: [{ index: true, element: <ChooseBoxPage /> }],

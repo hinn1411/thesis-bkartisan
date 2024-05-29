@@ -53,6 +53,21 @@ const apiOrders = {
       throw err;
     }
   },
+  getSellerOrders: async (page: number, offset: number) => {
+    try {
+      const { data } = await axiosClient.get("/orders/seller", {
+        params: {
+          page: page,
+          offset: offset,
+        },
+      });
+      console.log(data)
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
   saveOrder: async () => {
     try {
       const { data } = await axiosClient.post("/orders/save");
@@ -106,6 +121,15 @@ const apiOrders = {
   getOrderAdminDetail: async (orderId: string) => {
     try {
       const { data } = await axiosClient.get(`/orders/admin/${orderId}`);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  getSellerOrderDetail: async (orderId: string) => {
+    try {
+      const { data } = await axiosClient.get(`/orders/seller/${orderId}`);
 
       return data;
     } catch (err) {

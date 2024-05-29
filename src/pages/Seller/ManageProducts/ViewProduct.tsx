@@ -7,11 +7,14 @@ import Pagination from '../../../components/common/pagination/Pagination';
 import { useManageProductPagination } from './Hooks/userManageProductPagination';
 import { useDeleteProductMutation } from './Hooks/useProductMutation';
 import _ from 'lodash'
-import LineProduct, {
-  ProductLineProps
-} from '../../../components/seller/LineProducts';
+import LineProduct from '../../../components/seller/LineProducts';
 import TableLoading from './Components/TableLoading';
-import Dropdown from '../../../components/seller/DropDown';
+import { CiFilter } from 'react-icons/ci';
+import { IoIosArrowDown } from 'react-icons/io';
+import { IProducts, IProductsOfSeller } from '@apis/apiProducts';
+import Loading from './Components/OnLoading';
+import { Success, Warnning, Error } from '@components/seller/Toast';
+import { Confirm } from '@components/seller/model/Confirm';
 
 
 
@@ -20,7 +23,12 @@ const Viewproducts: FC = memo(() => {
 
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [isSoldOut, setIsSoldOut] = useState<boolean | null>(null);
+  const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  
   const [selectedProductIds, setSelectedProductIds] = useState<number[]>([]);
 
   useEffect(() => {
@@ -29,10 +37,12 @@ const Viewproducts: FC = memo(() => {
     }
   }, [mutation.isSuccess]);
 
-  const { data: products, page, setPage, isSuccess, isFetching } = useManageProductPagination(searchTerm, selectedFilter);
+  const { data: products, page, setPage, isSuccess, isFetching, refetch } = useManageProductPagination(searchTerm, selectedStatus, isSoldOut);
 
-  const handleDeleteProduct = () => {
-    mutation.mutate(selectedProductIds)
+
+  const onFilter = () => {
+    setDropdownIsOpen(false)
+    refetch()
   };
 
   const delayedSearch = _.debounce((value: string) => {
@@ -44,9 +54,6 @@ const Viewproducts: FC = memo(() => {
     delayedSearch(value);
   };
 
-  const handleSelectFilter = (filter: string) => {
-    setSelectedFilter(filter);
-  };
 
 
 
@@ -61,8 +68,26 @@ const Viewproducts: FC = memo(() => {
     });
   };
 
-  
+  const handleDeleteProduct = () => {
+    console.log(selectedProductIds)
+    setOpenModal(false);
+    mutation.mutate(selectedProductIds, {
+      onSuccess: () => {
+        setOpenModal(false);
+      },
+    });
+  }
 
+  const handleOpenModal = () => {
+    console.log(selectedProductIds.length)
+    if(selectedProductIds.length > 0) {
+      setOpenModal(true)
+    } else {
+      setShowWarning(true);
+      setTimeout(() => setShowWarning(false), 5000);
+    }
+
+  }
 
   const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
@@ -70,7 +95,7 @@ const Viewproducts: FC = memo(() => {
     checkboxes.forEach((checkbox: HTMLInputElement) => {
       checkbox.checked = isChecked;
     });
-    setSelectedProductIds(isChecked ? products.map((product: ProductLineProps) => product.id) : []);
+    setSelectedProductIds(isChecked ? products.map((product: IProducts) => product.productId) : []);
   };
 
 
@@ -78,6 +103,19 @@ const Viewproducts: FC = memo(() => {
     <div>
       <SellerSideBar name = "ManageProducts"></SellerSideBar>
       <div className='pt-4 px-4 sm:ml-64 mt-16 max-h-[91vh] min-h-[91vh] flex flex-col justify-between'>
+        <Confirm openModal={openModal} onConfirmDelete={handleDeleteProduct} onClose={() => setOpenModal(false)} message='Bạn có chắc muốn xóa các sản phẩm này?'></Confirm>
+
+        {mutation.isSuccess && <Success message='Xóa thành công.'></Success>}
+
+        {mutation.isError && <Error message='Lỗi, vui lòng thử lại!'></Error>}
+
+        { (mutation.isPending) && (
+          <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50'>
+            <Loading></Loading>
+          </div>
+          )}
+
+        { showWarning && <Warnning message='Chưa chọn sản phẩm.' /> }
       <div className="">
         <div className='flex items-center justify-between'>
           <div className='flex items-center space-x-4'>
@@ -87,13 +125,59 @@ const Viewproducts: FC = memo(() => {
                 <p>Thêm</p>
               </div>
             </Link>
-            <div onClick={handleDeleteProduct} className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200 cursor-pointer'>
+            <div onClick={() => handleOpenModal()} className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200 cursor-pointer'>
               <PiTrashLight className = 'w-5 h-5'/>
               <p className='pr-4'>Xóa</p>
             </div>
-            <div className='w-auto'>
-              <Dropdown name='Lọc' filterNames={["Tất cả","Đang bán", "Đang duyệt", "Vi phạm", "Tạm ngưng", "Hết hàng"]} onSelectFilter={handleSelectFilter}></Dropdown>
-              
+            <div>
+            <div onClick={() => setDropdownIsOpen(!dropdownIsOpen)} className='flex items-center space-x-2  drop-shadow-lg border  w-25 px-3 rounded-xl text-gray-500  hover:bg-gray-200'>
+              <CiFilter className = 'w-5 h-5'/>
+              <p>Lọc</p>
+              <IoIosArrowDown className = 'w-5 h-5'/>
+            </div>
+            <div className={`${dropdownIsOpen ? '' : 'hidden'} z-10 absolute bg-white rounded-xl shadow p-2 mt-2`}>
+            <div className='flex space-x-6'>
+              <div className='mb-2'>
+                <p>Trang thái sản phẩm</p>
+                <div className="flex items-center mb-1">
+                  <input onChange={() => setSelectedStatus("all")} checked={selectedStatus === "all"} id="date-all" type="radio" name="date" className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                  <label htmlFor="date-all" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tất cả</label>
+                </div>
+                <div className="flex items-center mb-1">
+                  <input onChange={() => setSelectedStatus("Đang bán")} checked={selectedStatus === "Đang bán"} id="date-outdated" type="radio" name="date" className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                  <label htmlFor="date-outdated" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Đang bán</label>
+                </div>
+                <div className="flex items-center mb-1">
+                  <input onChange={() => setSelectedStatus("Đang duyệt")} checked={selectedStatus === "Đang duyệt"} id="date-outdated" type="radio" name="date" className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                  <label htmlFor="date-outdated" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Đang duyệt</label>
+                </div>
+                <div className="flex items-center mb-1">
+                  <input onChange={() => setSelectedStatus("Vi phạm")} checked={selectedStatus === "Vi phạm"} id="date-outdated" type="radio" name="date" className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                  <label htmlFor="date-outdated" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Vi phạm</label>
+                </div>
+                <div className="flex items-center mb-1">
+                  <input onChange={() => setSelectedStatus("Tạm ngưng")} checked={selectedStatus === "Tạm ngưng"} id="date-outdated" type="radio" name="date" className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                  <label htmlFor="date-outdated" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tạm ngưng</label>
+                </div>
+              </div>
+              <div className='mb-2'>
+                <p>Số lượng hiện có</p>
+                <div className="flex items-center mb-1">
+                  <input onChange={() => setIsSoldOut(null)} checked={isSoldOut === null} id="num-all" type="radio" name="num" className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                  <label htmlFor="num-all" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tất cả</label>
+                </div>
+                <div className="flex items-center mb-1">
+                  <input onChange={() => setIsSoldOut(true)} checked={isSoldOut === true} id="num-sellout" type="radio" name="num" className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                  <label htmlFor="num-sellout" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hết hàng</label>
+                </div>
+                <div className="flex items-center mb-1">
+                  <input onChange={() => setIsSoldOut(false)} checked={isSoldOut === false} id="num-sellout" type="radio" name="num" className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                  <label htmlFor="num-sellout" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Còn hàng</label>
+                </div>
+              </div>
+                <button onClick={onFilter} type="submit" className="text-white bg-orange-500 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm py-1 px-2 text-center dark:bg-orange-500 dark:hover:bg-orange-700 dark:focus:ring-orange-800">Lọc</button>
+            </div>
+            </div>
             </div>
           </div>
 
@@ -130,14 +214,17 @@ const Viewproducts: FC = memo(() => {
           <tbody>
             {isFetching && (
               <TableLoading></TableLoading>
-            )
-
-            }
+            )}
+            {isSuccess && !isFetching && products.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="text-center py-4">Không có sản phẩm</td>
+                </tr>
+          )}
             {isSuccess && !isFetching && (
               <>
-                {products.map((product: ProductLineProps) => (
-                <LineProduct key={product.id} {...product} isSelected={selectedProductIds.includes(product.id)} 
-                onCheckboxChange={(event: ChangeEvent<HTMLInputElement>) => handleCheckboxChange(event, product.id)}/>
+                {products.map((product: IProductsOfSeller) => (
+                <LineProduct key={product.productId} {...product} isSelected={selectedProductIds.includes(product.productId)} 
+                onCheckboxChange={(event: ChangeEvent<HTMLInputElement>) => handleCheckboxChange(event, product.productId)}/>
               ))}
               </>
             )}

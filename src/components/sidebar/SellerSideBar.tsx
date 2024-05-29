@@ -5,15 +5,38 @@ import { BiMessageDots, BiBox } from "react-icons/bi";
 import { AiOutlineLineChart, AiOutlineGift } from "react-icons/ai";
 import { BsCart3 } from 'react-icons/bs';
 import React, { useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
-import { useNotifyMessage } from '@hooks/useNotifyMessage';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+// import { useNotifyMessage } from '@hooks/useNotifyMessage';
+import apiAuth from '@apis/apiAuth';
+import Loading from 'src/pages/Seller/ManageProducts/Components/OnLoading';
+import { useUserProfile } from '@hooks/useUserProfile';
 
 interface sideBarName {
   name: string;
 }
 
+// interface User {
+//   username: string;
+// }
+
 const SellerSideBar: FC<sideBarName> = memo(({name}) => {
-  const [user] = useOutletContext();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await apiAuth.logout().then(() => {
+        navigate("/login");
+      });
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err);
+      throw err;
+    }
+  };
+
+  const { user } = useUserProfile();
+  // const user = useOutletContext<User>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -39,7 +62,7 @@ const SellerSideBar: FC<sideBarName> = memo(({name}) => {
     }
   };
 
-  const {newMessage, setNewMessage} = useNotifyMessage(user.username);
+  // const {newMessage, setNewMessage} = useNotifyMessage(user.username);
 
   React.useEffect(() => {
     document.addEventListener('click', handleOutsideClick);
@@ -75,18 +98,18 @@ const SellerSideBar: FC<sideBarName> = memo(({name}) => {
                   <button type="button" className={`flex text-sm items-center space-x-3 rounded-full ${isDropdownOpen ? 'focus:bg-gray-300 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600' : ''} `} aria-expanded={isDropdownOpen} data-dropdown-toggle="dropdown-user" id="dropdownButton"
                 onClick={handleButtonClick}>
                     
-                    <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo"></img>
-                    <p>Quang</p>
+                    <img className="w-8 h-8 rounded-full" src={user.avatar} alt="user photo"></img>
+                    <p>{user.name}</p>
                   </button>
                   
                 </div>
                 <div className={`z-50 ${isDropdownOpen ? '' : 'hidden'} my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`} id="dropdown-user">
                   <ul className="py-1" role="none">
-                    <li>
+                    {/* <li>
                       <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a>
-                    </li>
-                    <li>
-                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
+                    </li> */}
+                    <li onClick={handleLogout}>
+                      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Đăng xuất</a>
                     </li>
                   </ul>
                 </div>
@@ -95,6 +118,14 @@ const SellerSideBar: FC<sideBarName> = memo(({name}) => {
         </div>
       </div>
     </nav>
+
+      {
+        isLoading && (
+          <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50'>
+            <Loading></Loading>
+          </div>
+        )
+      }
 
     <aside
         id="logo-sidebar"
@@ -156,14 +187,15 @@ const SellerSideBar: FC<sideBarName> = memo(({name}) => {
             
             </li>
             <li>
-              <Link to="/seller/message" onClick={() => setNewMessage([])}>
+              {/* <Link to="/seller/message" onClick={() => setNewMessage([])}> */}
+              <Link to="/seller/message" >
                 <a href="#" className={`flex  items-center p-2 text-gray-500 rounded-lg  group ${name == "Message"? `bg-orange-500 text-white` : `hover:bg-orange-100 hover:text-gray-900`} group`}>
                   <BiMessageDots className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${name == "Message"? ` text-white` : `group-hover:text-gray-900 `} `} />
                   
                   <span className="flex-1 ms-3 whitespace-nowrap">Tin nhắn</span>
-                  {newMessage && newMessage.length > 0 && (
+                  {/* {newMessage && newMessage.length > 0 && (
                     <span className="ml-auto">{newMessage.length}</span>
-                  )}
+                  )} */}
                 </a>
               </Link>
                 

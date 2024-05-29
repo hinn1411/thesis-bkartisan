@@ -259,7 +259,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
       }
       {
         mutation.isError && (
-          <FailureAdd ></FailureAdd>
+          <FailureAdd message={mutation.error?.response.data.error}></FailureAdd>
         )
       }
 

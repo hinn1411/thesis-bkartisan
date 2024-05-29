@@ -11,6 +11,15 @@ export interface IProducts {
   numberOfRating: number;
   discount: number;
 }
+export interface IProductsOfSeller {
+  productId: number;
+  price: number;
+  name: string;
+  seller: string;
+  coverImage: string;
+  quantity: number;
+  status: string;
+}
 const apiProducts = {
   getProducts: async (
     searchTerm: string,
@@ -52,6 +61,32 @@ const apiProducts = {
           numOfRating: numberOfRating,
         })
       );
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  getProductsOfSeller: async (
+    searchTerm: string,
+    page: number,
+    offset: number,
+    status: string,
+    isSoldOut: boolean | null,
+  ) => {
+    try {
+      const { data } = await axiosClient.get(`/seller/products`, {
+        params: {
+          searchTerm: searchTerm,
+          page: page,
+          offset: offset,
+          status: status,
+          isSoldOut: isSoldOut
+        },
+      });
+      console.log(`data`, data);
+
+      // console.log(res);
+      return data.products;
     } catch (err) {
       console.log(err);
       throw err;

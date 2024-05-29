@@ -343,9 +343,9 @@ const ProductDetail: FC = memo(() => {
                     <p className="text-base">{data?.sellerName}</p>
                     <p className="text-sm">
                       Chủ sở hữu của{" "}
-                      <a className="underline text-sm" href="#">
+                      <Link className="underline" to={`/shop/${data?.seller}`}>
                         {data?.seller}
-                      </a>
+                      </Link>
                     </p>
                     <button
                       type="button"

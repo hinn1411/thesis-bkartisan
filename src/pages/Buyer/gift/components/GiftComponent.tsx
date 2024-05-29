@@ -1,11 +1,13 @@
 import { FC, Fragment, memo } from 'react';
 import styles from './GiftDetailModal.module.css';
 import { DeleteOutlined } from '@ant-design/icons';
+import { formatCurrency } from '@utils/formatCurrency';
+import { CURRENCIES } from '@contants/currencies';
 
 
 interface GiftComponentProps {
-  srcImage: string;
-  description: string;
+  coverImage: string;
+  name: string;
   price: number;
 }
 
@@ -14,8 +16,9 @@ interface GiftComponentProps {
 */
 
 const GiftComponent: FC<GiftComponentProps> = memo(
-  ({ srcImage, description, price }) => {
+  ({ coverImage, name, price }) => {
     // const [isDeletedModal, setIsDeletedModal] = useState(true);
+    const formattedPrice = formatCurrency(price, CURRENCIES.VIETNAMDONG);
     return (
       <Fragment>
         {/* <Modal isOpen={isDeletedModal} setIsOpen={setIsDeletedModal} /> */}
@@ -25,13 +28,13 @@ const GiftComponent: FC<GiftComponentProps> = memo(
             <div>
               <img
                 className="h-[50px] w-[50px] overflow-hidden"
-                src={srcImage}
+                src={coverImage}
               />
             </div>
             {/* specifications container */}
             <div>
-              <p className={`${styles.description}`}>{description}</p>
-              <p className={`${styles.price}`}>{price}đ</p>
+              <p className={`${styles.description}`}>{name}</p>
+              <p className={`${styles.price}`}>{formattedPrice}</p>
             </div>
           </div>
           {/* Button container */}
