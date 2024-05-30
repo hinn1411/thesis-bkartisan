@@ -12,7 +12,7 @@ const OFFSET = 6;
 export const useManageOrderPagination = (searchTerm: string) => {
   const [page, setPage] = useState(PAGE);
   const { data, isFetching, isSuccess, error } = useQuery({
-    queryKey: ['orders', page, searchTerm],
+    queryKey: ['ordersSeller', page, searchTerm],
     queryFn: async () => {
       return await apiOrders.getSellerOrders(page, OFFSET);
     },
