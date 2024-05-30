@@ -8,6 +8,9 @@ export const useHandleCart = () => {
 
   const { mutate: deleteItem } = useMutation({
     mutationFn: apiCart.deleteCart,
+    onSuccess: () => {
+      location.reload();
+    }
   });
   return {
     updateCart: updateItem,

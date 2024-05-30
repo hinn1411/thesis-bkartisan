@@ -44,13 +44,13 @@ const Checkout: FC<CheckoutProps> = memo(() => {
       {/* Thong tin giao hang */}
       <section className="space-y-4">
         <h2 className="text-xl font-medium">Địa chỉ giao hàng</h2>
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <Checkbox
             className="text-orange-600  focus:ring-orange-600"
             id="address"
           />
           <Label htmlFor="address">Sử dụng địa chỉ cá nhân</Label>
-        </div>
+        </div> */}
         <form className="space-y-3">
           <div className="flex space-x-8">
             <div className="flex-1">
@@ -88,13 +88,48 @@ const Checkout: FC<CheckoutProps> = memo(() => {
               />
             </div>
           </div>
-
-          <div className="flex space-x-3 items-center">
+          <div className="flex space-x-8">
+            <div className="flex-1">
+              <label
+                htmlFor="email"
+                className="block mb-1 text-sm font-medium text-gray-900 "
+              >
+                Quốc gia
+              </label>
+              <TextInput
+                label="Nhập tên người nhận"
+                type="text"
+                placeholder="Nhập quốc gia"
+                register={register}
+                errors={errors}
+                validatedObject={{}}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              />
+            </div>
+            <div className="flex-1">
+              <label
+                htmlFor="email"
+                className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Địa chỉ
+              </label>
+              <TextInput
+                label="Nhập số điện thoại"
+                type="text"
+                placeholder="Nhập địa chỉ"
+                register={register}
+                errors={errors}
+                validatedObject={{}}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
+          </div>
+          {/* <div className="flex space-x-3 items-center">
             <p className="block text-sm font-medium text-gray-900 ">
               Địa chỉ: 268 Lý Thường Kiệt, Q.10, TP.HCM
             </p>
             <p className="underline cursor-pointer">Thay đổi</p>
-          </div>
+          </div> */}
         </form>
       </section>
       {/* Thong tin don hang */}
@@ -102,7 +137,7 @@ const Checkout: FC<CheckoutProps> = memo(() => {
         <h2 className="text-xl font-medium">Thông tin đơn hàng</h2>
 
         {data.orders.map((order: OrderTableProps, index: number) => (
-          <OrderTable key={index} {...order} />
+          <OrderTable info={data?.orderInfo} key={index} {...order} />
         ))}
         {/* <Table>
           <Table.Head className="text-md normal-case text-black">

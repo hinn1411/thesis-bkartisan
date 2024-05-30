@@ -11,7 +11,7 @@ const Search: FC = memo(() => {
 
   return (
     <main className="min-h-screen mx-4 md:mx-20 space-y-4 my-4">
-      <h1 className="text-start text-xl font-sans font-medium">Tìm thấy {products.length} sản phẩm</h1>
+      <h1 className="text-start text-xl font-sans font-medium">Tìm thấy {products?.length || 0} sản phẩm</h1>
       <ProductList data={products} isLoading={isFetching} />
       {/* {isFetching ? (
         <p>Loading</p>
