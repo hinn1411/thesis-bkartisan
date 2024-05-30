@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ApexCharts from 'apexcharts';
 
-
 const ChartLineComponent: React.FC = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -52,7 +51,7 @@ const ChartLineComponent: React.FC = () => {
         series: [
         {
             name: "Đơn hàng",
-            data: [50, 60, 30, 70, 10, 80, 40],
+            data: [0, 0, 3, 0, 0, 0, 0],
             color: "#c74c09",
         },
         ],
@@ -141,12 +140,12 @@ const ChartLineComponent: React.FC = () => {
             </div>
 
             <div className='flex mb-5'>
-                <div className='text-center px-3 border-b-2 border-orange-500'>
-                    <p className="text-gray-900 dark:text-white text-xl leading-none font-bold">150</p>
+                <div className="hover-effect text-center px-3 border-b-2 border-orange-500">
+                    <p className="text-gray-900 dark:text-white text-xl leading-none font-bold">3</p>
                     <p className="inline-flex items-center text-gray-500 dark:text-gray-400 leading-none mb-2 text-sm"> Đơn hàng</p>
                 </div>
                 <div className='text-center px-3'>
-                    <p className="text-gray-900 dark:text-white text-xl leading-none font-bold">100Tr</p>
+                    <p className="text-gray-900 dark:text-white text-xl leading-none font-bold">1.2Tr</p>
                     <p className="inline-flex items-center text-gray-500 dark:text-gray-400 leading-none mb-2 text-sm"> Doanh thu</p>
                 </div>
             </div>
