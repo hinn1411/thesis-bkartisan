@@ -94,7 +94,7 @@ const ViewOrders: FC = memo(() => {
                     <td className='py-1'><p className='p-2 rounded-full bg-blue-100 border'>{order.status}</p></td>
                     <td>{order.total}</td>
                     <td>{formatDate(order.createAt.toLocaleString())}</td>
-                    <td>{order.isGift ? 'Có' : 'Không'}</td>
+                    <td>{order.hasGift ? 'Có' : 'Không'}</td>
                   </tr>
                 ))}
               </>
