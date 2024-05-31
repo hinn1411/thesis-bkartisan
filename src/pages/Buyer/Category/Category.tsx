@@ -1,10 +1,10 @@
 import { FC, memo } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useQueryURL } from '@hooks/useQueryURL';
 import CategoryCard from '@components/common/category/CategoryCard';
 import ChildCategoryCard from '@components/common/category/ChildCategoryCard';
 import { LEVELS } from 'src/constants/categories';
-import ChildCategoryCardSkeleton, {
+import  {
   ChildCategoryCardSkeletonList,
 } from '@components/common/category/ChildCategoryCardSkeleton';
 import { useCategoryChildren } from '@hooks/useCategoryChildren';

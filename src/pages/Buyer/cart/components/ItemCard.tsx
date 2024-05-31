@@ -212,12 +212,12 @@ const ItemCard: FC<ItemCardProps> = memo(
                 {/* Edit/Remove */}
                 <div className="flex items-center justify-center space-x-2">
                   {/* Edit */}
-                  <div className="flex items-center justify-center space-x-1 hover:cursor-pointer">
+                  {/* <div className="flex items-center justify-center space-x-1 hover:cursor-pointer">
                     <div className="flex items-center justify-center">
                       <EditOutlined />
                     </div>
                     <p className="hover:underline">Sửa</p>
-                  </div>
+                  </div> */}
                   <div
                     onClick={openDeleteItemModal}
                     className="flex items-center justify-center space-x-1 hover:cursor-pointer"
@@ -230,7 +230,7 @@ const ItemCard: FC<ItemCardProps> = memo(
                 </div>
               </div>
               {/* Description */}
-              <div className="flex items-center space-x-1 my-2">
+              {/* <div className="flex items-center space-x-1 my-2">
                 <div className="flex items-center justify-center">
                   <TagOutlined />
                 </div>
@@ -244,7 +244,7 @@ const ItemCard: FC<ItemCardProps> = memo(
                 <button className="text-white bg-black px-3 py-1 text-[11px] rounded-[4px]">
                   Áp dụng
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="text-[13px]">
