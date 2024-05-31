@@ -99,7 +99,7 @@ const CollabManagement: FC = memo(() => {
         <ErrorMessage msg={"Không tìm thấy kết quả trùng khớp"} />
       ) : (
         data.map((element: any, index: number) => {
-          return <ListItem key={index} type="user" values={element} />;
+          return <ListItem key={index} type="collab" values={element} />;
         })
       )}
 

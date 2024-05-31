@@ -48,6 +48,7 @@ const MessageField: FC<MessageFieldProps> = memo(
         if (receiver.chatroomId) {
           setNewMessage(message);
         } else {
+          setNewMessage(message);
           setReceiver((prev) => {
             return { chatroomId: message.room, ...prev };
           });
@@ -88,17 +89,6 @@ const MessageField: FC<MessageFieldProps> = memo(
     const [incomingMsg, setIncomingMsg] = useState([]);
     const dummy = useRef(null);
 
-    const foo = () => {
-      console.log(messagesRef.current);
-      if (messagesRef.current) {
-        console.log(
-          messagesRef.current.scrollTop,
-          messagesRef.current.clientHeight,
-          messagesRef.current.scrollHeight
-        );
-      }
-    };
-
     useEffect(() => {
       if (messagesRef.current) {
         if (incomingMsg.length === 0) {
@@ -122,6 +112,15 @@ const MessageField: FC<MessageFieldProps> = memo(
           user.username === newMessage.sender)
       ) {
         setIncomingMsg((prev) => [...prev, newMessage]);
+      }
+      if (
+        newMessage &&
+        receiver.username === newMessage.sender &&
+        !receiver.chatroomId
+      ) {
+        setReceiver((prev) => {
+          return { chatroomId: newMessage.room, ...prev };
+        });
       }
     }, [newMessage]);
 
@@ -185,7 +184,6 @@ const MessageField: FC<MessageFieldProps> = memo(
 
         {/**Nội dung tin nhắn */}
         <div
-          onScroll={foo}
           id="messages"
           ref={messagesRef}
           className="relative my-3 overflow-y-auto no-scrollbar max-h-[72vh] min-h-[72vh] flex flex-col space-y-2"

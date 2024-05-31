@@ -9,6 +9,7 @@ const apiReports = {
         byType: filterOpts.byType,
         searchTerm: filterOpts.searchTerm,
         mode: filterOpts.mode,
+        collab: filterOpts.collab,
         page: page,
         offset: offset,
       },

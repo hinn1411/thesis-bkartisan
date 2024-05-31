@@ -16,7 +16,7 @@ const Message: FC<MessageProps> = memo(
       <div className={"flex items-start mx-2 " + align}>
         <div
           className={
-            "rounded-[10px] min-w-[10vw] p-4 font-sans text-sm font-normal text-gray-900 max-w-sm ms-2 break-all flex flex-col items-end whitespace-normal" +
+            "rounded-[10px] w-fit p-4 font-sans text-sm font-normal text-gray-900 max-w-sm ms-2 break-all flex flex-col items-end whitespace-normal" +
             bgColor
           }
         >
