@@ -70,6 +70,8 @@ import ReportDetail from "../pages/Admin/Report/ReportDetail";
 import OrderDetail from "../pages/Admin/Order/OrderDetail";
 import ChangeInfo from "../pages/Admin/Collab/ChangeInfo";
 import ReviewProductDetail from "src/pages/Admin/ReviewProduct/ReviewProductDetail";
+import PersonalInfo from "src/pages/Admin/Info/PersonalInfo";
+
 
 // Trang tin nhắn
 import ViewMessage from 'src/pages/Message/ViewMessage';
@@ -156,6 +158,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <UserManagement /> },
       { path: "dashboard", element: <DashboardAdmin /> },
+      { path: "info", element: <PersonalInfo /> },
       { path: "users", element: <UserManagement /> },
       { path: "users/:id", element: <UserDetail /> },
       { path: "collabs", element: <CollabManagement /> },

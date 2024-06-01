@@ -14,7 +14,6 @@ const ViewMessage: FC = memo(() => {
   const [user] = useOutletContext();
 
   //problem1: còn đã set up receiver chưa có phòng chat nhưng nó gửi tn tới mình trc khi mình gửi
-  //problem2: tin nhắn đến sẽ tự động scroll xuống dù có đang ở phần cuối hay ở phần trên của messages field
 
   /**
    * receiver:

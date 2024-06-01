@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import apiUsers from "../../../apis/apiUsers";
 import { useNavigate } from "react-router";
+import { isValidUsername } from "@utils/validate";
 
 type FormData = {
   name: string;
@@ -34,7 +35,7 @@ const AddCollab: FC = memo(() => {
   } = useForm<FormData>({
     defaultValues: {
       image: undefined,
-    }
+    },
   });
 
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const AddCollab: FC = memo(() => {
     },
     onSuccess: () => {
       toast.success("Thành công!");
-      navigate("/admin/collabs")
+      navigate("/admin/collabs");
     },
     onError: () => {
       toast.error("Đã có lỗi xảy ra! Vui lòng thử lại.");
@@ -142,11 +143,14 @@ const AddCollab: FC = memo(() => {
               <Box className="font-medium pb-2">Username</Box>
               <TextInput
                 type="text"
-                {...register("username", { required: true })}
+                {...register("username", {
+                  required: true,
+                  validate: (value) => isValidUsername(value),
+                })}
                 helperText={
                   errors.username && (
                     <span className="text-red-500">
-                      Vui lòng nhập tên tài khoản
+                      Vui lòng nhập tên tài khoản hợp lệ.
                     </span>
                   )
                 }
