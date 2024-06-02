@@ -5,22 +5,22 @@ import {
   useContext,
   useDeferredValue,
   useState,
-} from 'react';
+} from "react";
 import {
   MinusCircleOutlined,
   PlusCircleOutlined,
   EditOutlined,
   DeleteOutlined,
   TagOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
 
-import { Link } from 'react-router-dom';
-import { useHandleCart } from '../hooks/useHandleCart';
-import { formatCurrency } from '@utils/formatCurrency';
-import { CURRENCIES } from '@contants/currencies';
-import DeleteItemModal from './DeleteItemModal';
-import { BsPlus } from 'react-icons/bs';
-import { CartContext, CartContextType } from 'src/store/CartContext';
+import { Link, useNavigate } from "react-router-dom";
+import { useHandleCart } from "../hooks/useHandleCart";
+import { formatCurrency } from "@utils/formatCurrency";
+import { CURRENCIES } from "@contants/currencies";
+import DeleteItemModal from "./DeleteItemModal";
+import { BsPlus } from "react-icons/bs";
+import { CartContext, CartContextType } from "src/store/CartContext";
 
 export interface ItemCardProps {
   productId: number;
@@ -35,6 +35,8 @@ export interface ItemCardProps {
   currentPrice: number;
   originalPrice: number;
   percentageOfDiscount: number;
+  isGift: boolean;
+  sellerUsername: string;
 }
 const ItemCard: FC<ItemCardProps> = memo(
   ({
@@ -50,7 +52,9 @@ const ItemCard: FC<ItemCardProps> = memo(
     currentPrice,
     originalPrice,
     percentageOfDiscount,
+    sellerUsername,
   }) => {
+    const navigate = useNavigate();
     const [currentQuantity, setCurrentQuantity] = useState(quantity);
     const [currentNote, setCurrentNote] = useState<string>(note);
 
@@ -126,7 +130,15 @@ const ItemCard: FC<ItemCardProps> = memo(
       const newNote = e.target.value;
       setCurrentNote(newNote);
     };
-
+    const handleChatWithSeller = () => {
+      navigate("/message", {
+        state: {
+          username: sellerName,
+          name: sellerUsername,
+          avatar: sellerImage,
+        },
+      });
+    };
     return (
       <div className="shadow-lg rounded-[12px] border border-black border-opacity-25">
         <DeleteItemModal
@@ -141,7 +153,10 @@ const ItemCard: FC<ItemCardProps> = memo(
         <div className="p-4 flex flex-col space-y-2">
           {/* Seller information */}
           <div className="flex items-center justify-between">
-            <div className="flex space-x-3 items-center">
+            <Link
+              to={`/shop/${sellerName}`}
+              className="flex space-x-3 items-center"
+            >
               {/* Shop image */}
               <img
                 src={sellerImage}
@@ -150,25 +165,27 @@ const ItemCard: FC<ItemCardProps> = memo(
               />
               {/* Shop name */}
               <p className="text-base">{sellerName}</p>
-            </div>
-            <p className="hover:underline hover:cursor-pointer opacity-90 text-medium">
+            </Link>
+            <p
+            onClick={handleChatWithSeller}
+             className="hover:underline hover:cursor-pointer opacity-90 text-medium">
               Liên hệ với shop
             </p>
           </div>
           {/* Product information */}
           <div className="flex items-start space-y-2 md:space-y-0 space-x-3">
             {/* Image container */}
-            <div className="w-full h-full sm:w-[20%] ">
+            <div className="w-full h-full flex-1">
               <Link to={`/products/${productId}`}>
                 <img
                   src={itemImage}
                   alt="product image"
-                  className="w-full h-full border border-black border-opacity-50 rounded-[6px] object-cover hover:cursor-pointer"
+                  className="w-[100px] h-[100px] border border-black border-opacity-50 rounded-[6px] object-cover hover:cursor-pointer"
                 />
               </Link>
             </div>
             {/* Buttons container */}
-            <div className="w-full flex-col justify-between space-y-1">
+            <div className="flex-[5] justify-between space-y-1">
               <div className="flex items-start justify-between hover:cursor-pointer">
                 <div>
                   <Link to={`/products/${productId}`}>
@@ -194,7 +211,7 @@ const ItemCard: FC<ItemCardProps> = memo(
                 {/* Add/Substract */}
                 <div className="flex justify-center items-center space-x-2">
                   <div className="flex justify-center items-center">
-                    <MinusCircleOutlined onClick={decreaseItem} />
+                    <MinusCircleOutlined onClick={decreaseItem} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                   </div>
                   <div>
                     <input
@@ -206,7 +223,7 @@ const ItemCard: FC<ItemCardProps> = memo(
                     />
                   </div>
                   <div className="flex justify-center items-center">
-                    <PlusCircleOutlined onClick={increaseItem} />
+                    <PlusCircleOutlined onClick={increaseItem} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                   </div>
                 </div>
                 {/* Edit/Remove */}
@@ -223,7 +240,7 @@ const ItemCard: FC<ItemCardProps> = memo(
                     className="flex items-center justify-center space-x-1 hover:cursor-pointer"
                   >
                     <div className="flex items-center justify-center">
-                      <DeleteOutlined />
+                      <DeleteOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                     </div>
                     <p className="hover:underline">Xóa</p>
                   </div>
@@ -262,7 +279,7 @@ const ItemCard: FC<ItemCardProps> = memo(
               value={deferedNote}
               rows={2}
               className={`w-full overflow-hidden transition-max-h duration-300 ${
-                isOpenedAddNote ? 'max-h-96' : 'hidden'
+                isOpenedAddNote ? "max-h-96" : "hidden"
               } p-2.5 bg-[#F3F4F6] rounded-[4px] border-black placeholder:font-mono placeholder:text-[13px]`}
               placeholder="Thêm mô tả cho sản phẩm"
             />

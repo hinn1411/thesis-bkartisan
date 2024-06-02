@@ -1,14 +1,15 @@
-import { FC, Fragment, memo } from 'react';
-import styles from './GiftDetailModal.module.css';
-import { DeleteOutlined } from '@ant-design/icons';
-import { formatCurrency } from '@utils/formatCurrency';
-import { CURRENCIES } from '@contants/currencies';
-
+import { FC, Fragment, memo, Dispatch } from "react";
+import styles from "./GiftDetailModal.module.css";
+import { DeleteOutlined } from "@ant-design/icons";
+import { formatCurrency } from "@utils/formatCurrency";
+import { CURRENCIES } from "@contants/currencies";
 
 interface GiftComponentProps {
   coverImage: string;
   name: string;
   price: number;
+  quantity: number;
+  setItem: Dispatch<any>;
 }
 
 /*
@@ -16,7 +17,7 @@ interface GiftComponentProps {
 */
 
 const GiftComponent: FC<GiftComponentProps> = memo(
-  ({ coverImage, name, price }) => {
+  ({ coverImage, name, price, setItem }) => {
     // const [isDeletedModal, setIsDeletedModal] = useState(true);
     const formattedPrice = formatCurrency(price, CURRENCIES.VIETNAMDONG);
     return (
@@ -38,9 +39,18 @@ const GiftComponent: FC<GiftComponentProps> = memo(
             </div>
           </div>
           {/* Button container */}
-          <div className="flex justify-center items-center space-x-1 hover:cursor-pointer">
+          <div
+            onClick={() => {
+              console.log(`card/box`);
+              setItem([]);
+            }}
+            className="flex justify-center items-center space-x-1 hover:cursor-pointer"
+          >
             <div className="flex justify-center items-center">
-              <DeleteOutlined />
+              <DeleteOutlined
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
+              />
             </div>
             <p>Xóa</p>
           </div>

@@ -10,7 +10,7 @@ interface StepperProps {
 
 const Stepper: FC<StepperProps> = memo(
   ({ currentState, setCurrent, isCompleted }) => {
-    const steps = ['Chọn hộp quà', 'Chọn quà', 'Chọn thiệp chúc'];
+    const steps = ['Chọn quà', 'Chọn hộp quà', 'Chọn thiệp chúc'];
     return (
       <div>
         <div className="flex justify-center">
