@@ -2,7 +2,6 @@ import { FC, memo } from "react";
 import { Breadcrumb, Textarea } from "flowbite-react";
 import { Rating } from "@mui/material";
 import Pagination from "@components/common/pagination/Pagination";
-import Comment from "src/pages/Buyer/products/components/Comment";
 import {
   HeartOutlined,
   HeartFilled,
@@ -13,7 +12,7 @@ import {
 import { useState } from "react";
 import { useProductDetail } from "./hooks/useProductDetail";
 import { BsExclamationCircle } from "react-icons/bs";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ImageList from "./components/ImageList";
 import TextSkeleton from "@components/common/skeleton/Text";
 import Spinner from "@components/common/ui/Spinner";
@@ -31,7 +30,6 @@ import CommentList from "./components/CommentList";
 import { useComment } from "./hooks/useComment";
 import { urlMatch } from "@utils/urlMatch";
 import ReturnIcon from "@components/admin/ReturnIcon";
-import { Button as FlowbiteBtn } from "flowbite-react";
 import ResponseModal from "@components/admin/modal/ResponseModal";
 import { useUserProfile } from "@hooks/useUserProfile";
 
@@ -44,6 +42,7 @@ const ProductDetail: FC = memo(() => {
   }
 
   const location = useLocation();
+  const navigate = useNavigate();
   const isAdminPage = urlMatch("products", location.pathname);
 
   const { user, isPending: isLoadingUser, isAuthenticated } = useUserProfile(); 
@@ -219,18 +218,20 @@ const ProductDetail: FC = memo(() => {
                   onClick={handleAddItem}
                   className="flex items-center justify-center space-x-3 bg-black w-full md:w-3/4 mx-auto text-white py-3 rounded-full cursor-pointer"
                 >
-                  <ShoppingCartOutlined />
+                  <ShoppingCartOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                   <p>Thêm vào giỏ hàng</p>
                 </button>
-                <Button className="bg-[#E5E5E5] flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer">
-                  <GiftOutlined />
+                <Button 
+                onClick={() => navigate(`/gift/${data?.seller}`)}
+                className="bg-[#E5E5E5] flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer">
+                  <GiftOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                   <p>Tặng quà</p>
                 </Button>
                 <Button
                   onClick={addToFavoriteList}
                   className="bg-white flex items-center justify-center space-x-3 w-full  md:w-3/4 mx-auto py-3 rounded-full cursor-pointer border"
                 >
-                  <HeartFilled style={{ color: "#DC2626" }} />
+                  <HeartFilled style={{ color: "#DC2626" }} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                   <p>Yêu thích</p>
                 </Button>
               </div>
@@ -244,10 +245,7 @@ const ProductDetail: FC = memo(() => {
               >
                 <p className="font-medium">Chi tiết sản phẩm</p>
                 <DownOutlined
-                  className={`transform ${
-                    expandedStates[0] ? "rotate-180" : ""
-                  }`}
-                ></DownOutlined>
+                    className={`transform ${expandedStates[0] ? "rotate-180" : ""}`} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
@@ -267,10 +265,7 @@ const ProductDetail: FC = memo(() => {
               >
                 <p className="font-medium">Vận chuyển và chính sách đổi trả</p>
                 <DownOutlined
-                  className={`transform ${
-                    expandedStates[1] ? "rotate-180" : ""
-                  }`}
-                ></DownOutlined>
+                    className={`transform ${expandedStates[1] ? "rotate-180" : ""}`} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
@@ -294,10 +289,7 @@ const ProductDetail: FC = memo(() => {
               >
                 <p className="font-medium">Câu hỏi thường gặp</p>
                 <DownOutlined
-                  className={`transform ${
-                    expandedStates[2] ? "rotate-180" : ""
-                  }`}
-                ></DownOutlined>
+                    className={`transform ${expandedStates[2] ? "rotate-180" : ""}`} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
@@ -321,10 +313,7 @@ const ProductDetail: FC = memo(() => {
               >
                 <p className="font-medium">Gặp gỡ người bán</p>
                 <DownOutlined
-                  className={`transform ${
-                    expandedStates[3] ? "rotate-180" : ""
-                  }`}
-                ></DownOutlined>
+                    className={`transform ${expandedStates[3] ? "rotate-180" : ""}`} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                ></DownOutlined>
               </button>
               <div
                 className={`overflow-hidden transition-max-h duration-300 ${
@@ -351,7 +340,7 @@ const ProductDetail: FC = memo(() => {
                       type="button"
                       className="flex items-center space-x-2 text-xs "
                     >
-                      <HeartOutlined></HeartOutlined>
+                      <HeartOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}></HeartOutlined>
                       <p>Theo dõi shop</p>
                     </button>
                   </div>

@@ -1,5 +1,5 @@
 import { Checkbox, Label } from "flowbite-react";
-import { FC, memo } from "react";
+import { FC, memo, useState } from "react";
 import { useFetchCheckoutOrder } from "./hooks/useFetchCheckoutOrder";
 import Spinner from "@components/common/ui/Spinner";
 import Button from "@components/common/button/Button";
@@ -8,23 +8,32 @@ import TextInput from "@components/common/input/TextInput";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { shippingAddressSchema } from "./shippingAddressSchema";
 import OrderTable, { OrderTableProps } from "./components/OrderTable";
 import BuyLaterModal from "./components/BuyLaterModal";
 import { useSaveOrder } from "./hooks/useSaveOrder";
+import { AddressSchema } from "./AddressSchema";
+import { useFetchCountries } from "@hooks/useFetchCountries";
+import { useUserProfile } from "@hooks/useUserProfile";
 
 export interface CheckoutProps {}
-type ShippingAddress = z.infer<typeof shippingAddressSchema>;
+type Address = z.infer<typeof AddressSchema>;
 const Checkout: FC<CheckoutProps> = memo(() => {
+  const [isUsedDefaultAddress, setIsUsedDefaultAddress] = useState(false);
+  const { countries } = useFetchCountries();
+  const { user } = useUserProfile();
   const { isOpenBuyLaterModal, setIsOpenBuyLaterModal } = useSaveOrder();
   const { data, isFetching } = useFetchCheckoutOrder();
   const { goToPaymentGateway } = usePayment();
   const {
     register,
-    // handleSubmit,
+    setValue,
+    reset,
+    getValues,
+    handleSubmit,
+    clearErrors,
     formState: { errors },
-  } = useForm<ShippingAddress>({
-    resolver: zodResolver(shippingAddressSchema),
+  } = useForm<Address>({
+    resolver: zodResolver(AddressSchema),
   });
   if (isFetching) {
     return (
@@ -34,34 +43,58 @@ const Checkout: FC<CheckoutProps> = memo(() => {
     );
   }
   const { orderPrice, discountPrice } = data.orderInfo;
+  const setDefaultAddress = () => {
+    if (!user) {
+      return;
+    }
+    if (isUsedDefaultAddress) {
+      reset();
+    } else {
+      setValue("address", user.address);
+      setValue("nation", user.nation);
+      setValue("name", user.name);
+      setValue("numPhone", user.numPhone);
+      clearErrors();
+    }
+    setIsUsedDefaultAddress((prev) => !prev);
+  };
 
   const handleCheckout = () => {
-    goToPaymentGateway();
+    const address = getValues();
+    console.log(address);
+    
+    // alert(`address is valid`);
+    goToPaymentGateway(address);
   };
   return (
-    <div className="min-h-screen px-4 md:px-52 my-5 space-y-6">
-      <h1 className="text-2xl font-semibold text-center">Thanh toán</h1>
+    <form
+      onSubmit={handleSubmit(handleCheckout)}
+      className="min-h-screen px-4 md:px-52 my-5 space-y-6"
+    >
+      <h1 className="text-2xl font-semibold text-center">Thông tin đơn hàng</h1>
       {/* Thong tin giao hang */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-medium">Địa chỉ giao hàng</h2>
-        {/* <div className="flex items-center space-x-2">
+      <section className="space-y-4 w-full md:max-w-xl">
+        <h2>Địa chỉ giao hàng</h2>
+        <span className="flex items-center space-x-2">
           <Checkbox
             className="text-orange-600  focus:ring-orange-600"
             id="address"
+            onClick={setDefaultAddress}
           />
           <Label htmlFor="address">Sử dụng địa chỉ cá nhân</Label>
-        </div> */}
-        <form className="space-y-3">
+        </span>
+        <div className="space-y-3">
           <div className="flex space-x-8">
+            {/* Receiver */}
             <div className="flex-1">
               <label
-                htmlFor="email"
+                htmlFor="name"
                 className="block mb-1 text-sm font-medium text-gray-900 "
               >
                 Tên người nhận
               </label>
               <TextInput
-                label="Nhập tên người nhận"
+                label="name"
                 type="text"
                 placeholder="Nhập tên người nhận hàng"
                 register={register}
@@ -70,15 +103,16 @@ const Checkout: FC<CheckoutProps> = memo(() => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               />
             </div>
+            {/* Phone */}
             <div className="flex-1">
               <label
-                htmlFor="email"
+                htmlFor="numPhone"
                 className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Số điện thoại
               </label>
               <TextInput
-                label="Nhập số điện thoại"
+                label="numPhone"
                 type="text"
                 placeholder="Nhập số điện thoại"
                 register={register}
@@ -89,34 +123,65 @@ const Checkout: FC<CheckoutProps> = memo(() => {
             </div>
           </div>
           <div className="flex space-x-8">
+            {/* Nation */}
             <div className="flex-1">
-              <label
-                htmlFor="email"
-                className="block mb-1 text-sm font-medium text-gray-900 "
-              >
-                Quốc gia
-              </label>
-              <TextInput
-                label="Nhập tên người nhận"
-                type="text"
-                placeholder="Nhập quốc gia"
-                register={register}
-                errors={errors}
-                validatedObject={{}}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              />
+              <div className="">
+                <label
+                  htmlFor="nation"
+                  className="block mb-1 text-sm font-medium text-gray-900 "
+                >
+                  Chọn quốc gia
+                </label>
+                <select
+                  id="nation"
+                  {...register("nation")}
+                  onChange={(e) => {
+                    // const newNation = e.target.value;
+                    // console.log(`nation = ${newNation}`);
+                    // setValue("nation", newNation);
+                    // console.log(transports);
+                    // const [newNationObject] = transports.filter(
+                    //   (item) => item.location == newNation
+                    // );
+                    // if (newNationObject) {
+                    //   setShippingObject({
+                    //     price: newNationObject.price,
+                    //     pricePerItem: newNationObject.pricePerItem,
+                    //   });
+                    // }
+                    // console.log(newNationObject);
+                  }}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                >
+                  <option value="" selected>
+                    Chọn quốc gia
+                  </option>
+                  {countries &&
+                    countries.map((country: string, index: number) => (
+                      <option key={index} value={country}>
+                        {country}
+                      </option>
+                    ))}
+                </select>
+                {errors.nation && (
+                  <p className="text-sm text-red-500">
+                    {errors.nation.message}
+                  </p>
+                )}
+              </div>
             </div>
+            {/* Address */}
             <div className="flex-1">
               <label
-                htmlFor="email"
+                htmlFor="address"
                 className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Địa chỉ
               </label>
               <TextInput
-                label="Nhập số điện thoại"
+                label="address"
                 type="text"
-                placeholder="Nhập địa chỉ"
+                placeholder="Nhập địa chỉ giao hàng"
                 register={register}
                 errors={errors}
                 validatedObject={{}}
@@ -124,17 +189,11 @@ const Checkout: FC<CheckoutProps> = memo(() => {
               />
             </div>
           </div>
-          {/* <div className="flex space-x-3 items-center">
-            <p className="block text-sm font-medium text-gray-900 ">
-              Địa chỉ: 268 Lý Thường Kiệt, Q.10, TP.HCM
-            </p>
-            <p className="underline cursor-pointer">Thay đổi</p>
-          </div> */}
-        </form>
+        </div>
       </section>
       {/* Thong tin don hang */}
       <section className="space-y-4">
-        <h2 className="text-xl font-medium">Thông tin đơn hàng</h2>
+        <h2 className="text-xl font-medium">Thông tin sản phẩm</h2>
 
         {data.orders.map((order: OrderTableProps, index: number) => (
           <OrderTable info={data?.orderInfo} key={index} {...order} />
@@ -191,14 +250,14 @@ const Checkout: FC<CheckoutProps> = memo(() => {
             Mua sau
           </Button>
           <Button
-            onClick={handleCheckout}
+            // onClick={handleCheckout}
             className="flex justify-center items-center py-3 space-x-2 font-sans font-bold text-white rounded-md px-6 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border"
           >
             Xác nhận
           </Button>
         </div>
       </section>
-    </div>
+    </form>
   );
 });
 

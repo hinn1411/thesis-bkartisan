@@ -5,7 +5,7 @@ import { ProductSkeletonList } from "@components/common/product/ProductSkeleton"
 export interface GiftListProps {
   data: GiftItemProps[];
   isLoading: boolean;
-  addItem: Dispatch<never[]>;
+  addItem: Dispatch<any>;
 }
 
 const GiftList: FC<GiftListProps> = memo(({ isLoading, data, addItem }) => {

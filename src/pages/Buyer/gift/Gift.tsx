@@ -3,17 +3,13 @@ import Stepper from "./components/Stepper";
 import { GiftOutlined } from "@ant-design/icons";
 import GiftDetailModal from "./components/GiftDetailModal.js";
 import SuccessfulModal from "./components/SuccessfulModal.js";
-import { useProductPagination } from "../home/hooks/useProductPagination.js";
-import ProductList from "@components/common/product/ProductList.js";
-import Pagination from "@components/common/pagination/Pagination.js";
 import { useParams } from "react-router-dom";
 import useFetchShopInformation from "src/pages/Seller/Shop/hooks/useFetchShopInformation.js";
 import GiftList from "./components/GiftList.js";
-import { ToastOptions, toast } from "react-toastify";
-import { Message } from "@components/common/toast/Message.js";
-import { SuccessIcon } from "@components/common/toast/SuccessIcon.js";
-import { options } from "@components/common/toast/options.js";
 import Spinner from "@components/common/ui/Spinner.js";
+import { ProductComponentProps } from "./components/ProductComponent.js";
+import _ from "lodash";
+import { useUINotification } from "./hooks/useUINotification.js";
 /* 
   Remember adding loading indicator for item list
 */
@@ -21,22 +17,22 @@ const Gift: FC = memo(() => {
   const { seller } = useParams();
   const { shop, isLoading } = useFetchShopInformation(seller as string);
   console.log(shop);
-
+  const { notify, warn } = useUINotification();
   const [current, setCurrent] = useState(1);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isOpenedGiftDetailModal, setIsOpenedGiftDetailModal] = useState(false);
   const [isDone, setIsDone] = useState(false);
   // const { data: products, page, setPage, isFetching } = useProductPagination();
   const [giftItems, setGiftItems] = useState({});
-  const [giftCard, setGiftCard] = useState([]);
-  const [giftBox, setGiftBox] = useState([]);
+  const [giftCard, setGiftCard] = useState<[]>([]);
+  const [giftBox, setGiftBox] = useState<[]>([]);
 
-  const addItems = (newItem) => {
+  const addItems = (newItem: ProductComponentProps) => {
     setGiftItems((items) => {
-      if (!items[newItem.giftId]) {
+      if (!items[newItem.productId]) {
         return {
           ...items,
-          [newItem.giftId]: {
+          [newItem.productId]: {
             ...newItem,
             quantity: 1,
           },
@@ -44,9 +40,9 @@ const Gift: FC = memo(() => {
       } else {
         return {
           ...items,
-          [newItem.giftId]: {
-            ...newItem,
-            quantity: items[newItem.giftId].quantity + 1,
+          [newItem.productId]: {
+            ...items[newItem.productId],
+            quantity: items[newItem.productId].quantity + 1,
           },
         };
       }
@@ -56,24 +52,36 @@ const Gift: FC = memo(() => {
     console.log(giftItems);
     notify("Thêm thành công");
   };
-  const addBox = (newBox) => {
-    setGiftBox((items) => [newBox]);
+  const addBox = (newBox: ProductComponentProps) => {
+    setGiftBox([{ ...newBox, quantity: 1 }]);
     console.log(`giftBox`);
     console.log(giftBox);
     notify("Cập nhật thành công");
   };
-  const addCard = (newCard) => {
-    setGiftCard((items) => [newCard]);
+  const addCard = (newCard: ProductComponentProps) => {
+    setGiftCard([{ ...newCard, quantity: 1 }]);
     notify("Cập nhật thành công");
   };
-  const notify = (msg: string) => {
-    toast(<Message>{msg}!</Message>, {
-      icon: <SuccessIcon />,
-      ...(options as ToastOptions),
-    });
+  const handleAddGift = () => {
+    console.log(`current = ${current}`);
+    if (current < 3) {
+      setCurrent((prev) => prev + 1);
+    } else {
+      if (_.isEqual(giftItems, {})) {
+        return warn("Vui lòng chọn quà");
+      }
+      if (_.isEqual(giftCard, [])) {
+        return warn("Vui lòng chọn thiệp lời chúc");
+      }
+      if (_.isEqual(giftBox, [])) {
+        return warn("Vui lòng chọn hộp quà");
+      }
+      setIsOpenedGiftDetailModal(true);
+    }
   };
-  if(isLoading) {
-    <Spinner />
+
+  if (isLoading) {
+    <Spinner />;
   }
   return (
     <div className="min-h-screen px-20 my-5 space-y-5">
@@ -85,6 +93,8 @@ const Gift: FC = memo(() => {
         card={giftCard}
         items={giftItems}
         setItems={setGiftItems}
+        setCard={setGiftCard}
+        setBox={setGiftBox}
         transports={shop?.transports}
       />
       <SuccessfulModal isOpen={isDone} setIsOpen={setIsDone} />
@@ -116,7 +126,7 @@ const Gift: FC = memo(() => {
         <Fragment>
           <GiftList
             data={shop?.products.map((item) => ({
-              giftId: item.id,
+              productId: item.id,
               coverImage: item.srcImage,
               price: item.currentCost,
               name: item.name,
@@ -131,7 +141,12 @@ const Gift: FC = memo(() => {
       {current == 2 && (
         <Fragment>
           <GiftList
-            data={shop?.gifts.filter((item) => item.type === "box")}
+            data={shop?.boxes.map((item) => ({
+              productId: item.id,
+              coverImage: item.srcImage,
+              price: item.currentCost,
+              name: item.name,
+            }))}
             isLoading={isLoading}
             addItem={addBox}
           />
@@ -141,7 +156,12 @@ const Gift: FC = memo(() => {
       {/* Choose envelope */}
       {current == 3 && (
         <GiftList
-          data={shop?.gifts.filter((item) => item.type === "card")}
+          data={shop?.cards.map((item) => ({
+            productId: item.id,
+            coverImage: item.srcImage,
+            price: item.currentCost,
+            name: item.name,
+          }))}
           isLoading={isLoading}
           addItem={addCard}
         />
@@ -159,13 +179,7 @@ const Gift: FC = memo(() => {
           </button>
         )}
         <button
-          onClick={() => {
-            console.log(`current = ${current}`);
-            current == 3 && isCompleted && setIsOpenedGiftDetailModal(true);
-            current == 3
-              ? setIsCompleted(true)
-              : setCurrent((prev) => prev + 1);
-          }}
+          onClick={handleAddGift}
           className="w-full md:w-auto flex justify-center items-center py-3 space-x-2 font-sans font-bold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border transition hover:-translate-y-0.5 duration-150"
         >
           {current == 3 ? "Hoàn thành" : "Tiếp tục"}

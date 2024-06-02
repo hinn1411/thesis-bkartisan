@@ -4,15 +4,15 @@ import { formatCurrency } from "@utils/formatCurrency";
 import { Dispatch, FC, memo } from "react";
 
 export interface GiftItemProps {
-  giftId: string;
+  productId: string;
   coverImage: string;
   name: string;
   price: number;
-  addItem: Dispatch<never[]>;
+  addItem: Dispatch<any>;
 }
 
 const GiftItem: FC<GiftItemProps> = memo(
-  ({ coverImage, price, name, addItem, giftId }) => {
+  ({ coverImage, price, name, addItem, productId }) => {
     const formattedPrice = formatCurrency(price, CURRENCIES.VIETNAMDONG);
     return (
       <div className="mx-auto relative max-w-sm rounded-[10px] border overflow-hidden shadow-sm hover:shadow-lg hover:scale-105 duration-300">
@@ -36,7 +36,7 @@ const GiftItem: FC<GiftItemProps> = memo(
           </div>
           {/* Button container */}
           <Button
-            onClick={() => addItem({ coverImage, price, name, giftId })}
+            onClick={() => addItem({ coverImage, price, name, productId })}
             className="w-full  flex justify-center items-center py-2 font-sans text-sm font-semibold text-white rounded-md px-9 bg-orange-600  shadow-cyan-100 hover:bg-opacity-90 shadow-sm hover:shadow-lg border"
           >
             Chọn sản phẩm
