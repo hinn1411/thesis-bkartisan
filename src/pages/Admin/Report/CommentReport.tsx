@@ -21,7 +21,7 @@ const CommentReport: FC<CommentReportProps> = memo(({ report }) => {
   const [openResponseModal, setOpenResponseModal] = useState(false);
 
   const goToProductDetail = () => {
-    navigate(`/admin/products/${report.refId}`);
+    navigate(`/admin/products/${report.productId}`);
   };
 
   const { mutate, isPending } = useRejectReport(report.reportId);

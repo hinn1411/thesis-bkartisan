@@ -9,7 +9,7 @@ import apiReports from "@apis/apiReports";
 interface ResponseModalProps {
   openModal: boolean;
   setOpenModal: Function;
-  type: "delete-product" | "delete-comment" | "reject-product";
+  type: "delete-product" | "delete-comment" | "reject-product" | "order-report";
   id: any;
 }
 
@@ -37,27 +37,27 @@ const ResponseModal: FC<ResponseModalProps> = memo(
         api = apiReports.handleReport;
         queryKey = ["reportDetails", id.toString()];
         break;
+      case "order-report":
+        options = [];
+        api = apiReports.handleReport;
+        queryKey = ["reportDetails", id.toString()];
+        break;
       default:
         options = product;
         api = apiProducts.reviewProduct;
-        queryKey = ['review-product', id];
+        queryKey = ["review-product", id];
         break;
     }
 
     const { register, handleSubmit, mutate, isPending, errors } =
-      useFormResponse<FormData>(
-        queryKey,
-        setOpenModal,
-        api
-      );
+      useFormResponse<FormData>(queryKey, setOpenModal, api);
 
     const onSubmit = (data) => {
       const values = {};
       values.id = id;
       if (type === "reject-product") {
         values.accepted = false;
-      }
-      else {
+      } else {
         values.accepted = true;
       }
       values.response = data;
@@ -75,19 +75,33 @@ const ResponseModal: FC<ResponseModalProps> = memo(
                   ? "Lí do xóa bình luận: "
                   : type === "delete-product"
                   ? "Lí do xóa sản phẩm: "
+                  : type === "order-report"
+                  ? "Lí do"
                   : "Lí do từ chối duyệt bài đăng: "}
               </Grid>
               <Grid item xs={8}>
-                <Select id="reason" {...register("reason")}>
-                  {options.map((val) => (
-                    <option key={val} value={val}>
-                      {val}
-                    </option>
-                  ))}
-                </Select>
+                {type === "order-report" ? (
+                  <textarea
+                    id="message"
+                    rows={4}
+                    className="block h-16 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Lí do vi phạm..."
+                    {...register("reason", { required: true })}
+                  ></textarea>
+                ) : (
+                  <Select id="reason" {...register("reason")}>
+                    {options.map((val) => (
+                      <option key={val} value={val}>
+                        {val}
+                      </option>
+                    ))}
+                  </Select>
+                )}
               </Grid>
               <Grid item xs={4}>
-                Miêu tả thêm và đề xuất:
+                {
+                  type !== "order-report" ? "Miêu tả thêm và đề xuất:" : "Ghi chú: "
+                }
               </Grid>
               <Grid item xs={8}>
                 <Textarea

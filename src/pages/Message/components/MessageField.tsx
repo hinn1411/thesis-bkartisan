@@ -9,6 +9,7 @@ import ErrorMessage from "@components/admin/ErrorMessage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Message from "./Message";
 import { toast } from "react-toastify";
+import { FileInput, Label } from "flowbite-react";
 
 interface MessageFieldProps {
   receiver: any;
@@ -210,11 +211,25 @@ const MessageField: FC<MessageFieldProps> = memo(
             </>
           )}
         </div>
+        {/**Gửi hình ảnh */}
+        {/* <div className="relative">
+          <div className="absolute bottom-0 left-0 w-fit pl-2 pb-1 max-h-48 max-w-48">
+            <Avatar
+              src="https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg"
+              variant="rounded"
+              sx={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+          </div>
+        </div> */}
         {/**Message Input Field */}
         <div className="relative w-full mx-2">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3">
+          {/* <Label
+            htmlFor="upload-file"
+            className="absolute inset-y-0 start-0 flex items-center ps-3"
+          >
             <AiOutlinePaperClip className="h-5 w-5 cursor-pointer" />
-          </div>
+            <FileInput id="upload-file" className="hidden" />
+          </Label> */}
           <input
             type="text"
             id="text-field"

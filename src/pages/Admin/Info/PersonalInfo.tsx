@@ -1,6 +1,5 @@
-import { FC, Fragment, memo } from "react";
+import { FC, Fragment, memo, useState } from "react";
 import { Avatar, Box, Grid } from "@mui/material";
-import ReturnIcon from "../../../components/admin/ReturnIcon";
 import { FaRegUser } from "react-icons/fa";
 import { FiPhone } from "react-icons/fi";
 import { MdMailOutline, MdOutlineChat } from "react-icons/md";
@@ -12,6 +11,7 @@ import TextField from "../../../components/admin/TextField";
 import LoadingMessage from "../../../components/admin/LoadingMessage";
 import ErrorMessage from "../../../components/admin/ErrorMessage";
 import { formatDate } from "../../../utils/formatDate";
+import ChangePasswordModal from "@components/admin/modal/ChangePasswordModal";
 
 const PersonalInfo: FC = memo(() => {
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ const PersonalInfo: FC = memo(() => {
     refetchOnWindowFocus: false,
   });
 
+  const [openChangePassModal, setOpenChangePassModal] = useState(false);
+
   return (
     <Fragment>
       {isPending ? (
@@ -34,6 +36,12 @@ const PersonalInfo: FC = memo(() => {
       ) : (
         <>
           <Box display="flex" py={2}>
+            {openChangePassModal && (
+              <ChangePasswordModal
+                openModal={openChangePassModal}
+                setOpenModal={setOpenChangePassModal}
+              />
+            )}
             <Box
               width={6 / 10}
               className="border-2 border-slate-300/50 rounded p-4"
@@ -55,13 +63,15 @@ const PersonalInfo: FC = memo(() => {
                 {/**Giới tính */}
                 <Grid item xs={6}>
                   <Box className="font-medium pb-2">Giới tính</Box>
-                  <TextField value={
+                  <TextField
+                    value={
                       data.gender === "M"
                         ? "Nam"
                         : data.gender === "F"
                         ? "Nữ"
                         : "Chưa xác định"
-                    } />
+                    }
+                  />
                 </Grid>
                 {/**Số điên thoại */}
                 <Grid item xs={12}>
@@ -82,19 +92,18 @@ const PersonalInfo: FC = memo(() => {
                 {/**Username */}
                 <Grid item xs={12}>
                   <Box className="font-medium pb-2">Username</Box>
-                  <TextField value={data.username || "Chưa xác định"}/>
+                  <TextField value={data.username || "Chưa xác định"} />
                 </Grid>
                 {/**Địa chỉ */}
                 <Grid item xs={12}>
                   <Box className="font-medium pb-2">Địa chỉ</Box>
-                  <TextField
-                    textarea
-                    value={data.address || "Chưa xác định"}
-                  />
+                  <TextField textarea value={data.address || "Chưa xác định"} />
                 </Grid>
                 <Grid item xs={6}>
                   <Box className="font-medium pb-2">Ngày tạo tài khoản</Box>
-                  <TextField value={formatDate("dd/mm/yyyy", new Date(data.createdAt))} />
+                  <TextField
+                    value={formatDate("dd/mm/yyyy", new Date(data.createdAt))}
+                  />
                 </Grid>
               </Grid>
             </Box>
@@ -122,12 +131,12 @@ const PersonalInfo: FC = memo(() => {
                     display={"flex"}
                     alignItems={"center"}
                     className="w-full text-white bg-amber-500 hover:bg-amber-600 font-medium rounded-lg text-sm py-2.5"
-                    //onClick={() => navigate("change")}
+                    onClick={() => setOpenChangePassModal(true)}
                   >
                     <Box px={2}>
                       <LuPenLine size={"1.5rem"} fill="#ffffff" />
                     </Box>
-                    <Box>Sửa thông tin</Box>
+                    <Box>Thay đổi mặt khẩu</Box>
                   </Box>
                 </Grid>
                 {/**Button nhắn tin */}
@@ -137,7 +146,13 @@ const PersonalInfo: FC = memo(() => {
                     alignItems={"center"}
                     className="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm py-2.5"
                     onClick={() =>
-                      navigate("/admin/message", { state: { username: "hiamlauhoi", name: "hiamlauhoi", avatar: null } })
+                      navigate("/admin/message", {
+                        state: {
+                          username: "hiamlauhoi",
+                          name: "hiamlauhoi",
+                          avatar: null,
+                        },
+                      })
                     }
                   >
                     <Box px={1.5}>

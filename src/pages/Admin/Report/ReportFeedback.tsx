@@ -6,9 +6,10 @@ import { formatDate } from "../../../utils/formatDate";
 
 interface ReportFeedbackProps {
   report: any;
+  isOrderReport: boolean;
 }
 
-const ReportFeedback: FC<ReportFeedbackProps> = memo(({ report }) => {
+const ReportFeedback: FC<ReportFeedbackProps> = memo(({ report, isOrderReport = false }) => {
   const rejectMsg = `Report này đã được đóng lại và quản trị viên vẫn cho phép ${
     report.type === "Bình luận" ? "bài bình luận" : "sản phẩm"
   } hiện lên và không xóa ${
@@ -37,13 +38,17 @@ const ReportFeedback: FC<ReportFeedbackProps> = memo(({ report }) => {
         {report.violation ? (
           <>
             <Grid item xs={1.5} className="font-medium pb-2">
-              Loại vi phạm:{" "}
+              {
+                isOrderReport ? "Lí do: " : "Loại vi phạm: "
+              }
             </Grid>
             <Grid item xs={10}>
               <TextField value={report.violation} />
             </Grid>
             <Grid item xs={2.5} className="font-medium pb-2">
-              Miêu tả thêm và đề xuất:{" "}
+              {
+                isOrderReport ? "Ghi chú: " : "Miêu tả thêm và đề xuất: "
+              }
             </Grid>
             <Grid item xs={9}>
               <TextField

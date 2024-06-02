@@ -32,7 +32,8 @@ const apiReports = {
     additionalInfo: string;
     type: "Sản phẩm" | "Bình luận" | "Mua bán";
     refId?: number;
-  }) => {
+    images?: any;
+  } | FormData) => {
     const { data } = await axiosClient.post(`/reports`, report);
     return data;
   },
