@@ -9,6 +9,7 @@ const apiReports = {
         byType: filterOpts.byType,
         searchTerm: filterOpts.searchTerm,
         mode: filterOpts.mode,
+        collab: filterOpts.collab,
         page: page,
         offset: offset,
       },
@@ -31,7 +32,8 @@ const apiReports = {
     additionalInfo: string;
     type: "Sản phẩm" | "Bình luận" | "Mua bán";
     refId?: number;
-  }) => {
+    images?: any;
+  } | FormData) => {
     const { data } = await axiosClient.post(`/reports`, report);
     return data;
   },

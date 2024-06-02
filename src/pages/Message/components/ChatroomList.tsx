@@ -51,6 +51,7 @@ const ChatroomList: FC<ChatroomListProp> = memo(
           chatrooms.splice(index, 1);
         }
         const newChatrooms = [newChatroom, ...chatrooms];
+        console.log(newChatrooms);
         setChatrooms(newChatrooms);
       }
     }, [newMessage])

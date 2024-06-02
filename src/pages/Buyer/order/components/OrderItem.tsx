@@ -1,7 +1,7 @@
 import Button from "@components/common/button/Button";
 import { CURRENCIES } from "@contants/currencies";
 import { formatCurrency } from "@utils/formatCurrency";
-import { FC, memo } from "react";
+import { FC, memo, useState } from "react";
 import { ORDER_STATES } from "../state.ts";
 import { usePayment } from "../../checkout/hooks/usePayment.tsx";
 import { useCancelOrder } from "../../checkout/hooks/useCancelOrder.tsx";
@@ -13,6 +13,8 @@ import ReturnModal from "./ReturnModal.tsx";
 import { useChangeOrderState } from "../hooks/useChangeOrderState.tsx";
 import ConfirmModal from "./ConfirmModal.tsx";
 import { useNavigate } from "react-router-dom";
+import ReportOrderModal from "./ReportOrderModal.tsx";
+import { useUserProfile } from "@hooks/useUserProfile.tsx";
 
 export interface ItemProps {
   coverImage: string;
@@ -88,8 +90,25 @@ const OrderItem: FC<OrderItemProps> = memo(
         },
       });
     };
+
+    const [isOpenedReportOrder, setIsOpenedReportOrder] = useState(false);
+    const {
+      user,
+      isPending: isLoadingUser,
+      isAuthenticated,
+    } = useUserProfile();
+
+
     return (
       <li className="w-full md:w-1/2 mx-auto space-y-6 bg-[#FAFAFA] py-[20px] px-[45px] rounded-[7.5px] shadow-xl">
+        {user && (
+          <ReportOrderModal
+            isOpen={isOpenedReportOrder}
+            setIsOpen={setIsOpenedReportOrder}
+            reporter={user}
+            reportedUser={{username: seller, name: sellerName}}
+          />
+        )}
         {/* Order information */}
         <span className="flex flex-col md:flex-row justify-between border-b-2 border-b-gray-300 pb-4">
           <span className="text-[14px]">
@@ -194,7 +213,7 @@ const OrderItem: FC<OrderItemProps> = memo(
               </>
             )}
             {[ORDER_STATES.DENY_RETURN].includes(status as ORDER_STATES) && (
-              <Button className="text-[13px] font-sans text-center border-2 border-orange-600 bg-orange-600 text-white  py-[10px] px-[32px] rounded-[6px]">
+              <Button onClick={() => setIsOpenedReportOrder(true)} className="text-[13px] font-sans text-center border-2 border-orange-600 bg-orange-600 text-white  py-[10px] px-[32px] rounded-[6px]">
                 Báo cáo
               </Button>
             )}

@@ -37,6 +37,7 @@ const ReportManagement: FC = memo(() => {
     defaultFieldValues.mode = "Của các cộng tác viên khác";
   }
 
+
   const queryKey = ["reports", 1];
 
   const {
@@ -125,7 +126,6 @@ const ReportManagement: FC = memo(() => {
               <Select
                 id="mode"
                 {...register("mode")}
-                defaultValue={"Của bản thân"}
               >
                 <option value={"Của bản thân"}>Của bản thân</option>
                 <option value={"Của các cộng tác viên khác"}>
@@ -141,7 +141,7 @@ const ReportManagement: FC = memo(() => {
                 placeholder="Nhập tên cộng tác viên xử lí"
                 {...register("collab", {
                   validate: (value) => {
-                    if (value !== "" && getValues("mode") !== "Của bản thân")
+                    if (value !== "" && getValues("mode") === "Của bản thân")
                       return false;
                     return true;
                   },

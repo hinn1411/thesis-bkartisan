@@ -33,7 +33,7 @@ const AdminSidebar: FC<SidebarProp> = memo(
         >
           <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
             <ul className="space-y-2 font-medium">
-              {role === "admin" && (
+              {role === "admin" && false && (
                 <li className="Thong ke website">
                   <Link
                     to="dashboard"
@@ -57,6 +57,32 @@ const AdminSidebar: FC<SidebarProp> = memo(
                   </Link>
                 </li>
               )}
+              
+              {role === "collab" && (
+                <li className="info">
+                  <Link
+                    to="info"
+                    className={`flex  items-center p-2 text-gray-500 rounded-lg  group ${
+                      urlMatch("info", location.pathname)
+                        ? `bg-orange-500 text-white`
+                        : `hover:bg-orange-100 hover:text-gray-900`
+                    } group`}
+                  >
+                    <ImUserTie
+                      className={`w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 ${
+                        urlMatch("info", location.pathname)
+                          ? ` text-white`
+                          : `group-hover:text-gray-900 `
+                      } `}
+                    ></ImUserTie>
+
+                    <span className="flex-1 ms-3 whitespace-nowrap">
+                      Thông tin cá nhân
+                    </span>
+                  </Link>
+                </li>
+              )}
+
               <li className="Nguoi dung">
                 <Link
                   to="users"

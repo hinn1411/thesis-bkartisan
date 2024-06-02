@@ -9,6 +9,7 @@ import ErrorMessage from "@components/admin/ErrorMessage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Message from "./Message";
 import { toast } from "react-toastify";
+import { FileInput, Label } from "flowbite-react";
 
 interface MessageFieldProps {
   receiver: any;
@@ -48,6 +49,7 @@ const MessageField: FC<MessageFieldProps> = memo(
         if (receiver.chatroomId) {
           setNewMessage(message);
         } else {
+          setNewMessage(message);
           setReceiver((prev) => {
             return { chatroomId: message.room, ...prev };
           });
@@ -88,17 +90,6 @@ const MessageField: FC<MessageFieldProps> = memo(
     const [incomingMsg, setIncomingMsg] = useState([]);
     const dummy = useRef(null);
 
-    const foo = () => {
-      console.log(messagesRef.current);
-      if (messagesRef.current) {
-        console.log(
-          messagesRef.current.scrollTop,
-          messagesRef.current.clientHeight,
-          messagesRef.current.scrollHeight
-        );
-      }
-    };
-
     useEffect(() => {
       if (messagesRef.current) {
         if (incomingMsg.length === 0) {
@@ -122,6 +113,15 @@ const MessageField: FC<MessageFieldProps> = memo(
           user.username === newMessage.sender)
       ) {
         setIncomingMsg((prev) => [...prev, newMessage]);
+      }
+      if (
+        newMessage &&
+        receiver.username === newMessage.sender &&
+        !receiver.chatroomId
+      ) {
+        setReceiver((prev) => {
+          return { chatroomId: newMessage.room, ...prev };
+        });
       }
     }, [newMessage]);
 
@@ -185,7 +185,6 @@ const MessageField: FC<MessageFieldProps> = memo(
 
         {/**Nội dung tin nhắn */}
         <div
-          onScroll={foo}
           id="messages"
           ref={messagesRef}
           className="relative my-3 overflow-y-auto no-scrollbar max-h-[72vh] min-h-[72vh] flex flex-col space-y-2"
@@ -212,11 +211,25 @@ const MessageField: FC<MessageFieldProps> = memo(
             </>
           )}
         </div>
+        {/**Gửi hình ảnh */}
+        {/* <div className="relative">
+          <div className="absolute bottom-0 left-0 w-fit pl-2 pb-1 max-h-48 max-w-48">
+            <Avatar
+              src="https://st5.depositphotos.com/4428871/67037/i/450/depositphotos_670378628-stock-photo-examples-text-quote-concept-background.jpg"
+              variant="rounded"
+              sx={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+          </div>
+        </div> */}
         {/**Message Input Field */}
         <div className="relative w-full mx-2">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3">
+          {/* <Label
+            htmlFor="upload-file"
+            className="absolute inset-y-0 start-0 flex items-center ps-3"
+          >
             <AiOutlinePaperClip className="h-5 w-5 cursor-pointer" />
-          </div>
+            <FileInput id="upload-file" className="hidden" />
+          </Label> */}
           <input
             type="text"
             id="text-field"

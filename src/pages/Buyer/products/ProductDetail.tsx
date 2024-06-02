@@ -31,10 +31,10 @@ import { useComment } from "./hooks/useComment";
 import { urlMatch } from "@utils/urlMatch";
 import ReturnIcon from "@components/admin/ReturnIcon";
 import ResponseModal from "@components/admin/modal/ResponseModal";
+
 import { useUserProfile } from "@hooks/useUserProfile";
 
 const ProductDetail: FC = memo(() => {
-  const [openResponseModal, setOpenResponseModal] = useState(false);
 
   const { productId } = useParams();
   if (!productId) {
@@ -96,14 +96,6 @@ const ProductDetail: FC = memo(() => {
   };
   return (
     <div className="mx-4 md:mx-20">
-      {isAdminPage && (
-        <ResponseModal
-          type="delete-product"
-          id={productId}
-          setOpenModal={setOpenResponseModal}
-          openModal={openResponseModal}
-        />
-      )}
       <ReportProductModal
         isOpen={isOpenedReportProduct}
         setIsOpen={setIsOpenedReportProduct}
