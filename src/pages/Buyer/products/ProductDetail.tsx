@@ -2,7 +2,6 @@ import { FC, memo } from "react";
 import { Breadcrumb, Textarea } from "flowbite-react";
 import { Rating } from "@mui/material";
 import Pagination from "@components/common/pagination/Pagination";
-import Comment from "src/pages/Buyer/products/components/Comment";
 import {
   HeartOutlined,
   HeartFilled,
@@ -31,12 +30,9 @@ import CommentList from "./components/CommentList";
 import { useComment } from "./hooks/useComment";
 import { urlMatch } from "@utils/urlMatch";
 import ReturnIcon from "@components/admin/ReturnIcon";
-import { Button as FlowbiteBtn } from "flowbite-react";
-import ResponseModal from "@components/admin/modal/ResponseModal";
 import { useUserProfile } from "@hooks/useUserProfile";
 
 const ProductDetail: FC = memo(() => {
-  const [openResponseModal, setOpenResponseModal] = useState(false);
 
   const { productId } = useParams();
   if (!productId) {
@@ -97,14 +93,6 @@ const ProductDetail: FC = memo(() => {
   };
   return (
     <div className="mx-4 md:mx-20">
-      {isAdminPage && (
-        <ResponseModal
-          type="delete-product"
-          id={productId}
-          setOpenModal={setOpenResponseModal}
-          openModal={openResponseModal}
-        />
-      )}
       <ReportProductModal
         isOpen={isOpenedReportProduct}
         setIsOpen={setIsOpenedReportProduct}
