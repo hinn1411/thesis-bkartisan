@@ -13,14 +13,13 @@ import { FC, memo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProductPagination } from "src/pages/Buyer/home/hooks/useProductPagination";
 import useFetchShopInformation from "./hooks/useFetchShopInformation";
-import GiftList from "./components/GiftList";
 import ShippingCostTable from "./components/ShippingCostTable";
 
 const Shop: FC = memo(() => {
   const { owner } = useParams();
   const { shop, isLoading } = useFetchShopInformation(owner as string);
-
-
+  console.log(shop);
+  
   const navigate = useNavigate();
   const { user } = useUserProfile();
   console.log(user);
@@ -67,7 +66,7 @@ const Shop: FC = memo(() => {
           <div className="flex items-center space-x-3">
             {user?.username == shop?.info[0].username ? (
               <Button
-                onClick={() => navigate('/seller')}
+                onClick={() => navigate("/seller")}
                 className="flex items-center space-x-1 shadow-lg py-[9px] px-[32px] bg-white border-2 border-black rounded-full"
               >
                 <ShopOutlined
@@ -156,16 +155,10 @@ const Shop: FC = memo(() => {
           <ProductList data={shop?.products} isLoading={isLoading} />
         )}
         {currentTab === 1 && (
-          <GiftList
-            data={shop?.gifts.filter((item) => item.type === "box")}
-            isLoading={isLoading}
-          />
+          <ProductList data={shop?.boxes} isLoading={isLoading} />
         )}
         {currentTab === 2 && (
-          <GiftList
-            data={shop?.gifts.filter((item) => item.type === "card")}
-            isLoading={isLoading}
-          />
+          <ProductList data={shop?.cards} isLoading={isLoading} />
         )}
         {currentTab === 3 && <ShippingCostTable items={shop?.transports} />}
         {/* Pagination */}

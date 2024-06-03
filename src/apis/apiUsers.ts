@@ -134,7 +134,29 @@ const apiUsers = {
         numOfRating: item.numberOfRating,
         currentCost: item.price * (1 - item.discount / 100),
         originalCost: item.price,
-        percentageOfDiscount: item.discount
+        percentageOfDiscount: item.discount,
+      }));
+      data.boxes = data.boxes.map((item) => ({
+        id: item.productId,
+        srcImage: item.coverImage,
+        name: item.name,
+        seller: item.seller,
+        star: item.numberOfStar,
+        numOfRating: item.numberOfRating,
+        currentCost: item.price * (1 - item.discount / 100),
+        originalCost: item.price,
+        percentageOfDiscount: item.discount,
+      }));
+      data.cards = data.cards.map((item) => ({
+        id: item.productId,
+        srcImage: item.coverImage,
+        name: item.name,
+        seller: item.seller,
+        star: item.numberOfStar,
+        numOfRating: item.numberOfRating,
+        currentCost: item.price * (1 - item.discount / 100),
+        originalCost: item.price,
+        percentageOfDiscount: item.discount,
       }));
       /*
   id: number;

@@ -1,9 +1,13 @@
+import { z } from "zod";
 import { axiosClient } from "./axiosClient";
+import { AddressChema } from "src/pages/Buyer/gift/components/AddressSchema";
+
+type Address = z.infer<typeof AddressChema>;
 
 export const apiPayment = {
-  getPaymentLink: async () => {
+  getPaymentLink: async (address: Address) => {
     try {
-      const { data } = await axiosClient.get("/payments");
+      const { data } = await axiosClient.post("/payments", address);
       // console.log(data);
 
       return data;

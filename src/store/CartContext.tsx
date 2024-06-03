@@ -1,4 +1,4 @@
-import { FC, ReactNode, createContext, useState } from 'react';
+import { FC, ReactNode, createContext, useState } from "react";
 
 export interface ICart {
   numberOfItems: number;
@@ -13,6 +13,8 @@ export type CartContextType = {
   updateNumberOfItems: (newQuantity: number) => void;
   updateDiscountPrice: (newPrice: number) => void;
   updateOriginalPrice: (price: number) => void;
+  initNumberOfItems: (newQuantity: number) => void;
+  initOriginalPrice: (newPrice: number) => void;
 };
 
 export const CartContext = createContext<CartContextType | null>(null);
@@ -21,6 +23,13 @@ const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [numberOfItems, setNumberOfItems] = useState<number>(0);
   const [discountPrice, setDiscountPrice] = useState<number>(0);
   const [originalPrice, setOriginalPrice] = useState<number>(0);
+
+  const initNumberOfItems = (newQuantity: number) => {
+    setNumberOfItems(newQuantity);
+  };
+  const initOriginalPrice = (newPrice: number) => {
+    setOriginalPrice(newPrice);
+  };
   const updateNumberOfItems = (newQuantity: number) => {
     setNumberOfItems((prev) => prev + newQuantity);
   };
@@ -39,6 +48,8 @@ const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
         updateNumberOfItems,
         updateDiscountPrice,
         updateOriginalPrice,
+        initNumberOfItems,
+        initOriginalPrice,
       }}
     >
       {children}

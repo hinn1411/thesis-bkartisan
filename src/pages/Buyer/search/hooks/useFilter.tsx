@@ -7,6 +7,7 @@ export const useFilter = (queryObj) => {
     queryFn: async () => {
       return await apiProducts.searchProducts(queryObj);
     },
+    refetchOnWindowFocus: false
   });
   return { data, isFetching, isError };
 };
