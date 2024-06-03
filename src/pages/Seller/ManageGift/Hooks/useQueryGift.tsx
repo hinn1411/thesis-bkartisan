@@ -12,7 +12,7 @@ const OFFSET = 6;
 export const useGiftPagination = (type: string, searchTerm: string) => {
   const [page, setPage] = useState(PAGE);
   const { data, isFetching, isSuccess, error } = useQuery({
-    queryKey: ['alldiscounts', page, searchTerm],
+    queryKey: ['allGifts', page, searchTerm],
     queryFn: async () => {
       return await apiGifts.getGifts(type, searchTerm, page, OFFSET)
     },

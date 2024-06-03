@@ -3,8 +3,8 @@ import { Message, SuccessIcon, options } from "@components/common/toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ToastOptions, toast } from "react-toastify";
 
-export const useChangeOrderState = () => { 
-  
+
+export const useChangeOrderState = () => {
   const queryClient = useQueryClient()
 
   const { mutate: changeState, isPending, isSuccess } = useMutation({
