@@ -1,6 +1,5 @@
 import { Button, Modal, Spinner, TextInput, Textarea } from "flowbite-react";
 import { FC, memo } from "react";
-import useFormResponse from "../../../hooks/useFormReponse";
 import apiUsers from "../../../apis/apiUsers";
 import { Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -51,7 +50,7 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = memo(
     return (
       <>
         <Modal show={openModal} size="4xl" onClose={() => setOpenModal(false)}>
-          <Modal.Header>Điền Form phản hồi</Modal.Header>
+          <Modal.Header>Thay đổi mặt khẩu</Modal.Header>
           <Modal.Body className="relative">
             <Grid container spacing={1.5} p={1} rowGap={1}>
               <Grid item xs={4}>
