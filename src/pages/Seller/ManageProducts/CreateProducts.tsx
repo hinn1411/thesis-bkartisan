@@ -85,6 +85,7 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!videoSrc) {
       setErrorVideo("Vui lòng thêm video sản phẩm!");
       return;
@@ -93,7 +94,6 @@ const CreateProducts: FC<YourComponentProps> = memo(() => {
       setSelectedCategory(-1);
       return;
     }
-    event.preventDefault();
     const formData = new FormData();
     formData.append("name", formDatas.name);
     formData.append("price", String(formDatas.price));

@@ -15,6 +15,7 @@ import { IProducts, IProductsOfSeller } from '@apis/apiProducts';
 import Loading from './Components/OnLoading';
 import { Success, Warnning, Error } from '@components/seller/Toast';
 import { Confirm } from '@components/seller/model/Confirm';
+import { ModalDetail } from './Components/ModalDetail';
 
 
 
@@ -98,11 +99,14 @@ const Viewproducts: FC = memo(() => {
     setSelectedProductIds(isChecked ? products.map((product: IProducts) => product.productId) : []);
   };
 
+  const [openModalDetail, setOpenModalDetail] = useState(false);
+
 
   return (
     <div>
       <SellerSideBar name = "ManageProducts"></SellerSideBar>
       <div className='pt-4 px-4 sm:ml-64 mt-16 max-h-[91vh] min-h-[91vh] flex flex-col justify-between'>
+        <ModalDetail openModal={openModalDetail} setOpenModal={setOpenModalDetail}/>
         <Confirm openModal={openModal} onConfirmDelete={handleDeleteProduct} onClose={() => setOpenModal(false)} message='Bạn có chắc muốn xóa các sản phẩm này?'></Confirm>
 
         {mutation.isSuccess && <Success message='Xóa thành công.'></Success>}
@@ -224,7 +228,7 @@ const Viewproducts: FC = memo(() => {
               <>
                 {products.map((product: IProductsOfSeller) => (
                 <LineProduct key={product.productId} {...product} isSelected={selectedProductIds.includes(product.productId)} 
-                onCheckboxChange={(event: ChangeEvent<HTMLInputElement>) => handleCheckboxChange(event, product.productId)}/>
+                onCheckboxChange={(event: ChangeEvent<HTMLInputElement>) => handleCheckboxChange(event, product.productId)} setOpenModal={setOpenModalDetail}/>
               ))}
               </>
             )}

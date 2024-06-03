@@ -18,6 +18,5 @@ export const useQuerySellerOrderDetail = (orderId: string) => {
         isFetching,
         isSuccess,
         error,
-        refetch
       };
 };

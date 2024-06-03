@@ -7,7 +7,7 @@ export interface usePaginationProps {}
 // eslint-disable-next-line react-refresh/only-export-components
 const PAGE = 1;
 // eslint-disable-next-line react-refresh/only-export-components
-const OFFSET = 6;
+const OFFSET = 10;
 
 export const useManageOrderPagination = (searchTerm: string) => {
   const [page, setPage] = useState(PAGE);
