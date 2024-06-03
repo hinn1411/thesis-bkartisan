@@ -10,6 +10,7 @@ import ImageList from "src/pages/Buyer/products/components/ImageList";
 import { useNavigate } from "react-router-dom";
 import ResponseModal from "@components/admin/modal/ResponseModal";
 import ReportFeedback from "./ReportFeedback";
+import { useRejectReport } from "./hooks/useRejectReport";
 
 interface OrderReportProps {
   report: any;
@@ -38,6 +39,8 @@ const OrderReport: FC<OrderReportProps> = memo(({ report }) => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openResponseModal, setOpenResponseModal] = useState(false);
+
+  const { mutate, isPending } = useRejectReport(report.reportId);
 
   return (
     <Box paddingBottom={4}>
@@ -122,8 +125,20 @@ const OrderReport: FC<OrderReportProps> = memo(({ report }) => {
             color="info"
             className="w-72 h-9 justify-self-end"
             onClick={() => setOpenResponseModal(true)}
+            disabled={isPending}
           >
-            Xác nhận đã xử lý
+            Chấp nhận
+          </Button>
+          <Button
+            color="gray"
+            className="h-9 justify-self-end"
+            isProcessing={isPending}
+            disabled={isPending}
+            onClick={() =>
+              mutate({ reportId: report.reportId, accepted: false })
+            }
+          >
+            Hủy yêu cầu
           </Button>
         </Box>
       )}
