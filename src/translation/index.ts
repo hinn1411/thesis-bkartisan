@@ -12,6 +12,6 @@ i18next
     lng: "vn",
     fallbackLng: "en",
     backend: {
-      loadPath: "/locales/vn/translation.json",
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
   });
