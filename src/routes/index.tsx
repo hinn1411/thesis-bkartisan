@@ -52,7 +52,7 @@ import CreateGift from "../pages/Seller/ManageGift/CreateGift";
 import SellerMessagePage from "src/pages/Seller/Message/SellerMessagePage";
 import ViewReport from "../pages/Seller/Report/ViewReport";
 import ViewTransport from "../pages/Seller/ManageTransport/ViewTransport";
-import SellerRegistrationPage from "../pages/Seller/registration/SellerRegistration";
+import SellerRegistrationPage from "../pages/Seller/Registration/SellerRegistration";
 import ShopPage from "../pages/Seller/Shop/Shop";
 
 // Admin pages
@@ -72,9 +72,8 @@ import ChangeInfo from "../pages/Admin/Collab/ChangeInfo";
 import ReviewProductDetail from "src/pages/Admin/ReviewProduct/ReviewProductDetail";
 import PersonalInfo from "src/pages/Admin/Info/PersonalInfo";
 
-
 // Trang tin nhắn
-import ViewMessage from 'src/pages/Message/ViewMessage';
+import ViewMessage from "src/pages/Message/ViewMessage";
 
 const router = createBrowserRouter([
   {
