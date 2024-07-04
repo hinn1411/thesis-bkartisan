@@ -1,6 +1,7 @@
 {
   "name": "fe-bkartisan",
   "private": true,
+  "homepage": "https://hinn1411.github.io/thesis-bkartisan/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
