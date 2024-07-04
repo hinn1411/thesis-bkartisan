@@ -1,17 +1,17 @@
-import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import Backend from 'i18next-http-backend';
+import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import Backend from "i18next-http-backend";
 i18next
   .use(initReactI18next)
   .use(LanguageDetector)
   .use(Backend)
   .init({
     debug: true,
-    load: 'languageOnly',
-    lng: 'vn',
-    fallbackLng: 'en',
-    // backend: {
-    //   loadPath: 'public/locales/vn/translation.json',
-    // },
+    load: "languageOnly",
+    lng: "vn",
+    fallbackLng: "en",
+    backend: {
+      loadPath: "/locales/vn/translation.json",
+    },
   });

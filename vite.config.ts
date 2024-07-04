@@ -18,7 +18,10 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   // test: vitestConfig.test,
   plugins: [react({}), tsconfigPaths()],
-  base: "/thesis-bkartisan/",
+  base: "/",
+  preview: {
+    port: 5173
+  }
   // resolve: {npm install --save-dev
   //   alias: [
   //     {
