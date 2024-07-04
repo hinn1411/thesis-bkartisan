@@ -9,26 +9,24 @@ export interface OrderTableProps {
   items: Array<ItemRowProps>;
   seller: string;
   discountPrice: number;
+  total: number;
 }
 
 const OrderTable: FC<OrderTableProps> = memo(
-  ({ info, items, }) => {
-    
-    
-    const { totalDiscount, totalPrice, totalShippingPrice } = info;
+  ({ info, items, total, discountPrice }) => {
     const formattedDiscount = formatCurrency(
-      totalDiscount,
+      discountPrice,
       CURRENCIES.VIETNAMDONG
     );
-    const formattedShippingPrice = formatCurrency(totalShippingPrice, CURRENCIES.VIETNAMDONG)
-    const formattedTotal = formatCurrency(
-      totalPrice - totalDiscount + totalShippingPrice,
-      CURRENCIES.VIETNAMDONG
-    );
+    // const formattedShippingPrice = formatCurrency(
+    //   totalShippingPrice,
+    //   CURRENCIES.VIETNAMDONG
+    // );
+    const formattedTotal = formatCurrency(total, CURRENCIES.VIETNAMDONG);
     return (
       <Table>
         <Table.Head className="text-md normal-case text-black">
-          <Table.HeadCell>Sản phẩn</Table.HeadCell>
+          <Table.HeadCell>Sản phẩm</Table.HeadCell>
           <Table.HeadCell>Đơn giá</Table.HeadCell>
           <Table.HeadCell>Số lượng</Table.HeadCell>
           <Table.HeadCell>Thành tiền</Table.HeadCell>
@@ -48,14 +46,14 @@ const OrderTable: FC<OrderTableProps> = memo(
             <Table.Cell></Table.Cell>
             <Table.Cell>-{formattedDiscount}</Table.Cell>
           </Table.Row>
-          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+          {/* <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
             <Table.Cell></Table.Cell>
             <Table.Cell className="font-semibold text-black">
               Phí vận chuyển
             </Table.Cell>
             <Table.Cell></Table.Cell>
             <Table.Cell>-{formattedShippingPrice}</Table.Cell>
-          </Table.Row>
+          </Table.Row> */}
           <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
             <Table.Cell></Table.Cell>
             <Table.Cell className="font-semibold text-black">

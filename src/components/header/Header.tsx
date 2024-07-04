@@ -426,7 +426,7 @@ const Header: FC = memo(() => {
               </div>
 
               {/* Language container */}
-              <div className="language-container relative" ref={languageRef}>
+              {/* <div className="language-container relative" ref={languageRef}>
                 <div
                   onClick={() => setIsLanguageDropdownOpened((prev) => !prev)}
                   className="language-trigger flex items-center justify-center space-x-1 hover:cursor-pointer"
@@ -471,7 +471,7 @@ const Header: FC = memo(() => {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
             </>
           )}
         </div>

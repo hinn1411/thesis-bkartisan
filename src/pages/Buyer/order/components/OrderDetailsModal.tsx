@@ -123,7 +123,7 @@ const OrderDetailsModal: FC<OrderDetailsModalProps> = memo(
                               </span>
                             </p>
                             {/* <p>Tổng phụ: 123,000đ</p> */}
-                            <p>
+                            {/* <p>
                               Phí vận chuyển:{" "}
                               <span className="text-orange-600">
                                 {formatCurrency(
@@ -131,7 +131,7 @@ const OrderDetailsModal: FC<OrderDetailsModalProps> = memo(
                                   CURRENCIES.VIETNAMDONG
                                 )}
                               </span>
-                            </p>
+                            </p> */}
                             <p>
                               Tổng tiền:{" "}
                               <span className="text-orange-600">

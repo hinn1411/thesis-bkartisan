@@ -140,12 +140,12 @@ const OrderItem: FC<OrderItemProps> = memo(
               {formatCurrency(discountPrice, CURRENCIES.VIETNAMDONG)}
             </span>
           </p>
-          <p>
+          {/* <p>
             Phí vận chuyển :{" "}
             <span className="text-orange-600">
               {formatCurrency(shipPrice, CURRENCIES.VIETNAMDONG)}
             </span>
-          </p>
+          </p> */}
           <p>
             Thành tiền:{" "}
             <span className="text-orange-600">
@@ -165,7 +165,7 @@ const OrderItem: FC<OrderItemProps> = memo(
                 Thanh toán
               </Button>
             )}
-            {[ORDER_STATES.CONFIRMING, ORDER_STATES.PROCESSING].includes(
+            {[ORDER_STATES.CONFIRMING].includes(
               status as ORDER_STATES
             ) && (
               <>
